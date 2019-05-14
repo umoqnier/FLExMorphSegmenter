@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 # Diego Alberto Barriga Martíenz @umoqnier
 # Replica del experimento  'Automatic Prediction of Lezgi Morpheme Breaks' realizado para la lengua Lezgi para generar
 # glosa automática a partir de escasos ejemplos
@@ -12,11 +11,24 @@ from collections import Counter
 from utilities import *
 import os
 
+model_filename = 'tsunkua.crfsuite'
+
 # Randomize and split the data
 
 vic_data = get_vic_data()
 # data_flex = XMLtoWords("FLExTxtExport2.xml")
-train_data, test_data = train_test_split(WordsToLetter(vic_data), test_size=0.2)
+aux = WordsToLetter(vic_data)
+train_data, test_data = train_test_split(aux, test_size=0.2)
+
+with open("train.txt", "w") as f:
+    for t in train_data:
+        f.write(str(t) + '\n')
+
+with open("test.txt", "w") as f:
+    for t in test_data:
+        f.write(str(t) + '\n')
+
+
 
 X_train = sent2features(train_data)
 Y_train = sent2labels(train_data)
@@ -42,7 +54,6 @@ trainer.set_params({
 
 # The program saves the trained model to a file:
 
-model_filename = 'tsunkua.crfsuite'
 if not os.path.isfile(model_filename):
     print("ENTRENANDO...")
     start = time.time()
@@ -73,13 +84,20 @@ print('Correct:', ' '.join(extractLabels(example_sent, 1)))
 
 try:
     Y_pred = []
-    X_test_decode = sents_decoder(X_test)
-    for i, xseq in enumerate(X_test_decode):
-        Y_pred.append(tagger.tag(xseq))  # TODO: Resolve critical issue with encoding
+    X_test = sents_decoder(X_test)
+    X_train = sents_decoder(X_train)
+    Y_test = sents_decoder(Y_test)
+    Y_train = sents_decoder(Y_train)
+    for i, xseq in enumerate(X_test):
+        inter = tagger.tag(xseq)
+        Y_pred.append(inter)  # TODO: Resolve critical issue with encoding
 except UnicodeDecodeError as e:
     print("UNICODE ERROR AT", i)
+    #print("secuencia >> ", X_test[i])
+    print("inter >> ", inter)
     print(e.object)
     print(e)
+
 
 
 # Get results for labeled position evaluation. This evaluates how well the classifier performed on each morpheme as a

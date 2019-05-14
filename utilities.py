@@ -2,12 +2,12 @@ from itertools import chain
 from sklearn.metrics import classification_report
 from sklearn.preprocessing import LabelBinarizer
 
+
 def get_vic_data():
     with open("corpusOtomi.txt") as f:
         plain_text = f.read()
     raw_data = plain_text.split('\n')
     return [eval(row) for row in raw_data]
-
 
 
 def XMLtoWords(filename):
