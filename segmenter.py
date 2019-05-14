@@ -84,10 +84,6 @@ print('Correct:', ' '.join(extractLabels(example_sent, 1)))
 
 try:
     Y_pred = []
-    X_test = sents_decoder(X_test)
-    X_train = sents_decoder(X_train)
-    Y_test = sents_decoder(Y_test)
-    Y_train = sents_decoder(Y_train)
     for i, xseq in enumerate(X_test):
         inter = tagger.tag(xseq)
         Y_pred.append(inter)  # TODO: Resolve critical issue with encoding
