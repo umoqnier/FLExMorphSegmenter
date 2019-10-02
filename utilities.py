@@ -1,13 +1,26 @@
 from itertools import chain
 from sklearn.metrics import classification_report
 from sklearn.preprocessing import LabelBinarizer
+import xml.etree.ElementTree as ET
 
 
-def get_vic_data():
-    with open("corpusOtomi.txt") as f:
+def get_vic_data(path, file_name):
+    # TODO: Verificar que no existan lineas duplicadas en el corpus
+    file = "corpus_" + file_name
+    with open(path + file, encoding='utf-8', mode='r') as f:
         plain_text = f.read()
     raw_data = plain_text.split('\n')
     return [eval(row) for row in raw_data]
+
+
+def get_hard_corpus(path, file_name):
+    with open(path + "corpus_" + file_name, encoding='utf-8', mode='r') as f:
+        plain_text = f.read()
+    return eval(plain_text)
+
+
+def corpus_verifier(corpus_list):
+    pass
 
 
 def XMLtoWords(filename):
@@ -15,7 +28,7 @@ def XMLtoWords(filename):
     Takes FLExText text as .xml. Returns data as list: [[[[[[morpheme, gloss], pos],...],words], sents]].
     Ignores punctuation. Morph_types can be: stem, suffix, prefix, or phrase when lexical item is made up of two words.
     """
-    
+
     datalists = []
 
     #open XML doc using xml parser
@@ -84,7 +97,7 @@ def XMLtoWords(filename):
     return datalists
 
 
-def WordsToLetter(wordlists):
+def WordsToLetter(wordlists, flag=False):
     '''
     Takes data from XMLtoWords: [[[[[[morpheme, gloss], pos],...],words],sents]].
     Returns [[[[[letter, POS, BIO-label],...],words],sents]]
@@ -97,10 +110,15 @@ def WordsToLetter(wordlists):
         #print(i, "phrase=================")
         sent = []
         for lexeme in phrase:
+            if flag:
+                pos = lexeme[-1]
+                lexeme = lexeme.pop(0)
+                lexeme.append(pos)
+            palabra = ''
             word = []
             #Skip POS label
             for morpheme in lexeme[:-1]:
-                #print("\tMorfema >>", morpheme)
+                palabra += ''.join([l for l in morpheme[0]])
                 #use gloss as BIO label
                 label = morpheme[1]
                 #print("\t\tLabel >>", label)
@@ -149,7 +167,7 @@ def extractFeatures(sent):
             letter = word[j][0]
             #gathering previous letters
             lettersequence += letter
-            #ignore digits             
+            #ignore     digits
             if not letter.isdigit():
                 features = [
                     'bias',
@@ -233,7 +251,7 @@ def sent2labels(data):
 
 
 def sent2tokens(data):
-    return [extractTokens(sent) for sent in data]
+    return [extractTokens(sent) for sent in data]   
 
 
 def bio_classification_report(y_correct, y_pred):
@@ -286,6 +304,7 @@ def countMorphemes(morphlist):
 
 
 def eval_labeled_positions(y_correct, y_pred):
+    breakepoint()
     # group the labels by morpheme and get list of morphemes
     correctmorphs, _ = concatenateLabels(y_correct)
     predmorphs, predLabels = concatenateLabels(y_pred)
@@ -324,7 +343,6 @@ def eval_labeled_positions(y_correct, y_pred):
 
 def print_transitions(trans_features):
     '''Print info from the crfsuite.'''
-    
     for (label_from, label_to), weight in trans_features:
         print("%-6s -> %-7s %0.6f" % (label_from, label_to, weight))
 
@@ -358,9 +376,30 @@ def sents_decoder(sent):
     return result
 
 
-def test_decoder(test):
+def labels_decoder(test):
     result = []
     for labels in test:
         aux = [label.decode("utf-8") for label in labels]
         result.append(aux)
     return result
+
+
+def accuracy_score(y_test, y_pred):
+    right, wrong, total, control = 0, 0, 0, 0
+    for tests, predictions in zip(y_test, y_pred):
+        if len(tests) == len(predictions):
+            control += 1
+        total += len(tests)
+        for t, p in zip(tests, predictions):
+            if t == p:
+                right += 1
+            elif t != p:
+                wrong += 1
+
+    print("\n++++++++++ACCURACY++++++++++")
+    print("Right", right)
+    print("Wrong", wrong)
+    print("R + W", right + wrong)
+    print("TOTAL", total)
+    print("Control", total)
+    return right / total
