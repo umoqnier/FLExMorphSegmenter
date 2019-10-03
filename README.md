@@ -1,22 +1,13 @@
-# Instrucciones para experimentos
-
-* Para correr el programa se requiere `python3.x` y el manejador de dependencias `pip`
-* Instalar las dependencias con `pip install -r requeriments.txt`
-* Correr el programa con `python segmenter.py`
-    * Al correr el programa se genera un modelo de aprendizaje. El nombre de dicho modelo se modifica en la variable`model_filename` 
-
- **NOTA**: El corpus utilizada se encuentra en el archivo `corpusOtomi.txt`
-
 # Plan de trabajo
 
-1. Revisar los reportes y como esta evaluando
-2. Anotar para cada experimento
+[ ] 1. Revisar los reportes que imprime el programa y como esta evaluando
+[ ] 2. Anotar para cada experimento
     * Nombre del modelo
     * Elastic Net l1, l2
     * Feature function
     * Iteraciones
     * Accuracy
-3. Agregar una seccion de parametros para no hardcodear
+[ ] 3. Agregar una seccion de parametros para no hardcodear
 
 ## Modificaciones al experimento actual
 
@@ -51,3 +42,14 @@
 
 * Interpretar las medidas de evaluacion
 * Explicar por que con la modificacion de ciertos parametros aumenta o disminuye 
+
+# Cómo correr experimentos
+
+* Para correr el programa se requiere `python3.x` y el manejador de
+paquetes de python `pip`
+* Instalar las dependencias con `pip install -r requeriments.txt`
+* Correr el programa con `python segmenter.py`
+    * Al correr el programa se genera un modelo de aprendizaje. El nombre de
+		dicho modelo se modifica en la variable `model_filename` 
+
+ **NOTA**: El corpus utilizada se encuentra en el archivo `corpusOtomi.txt`
