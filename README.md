@@ -1,13 +1,14 @@
 # Plan de trabajo
 
-[ ] 1. Revisar los reportes que imprime el programa y como esta evaluando
-[ ] 2. Anotar para cada experimento
+* [x] Revisar los reportes que imprime el programa y como esta evaluando
+* [ ] Documentación de funciones
+* [ ] Anotar para cada experimento
     * Nombre del modelo
     * Elastic Net l1, l2
     * Feature function
     * Iteraciones
     * Accuracy
-[ ] 3. Agregar una seccion de parametros para no hardcodear
+* [ ] Agregar una seccion de parametros para no hardcodear
 
 ## Modificaciones al experimento actual
 
@@ -41,7 +42,8 @@
 ### Descripcion de los experimentos
 
 * Interpretar las medidas de evaluacion
-* Explicar por que con la modificacion de ciertos parametros aumenta o disminuye 
+* Explicar por que con la modificacion de ciertos parametros aumenta o
+disminuye
 
 # Cómo correr experimentos
 
@@ -50,6 +52,15 @@ paquetes de python `pip`
 * Instalar las dependencias con `pip install -r requeriments.txt`
 * Correr el programa con `python segmenter.py`
     * Al correr el programa se genera un modelo de aprendizaje. El nombre de
-		dicho modelo se modifica en la variable `model_filename` 
+		dicho modelo se modifica en la variable `model_filename`
 
  **NOTA**: El corpus utilizada se encuentra en el archivo `corpusOtomi.txt`
+
+### Convenciones
+Para solucionar problemas de encoding/decoding se sustituyen las siguientes
+letras en otomí:
+
+* u̱ -> μ
+* a̱̱ -> α
+* e̱ -> ε
+* i̱ -> ι

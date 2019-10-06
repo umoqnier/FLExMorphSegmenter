@@ -5,7 +5,6 @@ import xml.etree.ElementTree as ET
 
 
 def get_vic_data(path, file_name):
-    # TODO: Verificar que no existan lineas duplicadas en el corpus
     file = "corpus_" + file_name
     with open(path + file, encoding='utf-8', mode='r') as f:
         plain_text = f.read()
@@ -255,18 +254,18 @@ def sent2tokens(data):
 
 
 def bio_classification_report(y_correct, y_pred):
-    '''Takes list of correct and predicted labels from tagger.tag. 
+    '''Takes list of correct and predicted labels from tagger.tag.
     Prints a classification report for a list of BIO-encoded sequences.
     It computes letter-level metrics.'''
 
     labeler = LabelBinarizer()
     y_correct_combined = labeler.fit_transform(list(chain.from_iterable(y_correct)))
     y_pred_combined = labeler.transform(list(chain.from_iterable(y_pred)))
-    
+
     tagset = set(labeler.classes_)
     tagset = sorted(tagset, key=lambda tag: tag.split('-', 1)[::-1])
     class_indices = {cls: idx for idx, cls in enumerate(labeler.classes_)}
-    
+
     return classification_report(
         y_correct_combined,
         y_pred_combined,
@@ -275,7 +274,12 @@ def bio_classification_report(y_correct, y_pred):
 
 
 def concatenateLabels(y_list):
-    '''Return list of morpheme labels [[B-label, I-label,...]morph,[B-label,...]]'''
+    '''Return list of morpheme
+    :param y_list:
+    :type: list
+    :return: labels = [B-label,...]]
+             morph = [[B-label, I-label, ...], [B-label, I-label, ...]]
+    '''
 
     morphs_list = []
     labels_list = []
@@ -297,14 +301,33 @@ def concatenateLabels(y_list):
 
 
 def countMorphemes(morphlist):
+    """ Cuenta el número de ocurrencias de cada label
+
+    :param morphlist: Lista de bio-labels
+    :return: Diccionario con las labesl como llave y el número de
+    ocurrencias como valor
+    """
     counts = {}
     for morpheme in morphlist:
-        counts[morpheme[0][2:]] = counts.get(morpheme[0][2:], 0) + 1
+        label = morpheme[0][2:]
+        counts[label] = counts.get(label, 0) + 1
     return counts
 
 
 def eval_labeled_positions(y_correct, y_pred):
-    breakepoint()
+    """Imprime un reporte de metricas entre las bio labels predichas
+    por el modelo y las reales
+
+    Genera diccionarios con las labels como llaves y el total de ocurrencias
+    como valores. Con estos diccionarios obtiene precision, recall y f-score
+    por cada label. Además, obtiene dichas métricas para todas las labels.
+
+    :param y_correct: Bio labels reales
+    :type: list
+    :param y_pred: Bio labels predichas por el modelo
+    :type: list
+    :return: None
+    """
     # group the labels by morpheme and get list of morphemes
     correctmorphs, _ = concatenateLabels(y_correct)
     predmorphs, predLabels = concatenateLabels(y_pred)
@@ -315,7 +338,7 @@ def eval_labeled_positions(y_correct, y_pred):
     correctMorphemects = {}
     idx = 0
     num_correct = 0
-    for morpheme in correctmorphs:
+    for morpheme in correctmorphs:  # TODO: Improve this section
         correct = True
         for label in morpheme:
             if label != predLabels[idx]:
@@ -327,7 +350,9 @@ def eval_labeled_positions(y_correct, y_pred):
     # calculate P, R F1 for each morpheme
     results = ''
     for firstlabel in correctMorphemects.keys():
+        # Calculate precision for each label
         lprec = correctMorphemects[firstlabel] / pred_morphcts[firstlabel]
+        # Calculate Recall for each label
         lrecall = correctMorphemects[firstlabel] / test_morphcts[firstlabel]
         results += firstlabel + '\t\t{0:.2f}'.format(lprec) + '\t\t' + '{0:.2f}'.format(
             lrecall) + '\t' + '{0:.2f}'.format((2 * lprec * lrecall) / (lprec + lrecall)) + '\t\t' + str(
@@ -343,13 +368,15 @@ def eval_labeled_positions(y_correct, y_pred):
 
 def print_transitions(trans_features):
     '''Print info from the crfsuite.'''
+    print("From Label -> To label | Weight")
     for (label_from, label_to), weight in trans_features:
-        print("%-6s -> %-7s %0.6f" % (label_from, label_to, weight))
+        print("%-6s -> %-8s | %0.6f" % (label_from, label_to, weight))
 
 
 def print_state_features(state_features):
+    print("Weight | Label | Attribute")
     for (attr, label), weight in state_features:
-        print("%0.6f %-6s %s" % (weight, label, attr))
+        print("%0.6f | %-6s | %s" % (weight, label, attr))
 
 
 def sents_encoder(sent):

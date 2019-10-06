@@ -1,9 +1,8 @@
-# Diego Alberto Barriga Martíenz @umoqnier
+# -*- coding: utf-8 -*-
+# Diego Alberto Barriga Martinez @umoqnier
 # Replica del experimento  'Automatic Prediction of Lezgi Morpheme Breaks'
 # realizado para la lengua Lezgi para generar glosa automática a partir
 # de escasos ejemplos
-
-# -*- coding: utf-8 -*-
 
 from sklearn.model_selection import train_test_split
 import time
@@ -67,7 +66,6 @@ trainer.set_params({
 
 
 # The program saves the trained model to a file:
-breakpoint()
 if not os.path.isfile(model_path + model_filename):
     print("ENTRENANDO...")
     start = time.time()
@@ -107,7 +105,6 @@ for i, xseq in enumerate(X_hard):
 # the classifier performed on each morpheme as a whole and their tags,
 # rather than evaluating character-level. Then, we check the results and
 # print a report of the results. These results are for character level.
-breakpoint()
 eval_labeled_positions(y_hard, y_pred_hard)
 
 print(bio_classification_report(y_hard, y_pred_hard))
@@ -116,6 +113,7 @@ print("Accuracy Score>>>> ", accuracy_score(y_hard, y_pred_hard))
 
 info = tagger.info()
 
+# Prints top 15 labels transitions with learned transitions weights
 print("Top likely transitions:")
 print_transitions(Counter(info.transitions).most_common(15))
 
