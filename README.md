@@ -2,23 +2,26 @@
 
 * [x] Revisar los reportes que imprime el programa y como esta evaluando
 * [ ] Documentación de funciones
-* [ ] Anotar para cada experimento
+* [x] Anotar para cada experimento
     * Nombre del modelo
+    * Máximo de Iteraciones
+    * Split ratio
+    * Data sets
     * Elastic Net l1, l2
-    * Feature function
-    * Iteraciones
     * Accuracy
-* [ ] Agregar una seccion de parametros para no hardcodear
+    * Descripción
+* [x] Agregar una seccion de parametros para no hardcodear
+* [ ] Correr experimentos con diferentes parámetros
 
-## Modificaciones al experimento actual
+## Modificación de parametros
 
 1. Quitar todas las etiquetas POS y entrenar. Verificar
 2. Quitar la ventana de contexto y limitarla a 3
 3. Que L1 sea 0 y que L2 sea 0 y ambos para ver que sucede
 
-## Escritura
+# Escritura
 
-### Metodología - Revision de la literatura
+## Metodología - Revision de la literatura
 
 1. Dominar CRF
     * Saber que son y como se definen
@@ -33,13 +36,13 @@
     * Donde se habla
     * Importancia de tratarlo
 
-### Estado del arte
+## Estado del arte
 
 1. Articulos que usan CRF para lenguas de bajos recursos
     * Griko
     * Lezgi
 
-### Descripcion de los experimentos
+## Descripcion de los experimentos
 
 * Interpretar las medidas de evaluacion
 * Explicar por que con la modificacion de ciertos parametros aumenta o
@@ -47,16 +50,15 @@ disminuye
 
 # Cómo correr experimentos
 
-* Para correr el programa se requiere `python3.x` y el manejador de
-paquetes de python `pip`
-* Instalar las dependencias con `pip install -r requeriments.txt`
-* Correr el programa con `python segmenter.py`
-    * Al correr el programa se genera un modelo de aprendizaje. El nombre de
-		dicho modelo se modifica en la variable `model_filename`
+* TODO
 
- **NOTA**: El corpus utilizada se encuentra en el archivo `corpusOtomi.txt`
+## Depuración del corpus
+* Para eliminar líneas repetidas en el corpus `$ sort -u corpus > corpus_uniq`
+* Mostrar las líneas duplicadas `$ diff --color corpus_sort corpus_uniq`
 
-### Convenciones
+# Convenciones
+
+## Sustitución de letras
 Para solucionar problemas de encoding/decoding se sustituyen las siguientes
 letras en otomí:
 
@@ -64,3 +66,9 @@ letras en otomí:
 * a̱̱ -> α
 * e̱ -> ε
 * i̱ -> ι
+
+## Nombre de los modelos
+Con la intención de tener documentada la evolución de los experimentos el
+nombre de los modelos sigue la siguiente estructura
+* `tsu_<nombre>_<max-iteraciones>_<L1>_<L2>.crfsuite`
+	* *Estos y otros parametros son configurables via `hyperparams.json`* 
