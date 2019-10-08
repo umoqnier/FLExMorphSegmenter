@@ -1,0 +1,10 @@
+{
+    "name": "base",
+    "dataset-train": "corpus_otomi_original",
+    "dataset-test": "corpus_hard",
+    "max-iter": 50,
+    "split-ratio": 0.2,
+    "L1": 1.0,
+    "L2": 1e-3,
+    "description": "Modelo base para replica de experimento"
+}

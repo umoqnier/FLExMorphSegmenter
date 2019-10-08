@@ -1,0 +1,2 @@
+model_name,dataset-train,dataset-test,time,iterations,L1,L2,accuracy,description
+tsu_base_50_1.0_0.001.crfsuite,corpus_otomi_original,corpus_hard,3.1050947348276776,50,1.0,0.001,0.7483108108108109,Modelo base para replica de experimento

@@ -1,4 +1,6 @@
+Click==7.0
 numpy==1.16.3
+-e git+git@github.com:umoqnier/otomi-morph-segmenter.git@092a3b0270f45d86e6236a2d02e784df84e1290a#egg=otomi_segmenter
 python-crfsuite==0.9.6
 scikit-learn==0.20.3
 scipy==1.2.1
