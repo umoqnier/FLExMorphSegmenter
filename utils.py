@@ -5,15 +5,14 @@ import xml.etree.ElementTree as ET
 
 
 def get_vic_data(path, file_name):
-    file = "corpus_" + file_name
-    with open(path + file, encoding='utf-8', mode='r') as f:
+    with open(path + file_name, encoding='utf-8', mode='r') as f:
         plain_text = f.read()
     raw_data = plain_text.split('\n')
     return [eval(row) for row in raw_data]
 
 
 def get_hard_corpus(path, file_name):
-    with open(path + "corpus_" + file_name, encoding='utf-8', mode='r') as f:
+    with open(path + file_name, encoding='utf-8', mode='r') as f:
         plain_text = f.read()
     return eval(plain_text)
 
@@ -39,39 +38,31 @@ def XMLtoWords(filename):
             if paragraphs.tag == 'paragraphs':
                 for paragraph in paragraphs:
                     #jump straight into items under phrases
-                    #print(paragraph.tag, paragraph.attrib)
                     for j, phrase in enumerate(paragraph[0]):
-                        #print(j, '>>', phrase.tag, phrase.attrib)
                         sent = []
                         # ignore first item tag which is the sentence number
                         for i, word in enumerate(phrase[1]):
-                           # print('\t', i, ':', word.tag, word.attrib)
                             #ignore punctuation tags which have no attributes
                             if word.attrib:
                                 lexeme = []
                                 for node in word:
                                     if node.tag == 'morphemes':
-                                        #print("\t\tCASO MORFEMA")
                                         for morph in node:
                                             morpheme = []
-                                            #note morph type 
+                                            #note morph type
                                             morph_type = morph.get('type')
-                                            #print("\t\tTipo >>", morph_type)
                                             #Treat MWEs or unlabled morphemes as stems.
                                             if morph_type == None or morph_type == 'phrase':
                                                 morph_type = 'stem'
                                             for item in morph:
                                                 #get morpheme token
                                                 if item.get('type') == 'txt':
-                                                   # print("\t\t\tTXT >>", item.text)
                                                     form = item.text
                                                     #get rid of hyphens demarcating affixes
                                                     if morph_type == 'suffix':
                                                         form = form[1:]
-                                                       # print("\t\t\tSUFFIX >> ", form)
                                                     if morph_type == 'prefix':
                                                         form = form[:-1]
-                                                       # print("\t\t\tPREFIX >> ", form)
                                                     morpheme.append(form)
                                                 #get affix glosses
                                                 if item.get('type') == 'gls' and morph_type != 'stem':
@@ -80,19 +71,11 @@ def XMLtoWords(filename):
                                             if morph_type == 'stem':
                                                 morpheme.append(morph_type)
                                             lexeme.append(morpheme)
-                                           # print("*** Current LEXEME", lexeme)
-                                       # print("\t\t>>> FINISH MORFEMA")
                                     #get word's POS
                                     if node.get('type') == 'pos':
-                                       # print("\t\tCASO POS TAG")
                                         lexeme.append(node.text)
-                                       # print("*** Current LEXEME", lexeme)
-                                    #print("\t\t>>> FINISH NODE ", node.tag)
                                 sent.append(lexeme)
-                                #print("\t>>>Finish WORD")
-                               # print('**** CURRENT SENT', sent)
                         datalists.append(sent)
-    # print(datalists[:10])
     return datalists
 
 
@@ -149,13 +132,19 @@ def WordsToLetter(wordlists, flag=False):
 
 
 def extractFeatures(sent):
-    '''Takes data as [[[[[letter, POS, BIO-label],...],words],sents]].
-    Returns list of words with characters as features list: [[[[[letterfeatures],POS,BIO-label],letters],words]]'''
-    
+    ''' Reglas que configuran las feature functions para entrenamiento
+
+    :param sent: Data as [[[[[letter, POS, BIO-label],...],words],sents]]
+    :type: list
+    :return: list of words with characters as features list:
+        [[[[[letterfeatures],POS,BIO-label],letters],words]]
+    :rtype: list
+    '''
+
     featurelist = []
     senlen = len(sent)
 
-    # TODO: Optimizar los parametros hardcode para el otomí. Se probaran nuevos parámetro
+    # TODO: Optimizar los parametros hardcode para el otomí.
     #each word in a sentence
     for i in range(senlen):
         word = sent[i]
@@ -172,7 +161,7 @@ def extractFeatures(sent):
                     'bias',
                     'letterLowercase=' + letter.lower(),
                     'postag=' + word[j][1],
-                ] 
+                ]
                 #position of word in sentence and pos tags sequence
                 if i > 0:
                     features.append('prevpostag=' + sent[i-1][0][1])
@@ -216,9 +205,7 @@ def extractFeatures(sent):
                 if j <= wordlen-5:
                     nxtlets += word[j+4][0]
                     features.append('nxt4letters=<' + nxtlets.lower())
-                
             featurelist.append([f.encode('utf-8') for f in features])  # Add encoding for pysrfsuite
-    
     return featurelist
 
 
@@ -250,7 +237,7 @@ def sent2labels(data):
 
 
 def sent2tokens(data):
-    return [extractTokens(sent) for sent in data]   
+    return [extractTokens(sent) for sent in data]
 
 
 def bio_classification_report(y_correct, y_pred):
@@ -423,10 +410,17 @@ def accuracy_score(y_test, y_pred):
             elif t != p:
                 wrong += 1
 
-    print("\n++++++++++ACCURACY++++++++++")
-    print("Right", right)
-    print("Wrong", wrong)
-    print("R + W", right + wrong)
-    print("TOTAL", total)
-    print("Control", total)
     return right / total
+
+
+def write_report(model_name, accuracy, train_time, hyper):
+    """Escribe el reporte con resultados e hiperparametros
+
+    """
+    line = model_name + "," + hyper['dataset-train'] + "," + \
+            hyper['dataset-test'] + "," + str(train_time / 60) + "," + \
+            str(hyper['max-iter']) + "," + str(hyper['L1']) + "," + \
+            str(hyper['L2']) + "," + str(accuracy) + "," + \
+            hyper['description'] + "\n"
+    with open('results.csv', 'a') as f:
+        f.write(line)
