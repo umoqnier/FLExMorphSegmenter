@@ -1,0 +1,658 @@
+Entrenando nuevo modelo 'tsu_l1_0_50_0.0_0.001.crfsuite'
+Feature generation
+type: CRF1d
+feature.minfreq: 0.000000
+feature.possible_states: 0
+feature.possible_transitions: 0
+0....1....2....3....4....5....6....7....8....9....10
+Number of features: 34633
+Seconds required: 0.099
+
+L-BFGS optimization
+c1: 0.000000
+c2: 0.001000
+num_memories: 6
+max_iterations: 50
+epsilon: 0.000010
+stop: 10
+delta: 0.000010
+linesearch: MoreThuente
+linesearch.max_iterations: 20
+
+***** Iteration #1 *****
+Loss: 150269.248877
+Feature norm: 5.000000
+Error norm: 41354.577623
+Active features: 34633
+Line search trials: 2
+Line search step: 0.000139
+Seconds required for this iteration: 16.033
+
+***** Iteration #2 *****
+Loss: 125138.187842
+Feature norm: 3.643985
+Error norm: 25217.624623
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.307
+
+***** Iteration #3 *****
+Loss: 107610.623124
+Feature norm: 4.705005
+Error norm: 10060.652620
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.245
+
+***** Iteration #4 *****
+Loss: 100919.112897
+Feature norm: 5.704778
+Error norm: 9281.016171
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.228
+
+***** Iteration #5 *****
+Loss: 93472.978813
+Feature norm: 6.405072
+Error norm: 9475.605454
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.245
+
+***** Iteration #6 *****
+Loss: 71914.066727
+Feature norm: 14.509456
+Error norm: 12475.464924
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.200
+
+***** Iteration #7 *****
+Loss: 59001.374379
+Feature norm: 14.476702
+Error norm: 4674.233769
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.250
+
+***** Iteration #8 *****
+Loss: 51370.162487
+Feature norm: 16.575080
+Error norm: 4237.343239
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.222
+
+***** Iteration #9 *****
+Loss: 41089.750069
+Feature norm: 23.424318
+Error norm: 8138.940569
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.219
+
+***** Iteration #10 *****
+Loss: 33891.500351
+Feature norm: 27.538835
+Error norm: 5004.029338
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.264
+
+***** Iteration #11 *****
+Loss: 31125.148902
+Feature norm: 29.418498
+Error norm: 3418.882034
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.301
+
+***** Iteration #12 *****
+Loss: 26753.461893
+Feature norm: 32.986157
+Error norm: 1955.961138
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.212
+
+***** Iteration #13 *****
+Loss: 23695.763392
+Feature norm: 35.091822
+Error norm: 1851.517898
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.270
+
+***** Iteration #14 *****
+Loss: 19876.006184
+Feature norm: 39.661446
+Error norm: 2923.387071
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.255
+
+***** Iteration #15 *****
+Loss: 17530.421427
+Feature norm: 44.134273
+Error norm: 2498.218792
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.189
+
+***** Iteration #16 *****
+Loss: 16104.926686
+Feature norm: 44.993035
+Error norm: 1588.086711
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.253
+
+***** Iteration #17 *****
+Loss: 13805.733848
+Feature norm: 46.089532
+Error norm: 1474.363041
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.238
+
+***** Iteration #18 *****
+Loss: 13083.783975
+Feature norm: 46.683980
+Error norm: 2016.429163
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.233
+
+***** Iteration #19 *****
+Loss: 12187.798207
+Feature norm: 48.003611
+Error norm: 1196.773277
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.239
+
+***** Iteration #20 *****
+Loss: 11162.871135
+Feature norm: 49.904430
+Error norm: 994.223205
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.215
+
+***** Iteration #21 *****
+Loss: 9879.901219
+Feature norm: 52.998219
+Error norm: 1000.930211
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.219
+
+***** Iteration #22 *****
+Loss: 8482.068744
+Feature norm: 57.573011
+Error norm: 996.087070
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.236
+
+***** Iteration #23 *****
+Loss: 7602.885708
+Feature norm: 63.577831
+Error norm: 1573.230231
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.262
+
+***** Iteration #24 *****
+Loss: 6987.395230
+Feature norm: 63.471649
+Error norm: 551.095472
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.252
+
+***** Iteration #25 *****
+Loss: 6641.687613
+Feature norm: 64.922497
+Error norm: 603.015208
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.283
+
+***** Iteration #26 *****
+Loss: 6043.856817
+Feature norm: 67.403595
+Error norm: 519.033791
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.278
+
+***** Iteration #27 *****
+Loss: 5784.675077
+Feature norm: 73.136247
+Error norm: 1452.367369
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.265
+
+***** Iteration #28 *****
+Loss: 5225.980318
+Feature norm: 71.655783
+Error norm: 483.724377
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.284
+
+***** Iteration #29 *****
+Loss: 4979.086849
+Feature norm: 71.208760
+Error norm: 384.241278
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.229
+
+***** Iteration #30 *****
+Loss: 4606.039242
+Feature norm: 71.809479
+Error norm: 566.055594
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.241
+
+***** Iteration #31 *****
+Loss: 4230.171617
+Feature norm: 72.802927
+Error norm: 409.786326
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.230
+
+***** Iteration #32 *****
+Loss: 4105.255764
+Feature norm: 76.041271
+Error norm: 991.749272
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.266
+
+***** Iteration #33 *****
+Loss: 3820.202865
+Feature norm: 74.930432
+Error norm: 384.632812
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.227
+
+***** Iteration #34 *****
+Loss: 3700.650966
+Feature norm: 75.126858
+Error norm: 424.981252
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.203
+
+***** Iteration #35 *****
+Loss: 3388.215016
+Feature norm: 76.173070
+Error norm: 487.936311
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.330
+
+***** Iteration #36 *****
+Loss: 3181.969261
+Feature norm: 78.386204
+Error norm: 343.327708
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.387
+
+***** Iteration #37 *****
+Loss: 2937.998824
+Feature norm: 79.985364
+Error norm: 290.105033
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.468
+
+***** Iteration #38 *****
+Loss: 2600.914395
+Feature norm: 82.933312
+Error norm: 267.783628
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.244
+
+***** Iteration #39 *****
+Loss: 2364.466346
+Feature norm: 87.110139
+Error norm: 575.369951
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.455
+
+***** Iteration #40 *****
+Loss: 2202.611461
+Feature norm: 89.342743
+Error norm: 362.857873
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.406
+
+***** Iteration #41 *****
+Loss: 2087.645921
+Feature norm: 88.563050
+Error norm: 270.622106
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.450
+
+***** Iteration #42 *****
+Loss: 1847.236546
+Feature norm: 90.933859
+Error norm: 399.170697
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.307
+
+***** Iteration #43 *****
+Loss: 1633.637085
+Feature norm: 95.097303
+Error norm: 260.815224
+Active features: 34633
+Line search trials: 2
+Line search step: 0.521437
+Seconds required for this iteration: 10.578
+
+***** Iteration #44 *****
+Loss: 1509.230194
+Feature norm: 96.442470
+Error norm: 194.035439
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.312
+
+***** Iteration #45 *****
+Loss: 1382.258333
+Feature norm: 97.993034
+Error norm: 163.048117
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.250
+
+***** Iteration #46 *****
+Loss: 1181.767295
+Feature norm: 102.450795
+Error norm: 167.272067
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.311
+
+***** Iteration #47 *****
+Loss: 941.034249
+Feature norm: 109.336851
+Error norm: 355.505760
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.226
+
+***** Iteration #48 *****
+Loss: 865.711374
+Feature norm: 112.251463
+Error norm: 238.714745
+Active features: 34633
+Line search trials: 2
+Line search step: 0.291503
+Seconds required for this iteration: 10.561
+
+***** Iteration #49 *****
+Loss: 788.606055
+Feature norm: 113.255662
+Error norm: 186.090762
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.269
+
+***** Iteration #50 *****
+Loss: 671.351352
+Feature norm: 119.182761
+Error norm: 196.366839
+Active features: 34633
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 5.413
+
+L-BFGS terminated with the maximum number of iterations
+Total seconds required for training: 285.061
+
+Storing the model
+Number of active features: 34633 (34633)
+Number of active attributes: 17247 (17247)
+Number of active labels: 219 (219)
+Writing labels
+Writing attributes
+Writing feature references for transitions
+Writing feature references for attributes
+Seconds required: 0.014
+
+Fin de entrenamiento. Tiempo de entrenamiento >> 286.0575671195984 [s] 4.767626118659973 [m]
+Basic example of prediction
+Letters: n  a  n  '  d  í  m  b  a  n  y  o  w  i  r  ι  m  a  m  á  k  o  r  ι  b  e  d  i  c  í
+Predicted: B-stem I-stem B-stem I-stem I-stem I-stem B-3.imp I-3.imp I-3.imp B-stem I-stem I-stem B-prag I-prag B-stem I-stem I-stem I-stem I-stem I-stem B-stem I-stem B-stem I-stem B-stem I-stem I-stem I-stem I-stem I-stem
+Correct: B-stem I-stem B-stem I-stem I-stem I-stem B-psd B-3.icp I-3.icp B-stem I-stem I-stem B-prag I-prag B-3.pss I-3.pss B-stem I-stem I-stem I-stem B-stem I-stem B-3.imp I-3.imp B-stem I-stem I-stem I-stem I-stem I-stem
+		Precision	Recall	f1-score	Instances
+
+stem		0.67		0.68	0.68		94
+prag		1.00		1.00	1.00		3
+psd		1.00		0.81	0.90		16
+2.cnt		1.00		0.20	0.33		5
+ctrf		1.00		1.00	1.00		1
+dual.exc		1.00		1.00	1.00		3
+1.pss		1.00		1.00	1.00		2
+det		1.00		1.00	1.00		3
+pl.exc		1.00		1.00	1.00		4
+pl		1.00		0.67	0.80		6
+1.icp		1.00		1.00	1.00		11
+2.icp		1.00		1.00	1.00		8
+3.icp		1.00		0.89	0.94		9
+1.cpl		1.00		1.00	1.00		5
+2.cpl		1.00		0.75	0.86		4
+3.cpl		1.00		1.00	1.00		5
+3.pot		1.00		1.00	1.00		5
+2.pss		1.00		0.50	0.67		2
+1.prf		1.00		1.00	1.00		1
+2.prf		1.00		1.00	1.00		1
+3.prf		0.33		0.50	0.40		2
+1.obj		1.00		0.50	0.67		2
+3.imp		0.50		0.50	0.50		2
+1.pot		1.00		0.20	0.33		5
+dem		1.00		1.00	1.00		1
+lig		0.25		0.25	0.25		4
+
+total/avg	0.80		0.67	0.73
+              precision    recall  f1-score   support
+
+     B-1.cnt       0.00      0.00      0.00         8
+     I-1.cnt       0.00      0.00      0.00        16
+     B-1.cpl       1.00      1.00      1.00         5
+     I-1.cpl       1.00      1.00      1.00         5
+     B-1.icp       1.00      1.00      1.00        11
+     I-1.icp       1.00      1.00      1.00        11
+     B-1.obj       1.00      0.50      0.67         2
+     I-1.obj       1.00      0.50      0.67         2
+     B-1.pot       1.00      0.20      0.33         5
+     I-1.pot       1.00      0.20      0.33         5
+     B-1.prf       1.00      1.00      1.00         1
+     I-1.prf       1.00      1.00      1.00         1
+     B-1.pss       1.00      1.00      1.00         2
+     I-1.pss       1.00      1.00      1.00         2
+     B-2.cnt       1.00      0.20      0.33         5
+     I-2.cnt       1.00      0.20      0.33        10
+     B-2.cpl       1.00      0.75      0.86         4
+     I-2.cpl       1.00      0.75      0.86         4
+     B-2.icp       1.00      1.00      1.00         8
+     I-2.icp       1.00      1.00      1.00         8
+     B-2.pot       0.00      0.00      0.00         4
+     I-2.pot       0.00      0.00      0.00         4
+     B-2.prf       1.00      1.00      1.00         1
+     I-2.prf       1.00      1.00      1.00         1
+     B-2.pss       1.00      0.50      0.67         2
+     I-2.pss       1.00      0.50      0.67         2
+     B-3.cnt       0.00      0.00      0.00         7
+     I-3.cnt       0.00      0.00      0.00         7
+     B-3.cpl       1.00      1.00      1.00         5
+     I-3.cpl       1.00      1.00      1.00         5
+     B-3.icp       1.00      0.89      0.94         9
+     I-3.icp       0.00      0.00      0.00         1
+     B-3.imp       0.50      0.50      0.50         2
+     I-3.imp       0.50      0.67      0.57         3
+     B-3.pot       1.00      1.00      1.00         5
+     I-3.pot       1.00      1.00      1.00         5
+     B-3.prf       0.33      0.50      0.40         2
+     I-3.prf       0.33      0.50      0.40         2
+     B-3.pss       0.00      0.00      0.00         1
+     I-3.pss       0.00      0.00      0.00         1
+      B-ctrf       1.00      1.00      1.00         1
+      I-ctrf       1.00      1.00      1.00         1
+       B-dem       1.00      1.00      1.00         1
+       I-dem       1.00      1.00      1.00         2
+       B-det       1.00      1.00      1.00         3
+       I-det       1.00      1.00      1.00         3
+  B-dual.exc       1.00      1.00      1.00         3
+  I-dual.exc       1.00      1.00      1.00         3
+       B-lig       0.25      0.25      0.25         4
+       B-lim       1.00      0.50      0.67         2
+       I-lim       1.00      0.33      0.50         3
+        B-pl       1.00      0.67      0.80         6
+        I-pl       1.00      0.67      0.80         6
+    B-pl.exc       1.00      1.00      1.00         4
+    I-pl.exc       1.00      1.00      1.00         4
+      B-prag       1.00      1.00      1.00         3
+      I-prag       1.00      1.00      1.00         3
+       B-psd       1.00      0.81      0.90        16
+      B-stem       0.68      0.68      0.68        95
+      I-stem       0.75      0.99      0.85       245
+
+   micro avg       0.79      0.79      0.79       592
+   macro avg       0.79      0.67      0.70       592
+weighted avg       0.75      0.79      0.75       592
+ samples avg       0.79      0.79      0.79       592
+
+Accuracy Score>>>>  0.7871621621621622
+Top likely transitions:
+From Label -> To label | Weight
+B-stem -> I-stem   | 15.247194
+I-stem -> I-stem   | 13.015905
+B-dem  -> I-dem    | 8.537932
+B-det  -> I-det    | 8.473672
+B-3.cpl -> I-3.cpl  | 8.162528
+B-prt  -> I-prt    | 8.070472
+B-lim  -> I-lim    | 7.586196
+I-dem  -> I-dem    | 7.411610
+B-det.pl -> I-det.pl | 7.207322
+B-1.icp -> I-1.icp  | 7.055305
+B-3.obj -> I-3.obj  | 6.836610
+B-3.pot -> I-3.pot  | 6.785142
+B-mod  -> I-mod    | 6.777099
+I-prt  -> I-prt    | 6.773905
+B-pl.exc -> I-pl.exc | 6.764143
+
+Top unlikely transitions:
+From Label -> To label | Weight
+I-stem -> B-it     | -0.684603
+I-det.pl -> B-stem   | -0.719051
+I-aum  -> B-stem   | -0.750871
+I-mod  -> B-mod    | -0.799838
+B-psd  -> B-stem   | -0.812739
+I-neg  -> B-stem   | -0.837524
+I-3.obj -> B-det    | -0.852995
+I-pl   -> B-det.pl | -0.950537
+I-mod  -> B-dem    | -1.139756
+I-dem  -> B-stem   | -1.273095
+I-3.obj -> B-stem   | -1.317422
+I-stem -> B-2.icp  | -1.320267
+I-1.obj -> B-stem   | -1.379109
+I-ila  -> B-stem   | -1.382421
+I-prag -> B-stem   | -1.922914
+Top positive:
+Weight | Label | Attribute
+10.178749 | I-det  | postag=det
+9.289046 | I-stem | EOW
+9.270963 | I-stem | postag=obl
+8.778076 | B-stem | postag=obl
+8.125654 | I-det.pl | postag=det
+7.987156 | I-det.pl | prev2letters=yi>
+7.758980 | I-det  | prev2letters=ri>
+7.308521 | B-stem | BOW
+7.276244 | B-3.icp | BOW
+6.598063 | I-3.pot | prevletter=d>
+6.479670 | B-3.pot | letterLowercase=d
+6.391966 | I-det  | prevletter=r>
+6.276300 | I-3.cpl | prevletter=b>
+6.008157 | I-1.cpl | prevletter=d>
+5.923649 | B-3.cpl | letterLowercase=b
+
+Top negative:
+Weight | Label | Attribute
+-2.888732 | B-3.cpl | bias
+-2.890078 | I-stem | letterLowercase=c
+-2.944635 | I-3.cpl | bias
+-3.032198 | I-det  | postag=n
+-3.191814 | B-prag | postag=n
+-3.209981 | I-prag | postag=n
+-3.216865 | B-3.icp | bias
+-3.453844 | I-stem | postag=n
+-3.843543 | I-det.pl | postag=v
+-4.032234 | I-stem | postag=unkwn
+-4.321980 | B-stem | postag=n
+-4.601711 | I-stem | postag=v
+-4.622280 | I-stem | bias
+-5.359914 | I-det  | postag=v
+-5.650062 | B-stem | postag=v

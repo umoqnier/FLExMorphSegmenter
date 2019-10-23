@@ -1,2 +1,4 @@
-model_name,dataset-train,dataset-test,time,iterations,L1,L2,accuracy,description
-tsu_base_50_1.0_0.001.crfsuite,corpus_otomi_original,corpus_hard,3.1050947348276776,50,1.0,0.001,0.7483108108108109,Modelo base para replica de experimento
+model_name,dataset-train,dataset-test,test-sizes,time,iterations,L1,L2,accuracy,description
+tsu_base_50_1.0_0.001.crfsuite,corpus_otomi_original,corpus_hard,0.2,3.10[m],50,1.0,0.001,0.7483,Modelo base para replica de experimento
+tsu_l1_0_50_0.0_0.001.crfsuite,corpus_otomi_original,corpus_hard,4.77[m],50,0.0,0.001,0.7872,Eliminación de la penalización L1. Todo el corpus es de entrenamiento teniendo un corpus solo para evaluación
+tsu_l1_0_50_0.0_0.001.crfsuite,corpus_otomi_original,corpus_hard,N/A,50,0.0,0.001,0.7872,Eliminación de la penalización L1. Todo el corpus es de entrenamiento teniendo un corpus solo para evaluación

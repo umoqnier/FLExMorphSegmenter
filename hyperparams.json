@@ -1,10 +1,10 @@
 {
-    "name": "base",
+    "name": "l1_0",
     "dataset-train": "corpus_otomi_original",
     "dataset-test": "corpus_hard",
     "max-iter": 50,
-    "split-ratio": 0.2,
+    "test-sizes": 0.2,
     "L1": 1.0,
     "L2": 1e-3,
-    "description": "Modelo base para replica de experimento"
+    "description": "Eliminación de la penalización L1. Todo el corpus es de entrenamiento teniendo un corpus solo para evaluación"
 }
