@@ -418,9 +418,9 @@ def write_report(model_name, accuracy, train_time, hyper):
 
     """
     line = model_name + "," + hyper['dataset-train'] + "," + \
-            hyper['dataset-test'] + "," + str(train_time / 60) + "," + \
-            str(hyper['max-iter']) + "," + str(hyper['L1']) + "," + \
-            str(hyper['L2']) + "," + str(accuracy) + "," + \
-            hyper['description'] + "\n"
+        hyper['dataset-test'] + "," + train_time + "," + \
+        str(hyper['max-iter']) + "," + str(hyper['L1']) + "," + \
+        str(hyper['L2']) + "," + str(round(accuracy, 4)) + "," + \
+        hyper['description'] + "\n"
     with open('results.csv', 'a') as f:
         f.write(line)
