@@ -1,7 +1,7 @@
 # CLI
 
-* Se implementa una *Command Line Interface (CLI)* sencilla para mejorar el flujo
-de trabajo en los experimentos.
+* Se implementa una *Command Line Interface (CLI)* sencilla para mejorar el
+flujo de trabajo en los experimentos.
 
 ## Instalación
 * Haz fork y clona este repositorio
@@ -57,11 +57,12 @@ Options:
     "test-sizes": 0.2,
     "L1": 1.0,
     "L2": 1e-3,
+    "k": 0,
     "description": "Eliminación de la penalización L1. Todo el corpus es de entrenamiento teniendo un corpus solo para evaluación"
 }
 ```
 * Las banderas entes mencionadas son opcionales y en caso de existir sobre
-escriben los parametros que esten en el archivo `json`
+escriben los parametros que esten en el archivo `.json`
 * Si se habilita el modo verboso `-v` se mostrará la información completa de
 cada iteración en entrenamiento y reportes del rendimiento del modelo
 
@@ -83,16 +84,44 @@ nombre de los modelos sigue la siguiente estructura
     * Data sets
     * Elastic Net l1, l2
     * Accuracy
+    * K para K folds
     * Descripción
 * [x] Agregar una seccion de parametros para no hardcodear
-* [ ] Correr experimentos con diferentes parámetros
+* [x] Correr experimentos con diferentes parámetros
+* [x] Correr adaptación de lezgi con el CLI
+* [ ] Correr K folds con K = 10
+* [ ] Correr con parametros de penalización = 0
+* [ ] Obtener el vocabulario de etiquétas 
 
-## Modificación de parametros
+## Modificación de *feature functions*
 
-1. Quitar todas las etiquetas POS y entrenar. Verificar
-2. Quitar la ventana de contexto y limitarla a 3
-3. Que L1 sea 0 y que L2 sea 0 y ambos para ver que sucede
-4. Modificar el split ratio
+1. [ ] Quitar todas las etiquetas POS
+2. [ ] Quitar la ventana de contexto y limitarla a 3
+3. [ ] Quitar la ventana de contexto y limitarla a 1 simulando un HMM
+
+## Manejo de Datos para evaluación
+
+1. Juntar todo: Un solo dataset y hacer validación cruzada (k-fold cross validation)
+	* Dataset (original) + instancias nuevas ("hard" etiquetadas por Vic)
+	* [x] K=5
+	* [ ] K=10
+	* El accuracy es el promedio de todas las particiones de como lo está haciendo
+2. Hold out evaluation (Actual): Se aparta una partición de datos para test
+	* Data set original
+	* Reducir la partición de entrenamiento
+		* [x] 80%(train) - 20%(test) + hard
+		* [x] 70%(train) - 30%(test) + hard
+		* [x] 75%(train) - 25%(test) + hard
+
+## Decisiones experimentales restantes
+
+* Análisis de features
+* Baseline (posibles):
+	* Parametros que funcionaron el Lezgi probados en el otomí
+	* Otros métodos
+		* HMM
+		* SVM
+		* Red Neuronal seq2seq
 
 # Escritura
 
@@ -124,12 +153,14 @@ nombre de los modelos sigue la siguiente estructura
 disminuye
 
 ## Depuración del corpus
+
 * Para eliminar líneas repetidas en el corpus `$ sort -u corpus > corpus_uniq`
 * Mostrar las líneas duplicadas `$ diff --color corpus_sort corpus_uniq`
 
 # Convenciones
 
 ## Sustitución de letras
+
 Para solucionar problemas de encoding/decoding se sustituyen las siguientes
 letras en otomí:
 
@@ -137,4 +168,3 @@ letras en otomí:
 * a̱̱ -> α
 * e̱ -> ε
 * i̱ -> ι
-
