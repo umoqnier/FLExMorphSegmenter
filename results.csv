@@ -1,4 +1,13 @@
-model_name,dataset-train,dataset-test,test-sizes,time,iterations,L1,L2,accuracy,description
-tsu_base_50_1.0_0.001.crfsuite,corpus_otomi_original,corpus_hard,0.2,3.10[m],50,1.0,0.001,0.7483,Modelo base para replica de experimento
-tsu_l1_0_50_0.0_0.001.crfsuite,corpus_otomi_original,corpus_hard,4.77[m],50,0.0,0.001,0.7872,Eliminación de la penalización L1. Todo el corpus es de entrenamiento teniendo un corpus solo para evaluación
-tsu_l1_0_50_0.0_0.001.crfsuite,corpus_otomi_original,corpus_hard,N/A,50,0.0,0.001,0.7872,Eliminación de la penalización L1. Todo el corpus es de entrenamiento teniendo un corpus solo para evaluación
+model_name,dataset-train,dataset-test,test-split,train-size,test-size,time,iterations,L1,L2,accuracy,evaluation,k,description
+tsu_lezgi_base_50_0.1_0.001.crfsuite,lezgi,,0.2,64,16,0.02[m],50,0.1,0.001,0.9316,hold_out,0,Experimento de Lezgi con el CLI actual
+tsu_tsunkua_base_50_0.1_0.001.crfsuite,corpus_otomi_original,corpus_otomi_original,0.2,1364,341,3.18[m],50,0.1,0.001,0.9616,hold_out,0,Base de parametros para Lezgi con el corpus en otomi
+tsu_test_size_30%_50_0.1_0.001.crfsuite,corpus_otomi_original,corpus_otomi_original,0.3,1193,512,2.37[m],50,0.1,0.001,0.9647,hold_out,0,MOdificacion al conjunto de test al 30%
+tsu_test_size_25%_50_0.1_0.001.crfsuite,corpus_otomi_original,corpus_otomi_original,0.25,1278,427,2.94[m],50,0.1,0.001,0.9648,hold_out,0,MOdificacion al conjunto de test al 25%
+tsu_hard_test_50_0.1_0.001.crfsuite,corpus_otomi_original,corpus_hard,0.2,1364,422,2.99[m],50,0.1,0.001,0.9501,hold_out,0,Integrando test retadores
+tsu_hard_test_split_30%_50_0.1_0.001.crfsuite,corpus_otomi_original,corpus_hard,0.3,1193,593,2.4[m],50,0.1,0.001,0.9556,hold_out,0,Integrando test retadores y un 30% de test
+tsu_l1_zero_50_0_0.001.crfsuite,corpus_otomi_original,corpus_hard,0.2,1364,422,0.0[m],50,0,0.001,0.976,hold_out,0,parametro L1 en cero
+tsu_l1_l2_zero_50_0_0.crfsuite,corpus_otomi_original,corpus_hard,0.2,1364,422,2.91[m],50,0,0,0.9572,hold_out,0,parametros L1 y L2 en cero y corpus retador
+tsu_l2_zero_50_0.1_0.crfsuite,corpus_otomi_original,corpus_hard,0.2,1364,422,3.45[m],50,0.1,0,0.9771,hold_out,0,parametros L1 y L2 en cero y corpus retador
+tsu_original_l1_zero_50_0_0.001.crfsuite,corpus_otomi_original,corpus_otomi_original,0.2,1364,341,2.98[m],50,0,0.001,0.9576,hold_out,0,parametros L1 en cero
+tsu_original_l1_l2_zero_50_0_0.crfsuite,corpus_otomi_original,corpus_otomi_original,0.2,1364,341,3.18[m],50,0,0,0.9671,hold_out,0,parametros L1 y L2 en cero
+tsu_original_l2_zero_50_0.1_0.crfsuite,corpus_otomi_original,corpus_otomi_original,0.2,1364,341,3.29[m],50,0.1,0,0.9701,hold_out,0,parametro L2 en cero
