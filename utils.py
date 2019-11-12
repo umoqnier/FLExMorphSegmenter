@@ -1,5 +1,10 @@
+import os
+import time
+import pycrfsuite
+from collections import Counter
 from itertools import chain
 from sklearn.metrics import classification_report
+from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelBinarizer
 import xml.etree.ElementTree as ET
 
@@ -8,7 +13,7 @@ def get_vic_data(path, file_name):
     with open(path + file_name, encoding='utf-8', mode='r') as f:
         plain_text = f.read()
     raw_data = plain_text.split('\n')
-    return [eval(row) for row in raw_data]
+    return [eval(row) for row in raw_data if row]
 
 
 def get_hard_corpus(path, file_name):
@@ -17,8 +22,142 @@ def get_hard_corpus(path, file_name):
     return eval(plain_text)
 
 
-def corpus_verifier(corpus_list):
-    pass
+def get_train_test(data, test_size, datatest, corpora_path):
+    """
+    """
+    train_data, test_data = train_test_split(WordsToLetter(data),
+                                             test_size=test_size)
+    if 'hard' in datatest:
+        hard_corpus = get_hard_corpus(corpora_path, datatest)
+        # Add hard cases to test dataset
+        hard_letters = WordsToLetter(hard_corpus, True)
+        test_data = test_data + hard_letters
+    return train_data, test_data
+
+
+def param_setter(hyper, model_name, test_size, iterations, l1, l2, evaluation):
+    """ Si existen parametros del CLI los setea en el diccionario hyper
+    """
+    if model_name:
+        hyper['name'] = model_name
+    if test_size:
+        hyper['test-split'] = test_size
+    if iterations:
+        hyper['iterarions'] = iterations
+    if l1:
+        hyper['L1'] = l1
+    if l2:
+        hyper['L2'] = l2
+    if evaluation:
+        hyper['evaluation'] = evaluation
+    return hyper
+
+
+def model_trainer(train_data, models_path, hyper, verbose, k=0):
+    """
+    """
+    X_train = sent2features(train_data)
+    y_train = sent2labels(train_data)
+
+    # Train the model
+
+    trainer = pycrfsuite.Trainer(verbose=verbose)
+
+    for xseq, yseq in zip(X_train, y_train):
+        trainer.append(xseq, yseq)
+
+    # Set training parameters. L-BFGS is default. Using Elastic Net (L1 + L2)
+    # regularization [ditto?].
+    trainer.set_params({
+            'c1': hyper['L1'],  # coefficient for L1 penalty
+            'c2': hyper['L2'],  # coefficient for L2 penalty
+            'max_iterations': hyper['max-iter']  # early stopping
+        })
+    if k:
+        compositive_name = f"tsu_{hyper['name']}_{hyper['max-iter']}_{hyper['L1']}_{hyper['L2']}_k_{k}.crfsuite"
+    else:
+        compositive_name = f"tsu_{hyper['name']}_{hyper['max-iter']}_{hyper['L1']}_{hyper['L2']}.crfsuite"
+    # The program saves the trained model to a file:
+    if not os.path.isfile(models_path + compositive_name):
+        print(f"Entrenando nuevo modelo '{compositive_name}'")
+        start = time.time()
+        trainer.train(models_path + compositive_name)
+        end = time.time()
+        train_time = end - start
+        print("Fin de entrenamiento. Tiempo de entrenamiento >>", train_time,
+              "[s]", train_time / 60, "[m]")
+    else:
+        train_time = 0
+        print("Usando modelo pre-entrenado >>", models_path + compositive_name)
+    return train_time, compositive_name
+
+
+def model_tester(test_data, models_path, model_name, verbose):
+    """
+    """
+    X_test = sent2features(test_data)
+    y_test = sent2labels(test_data)
+
+    # ### Make Predictions
+    tagger = pycrfsuite.Tagger()
+    tagger.open(models_path + model_name)  # Passing model to tagger
+
+    # First, let's use the trained model to make predications for just one
+    # example sentence from the test data.
+    # The predicted labels are printed out for comparison above the correct
+    # labels. Most examples have 100% accuracy.
+
+    if verbose:
+        print("Basic example of prediction")
+        example_sent = test_data[0]
+        print('Letters:', '  '.join(extractTokens(example_sent)), end='\n')
+
+        print('Predicted:',
+              ' '.join(tagger.tag(extractFeatures(example_sent))), end='\n')
+        print('Correct:', ' '.join(extractLabels(example_sent, 1)))
+
+    # First, we will predict BIO labels in the test data:
+
+    y_pred = []
+    y_test = labels_decoder(y_test)
+    for xseq in X_test:
+        try:
+            y_pred.append(tagger.tag(xseq))
+        except UnicodeDecodeError as e:
+            print("ERROR al producir etiquetas")
+            print(e.object)
+            print(e.reason)
+
+    return y_test, y_pred, tagger
+
+
+def report_printer(y_test, y_pred, tagger):
+    """
+    """
+    # Get results for labeled position evaluation. This evaluates how well
+    # the classifier performed on each morpheme as a whole and their tags,
+    # rather than evaluating character-level. Then, we check the results and
+    # print a report of the results. These results are for character level.
+    eval_labeled_positions(y_test, y_pred)
+
+    print(bio_classification_report(y_test, y_pred))
+
+    print("Accuracy Score>>>> ", accuracy_score(y_test, y_pred))
+
+    info = tagger.info()
+
+    # Prints top 15 labels transitions with learned transitions weights
+    print("Top likely transitions:")
+    print_transitions(Counter(info.transitions).most_common(15))
+
+    print("\nTop unlikely transitions:")
+    print_transitions(Counter(info.transitions).most_common()[-15:])
+
+    print("Top positive:")
+    print_state_features(Counter(info.state_features).most_common(15))
+
+    print("\nTop negative:")
+    print_state_features(Counter(info.state_features).most_common()[-15:])
 
 
 def XMLtoWords(filename):
@@ -29,8 +168,8 @@ def XMLtoWords(filename):
 
     datalists = []
 
-    #open XML doc using xml parser
-    root = ET.parse(filename).getroot()
+    # open XML doc using xml parser
+    root = ET.parse('legacy/' + filename).getroot()
 
     for text in root:
         for paragraphs in text:
@@ -162,7 +301,7 @@ def extractFeatures(sent):
                     'letterLowercase=' + letter.lower(),
                     'postag=' + word[j][1],
                 ]
-                #position of word in sentence and pos tags sequence
+                # position of word in sentence and pos tags sequence
                 if i > 0:
                     features.append('prevpostag=' + sent[i-1][0][1])
                     if i != senlen-1:
@@ -399,10 +538,8 @@ def labels_decoder(test):
 
 
 def accuracy_score(y_test, y_pred):
-    right, wrong, total, control = 0, 0, 0, 0
+    right, wrong, total = 0, 0, 0
     for tests, predictions in zip(y_test, y_pred):
-        if len(tests) == len(predictions):
-            control += 1
         total += len(tests)
         for t, p in zip(tests, predictions):
             if t == p:
@@ -413,14 +550,28 @@ def accuracy_score(y_test, y_pred):
     return right / total
 
 
-def write_report(model_name, accuracy, train_time, hyper):
+def write_report(model_name, train_size, test_size, accuracy, train_time,
+                 hyper):
     """Escribe el reporte con resultados e hiperparametros
 
     """
-    line = model_name + "," + hyper['dataset-train'] + "," + \
-        hyper['dataset-test'] + "," + train_time + "," + \
-        str(hyper['max-iter']) + "," + str(hyper['L1']) + "," + \
-        str(hyper['L2']) + "," + str(round(accuracy, 4)) + "," + \
-        hyper['description'] + "\n"
+    line = ''
+    if hyper['k']:
+        hyper['dataset-test'] = 'N/A'
+        hyper['test-split'] = 'N/A'
+    line += model_name + ','
+    line += hyper['dataset-train'] + ','
+    line += hyper['dataset-test'] + ','
+    line += str(hyper['test-split']) + ','
+    line += str(train_size) + ','
+    line += str(test_size) + ','
+    line += train_time + ','
+    line += str(hyper['max-iter']) + ','
+    line += str(hyper['L1']) + ','
+    line += str(hyper['L2']) + ','
+    line += str(round(accuracy, 4)) + ','
+    line += hyper['evaluation'] + ','
+    line += str(hyper['k']) + ','
+    line += hyper['description'] + "\n"
     with open('results.csv', 'a') as f:
         f.write(line)

@@ -3,19 +3,17 @@
 # realizado para la lengua Lezgi para generar glosa automática a partir
 # de escasos ejemplos
 
-import os
-import time
-import pycrfsuite
 import click
 import json
-from collections import Counter
-from sklearn.model_selection import train_test_split
+import numpy as np
+from sklearn.model_selection import KFold
 from utils import (get_hard_corpus, get_vic_data, WordsToLetter,
                    sent2features, sent2labels, extractTokens,
                    extractLabels, extractFeatures, eval_labeled_positions,
                    bio_classification_report, labels_decoder,
                    print_state_features, print_transitions, accuracy_score,
-                   write_report)
+                   write_report, get_train_test, param_setter, XMLtoWords,
+                   model_trainer, model_tester)
 
 
 @click.command()
@@ -33,119 +31,82 @@ from utils import (get_hard_corpus, get_vic_data, WordsToLetter,
               help='Parametro de optimización ElasticNet L1')
 @click.option('-l2', type=float,
               help='Parametro de optimización ElasticNet L2')
+@click.option('-e', '--evaluation', type=str,
+              help='Método de evaluación. Ej. hold_out, k_fold')
 @click.option('-d', '--debug', is_flag=True,
               help='Habilita el modo depuración')
 @click.option('-v', '--verbose', is_flag=True,
               help='Habilita el modo verboso')
 @click.argument('hparams', type=click.File('r'))
 def cli(corpora_path, models_path, model_name, debug, verbose, test_size,
-        iterations, l1, l2, hparams):
+        iterations, l1, l2, evaluation, hparams):
     """Command Line Interface para glosador automático del otomí (hñahñu)
     """
     if debug:
         breakpoint()
     hyper = json.loads(hparams.read())
-    if model_name is None:
-        model_name = hyper['name']
-
-    vic_data = get_vic_data(corpora_path, hyper['dataset-train'])
-    # Randomize and split the data
-    if 'hard' in hyper['dataset-test']:
-        train_data = WordsToLetter(vic_data)
-        hard_corpus = get_hard_corpus(corpora_path, hyper['dataset-test'])
-        test_data = WordsToLetter(hard_corpus, True)
-        hyper['test-size'] = 'N/A'
+    hyper = param_setter(hyper, model_name, test_size, iterations, l1, l2,
+                         evaluation)
+    if hyper['dataset-train'] == "lezgi":
+        data = XMLtoWords('FLExTxtExport2.xml')
     else:
-        train_data, test_data = train_test_split(WordsToLetter(vic_data),
-                                                 test_size=hyper['test-size'])
-
-    X_train = sent2features(train_data)
-    y_train = sent2labels(train_data)
-
-    X_test = sent2features(test_data)
-    y_test = sent2labels(test_data)
-
-    # Train the model
-
-    trainer = pycrfsuite.Trainer(verbose=verbose)
-
-    for xseq, yseq in zip(X_train, y_train):
-        trainer.append(xseq, yseq)
-
-    # Set training parameters. L-BFGS is default. Using Elastic Net (L1 + L2)
-    # regularization [ditto?].
-    trainer.set_params({
-            'c1': l1 or hyper['L1'],  # coefficient for L1 penalty
-            'c2': l2 or hyper['L2'],  # coefficient for L2 penalty
-            'max_iterations': iterations or hyper['max-iter']  # early stopping
-        })
-    compositive_name = f"tsu_{model_name}_{iterations or hyper['max-iter']}_{hyper['L1']}_{hyper['L2']}.crfsuite"
-    # The program saves the trained model to a file:
-    if not os.path.isfile(models_path + compositive_name):
-        print(f"Entrenando nuevo modelo '{compositive_name}'")
-        start = time.time()
-        trainer.train(models_path + compositive_name)
-        end = time.time()
-        train_time = end - start
+        data = get_vic_data(corpora_path, hyper['dataset-train'])
+    if hyper['evaluation'] == 'hold_out':
+        print("*"*10)
+        print("HOLD OUT VALIDATION")
+        print("*"*10)
+        train_data, test_data = get_train_test(data, hyper['test-split'],
+                                               hyper['dataset-test'],
+                                               corpora_path)
+        train_size = len(train_data)
+        test_size = len(test_data)
+        train_time, compositive_name = model_trainer(train_data, models_path,
+                                                     hyper, verbose)
+        y_test, y_pred, tagger = model_tester(test_data, models_path,
+                                              compositive_name, verbose)
+        accuracy = accuracy_score(y_test, y_pred)
         train_time_format = str(round(train_time / 60, 2)) + "[m]"
-        print("Fin de entrenamiento. Tiempo de entrenamiento >>", train_time,
-              "[s]", train_time / 60, "[m]")
+        write_report(compositive_name, train_size, test_size, accuracy,
+                     train_time_format, hyper)
+        if verbose:
+            eval_labeled_positions(y_test, y_pred)
+            print(bio_classification_report(y_test, y_pred))
     else:
-        train_time_format = "N/A"
-        print("Usando modelo pre-entrenado >>", models_path + compositive_name)
-
-    # ### Make Predictions
-    tagger = pycrfsuite.Tagger()
-    tagger.open(models_path + compositive_name)  # Passing model to tagger
-
-    # First, let's use the trained model to make predications for just one
-    # example sentence from the test data.
-    # The predicted labels are printed out for comparison above the correct
-    # labels. Most examples have 100% accuracy.
-
-    if verbose:
-        print("Basic example of prediction")
-        example_sent = test_data[0]
-        print('Letters:', '  '.join(extractTokens(example_sent)), end='\n')
-
-        print('Predicted:',
-              ' '.join(tagger.tag(extractFeatures(example_sent))), end='\n')
-        print('Correct:', ' '.join(extractLabels(example_sent, 1)))
-
-    # First, we will predict BIO labels in the test data:
-
-    y_pred = []
-    y_test = labels_decoder(y_test)
-    for i, xseq in enumerate(X_test):
-        y_pred.append(tagger.tag(xseq))
-
-    accuracy = accuracy_score(y_test, y_pred)
-    write_report(compositive_name, accuracy, train_time_format, hyper)
-    # Get results for labeled position evaluation. This evaluates how well
-    # the classifier performed on each morpheme as a whole and their tags,
-    # rather than evaluating character-level. Then, we check the results and
-    # print a report of the results. These results are for character level.
-    if verbose:
-        eval_labeled_positions(y_test, y_pred)
-
-        print(bio_classification_report(y_test, y_pred))
-
-        print("Accuracy Score>>>> ", accuracy_score(y_test, y_pred))
-
-        info = tagger.info()
-
-        # Prints top 15 labels transitions with learned transitions weights
-        print("Top likely transitions:")
-        print_transitions(Counter(info.transitions).most_common(15))
-
-        print("\nTop unlikely transitions:")
-        print_transitions(Counter(info.transitions).most_common()[-15:])
-
-        print("Top positive:")
-        print_state_features(Counter(info.state_features).most_common(15))
-
-        print("\nTop negative:")
-        print_state_features(Counter(info.state_features).most_common()[-15:])
+        i = 0
+        partial_time = 0
+        partial_accuracy = 0
+        kf = KFold(n_splits=hyper['k'], shuffle=True)
+        data = WordsToLetter(data)
+        hard_data = WordsToLetter(get_hard_corpus(corpora_path, 'corpus_hard'),
+                                  True)
+        dataset = np.array(data + hard_data)
+        print("*"*10)
+        print("K FOLDS VALIDATION")
+        print("*"*10)
+        for train_index, test_index in kf.split(dataset):
+            i += 1
+            print("Iteration #", i)
+            train_data, test_data = dataset[train_index], dataset[test_index]
+            train_time, compositive_name = model_trainer(train_data,
+                                                         models_path, hyper,
+                                                         verbose, i)
+            y_test, y_pred, tagger = model_tester(test_data, models_path,
+                                                  compositive_name, verbose)
+            partial_accuracy += accuracy_score(y_test, y_pred)
+            partial_time += train_time
+            if verbose:
+                print("*"*10)
+                print("Partial Time>>", train_time, "Accuracy acumulado>>",
+                      partial_accuracy)
+                eval_labeled_positions(y_test, y_pred)
+                print(bio_classification_report(y_test, y_pred))
+        accuracy = partial_accuracy / hyper['k']
+        train_time_format = str(round(partial_time / 60, 2)) + "[m]"
+        train_size = len(train_data)
+        test_size = len(test_data)
+        print("Time>>", train_time_format, "Accuracy>>", accuracy)
+        write_report(compositive_name, train_size, test_size, accuracy,
+                     train_time_format, hyper)
 
 
 if __name__ == '__main__':
