@@ -11,3 +11,6 @@ tsu_l2_zero_50_0.1_0.crfsuite,corpus_otomi_original,corpus_hard,0.2,1364,422,3.4
 tsu_original_l1_zero_50_0_0.001.crfsuite,corpus_otomi_original,corpus_otomi_original,0.2,1364,341,2.98[m],50,0,0.001,0.9576,hold_out,0,parametros L1 en cero
 tsu_original_l1_l2_zero_50_0_0.crfsuite,corpus_otomi_original,corpus_otomi_original,0.2,1364,341,3.18[m],50,0,0,0.9671,hold_out,0,parametros L1 y L2 en cero
 tsu_original_l2_zero_50_0.1_0.crfsuite,corpus_otomi_original,corpus_otomi_original,0.2,1364,341,3.29[m],50,0.1,0,0.9701,hold_out,0,parametro L2 en cero
+tsu_base_k_fold_50_0.1_0.001_k_10.crfsuite,corpus_otomi_original,N/A,N/A,1608,178,40.23[m],50,0.1,0.001,0.9664,k_fold,10,Base de parametros con evaluación k fold
+tsu_base_k_fold_5_50_0.1_0.001_k_5.crfsuite,corpus_otomi_original+corpus_hard,N/A,N/A,1429,357,16.94[m],50,0.1,0.001,0.9653,k_fold,5,Base de parametros con evaluación k fold k = 5
+tsu_l1_l2_zero_k_fold_10_50_0_0_k_10.crfsuite,corpus_otomi_original+corpus_hard,N/A,N/A,1608,178,45.94[m],50,0,0,0.9666,k_fold,10,Parametros l1 y l2 en cero con evaluación k fold k = 10
