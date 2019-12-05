@@ -10,6 +10,20 @@ import xml.etree.ElementTree as ET
 
 
 def get_vic_data(path, file_name):
+    """ Obtiene el corpus original
+
+    Cada renglon del archivo es una oración codificada con glosa por cada
+    fragmento de la oración y con su etiqueta POS por palabra.
+    El formato por renglon es el siguiente:
+        `[[[letras, glosa], [letras, glosa], ..., POS],...]`
+
+    :param path: Ruta donde se encuentra el corpus
+    :type: str
+    :param file_name: Nombre del archivo que contiene el corpus
+    :type: str
+    :return: Lista donde cada elemento es un renglon el corpus
+    :rtype: list
+    """
     with open(path + file_name, encoding='utf-8', mode='r') as f:
         plain_text = f.read()
     raw_data = plain_text.split('\n')
@@ -17,6 +31,21 @@ def get_vic_data(path, file_name):
 
 
 def get_hard_corpus(path, file_name):
+    """ Obtiene el corpus retador
+
+    Esta archivo contiene una lista donde cada elemento es una oración
+    codificada con glosa para cada fragmento de la oración y con su
+    respectiva etiqueta POS por palabra.
+    El formato del archivo es el siguiente:
+        `[[[[letras, glosa], [letras, glosa], ..., POS],...], ...]`
+
+    :param path: Ruta donde se encuentra el corpus
+    :type: str
+    :param file_name: Nombre del archivo que contiene el corpus
+    :type: str
+    :return: Lista donde cada elemento es un renglon el corpus
+    :rtype: list
+    """
     with open(path + file_name, encoding='utf-8', mode='r') as f:
         plain_text = f.read()
     return eval(plain_text)
@@ -24,6 +53,22 @@ def get_hard_corpus(path, file_name):
 
 def get_train_test(data, test_size, datatest, corpora_path):
     """
+    Obtiene el conjunto de entrenamiento y de test
+
+    Conjunto de entrenamiento y pruebas para la evaluación
+    *hold-out*
+
+    :param data: Corpus a evaluar
+    :type: list
+    :param test_size: Porcentaje del conjunto de pruebas
+    :type: float
+    :param datatest: Nombre del tipo de conjunto de pruebas que se utilizará
+    :type: str
+    :param corpora_path: Ruta de la carpeta que contiene los corpus
+    :type: str
+    :return: Tupla con dos listas. Una con el conjunto de entrenamiento
+    y otra con el de pruebas
+    :rtype: tuple
     """
     train_data, test_data = train_test_split(WordsToLetter(data),
                                              test_size=test_size)
@@ -36,7 +81,27 @@ def get_train_test(data, test_size, datatest, corpora_path):
 
 
 def param_setter(hyper, model_name, test_size, iterations, l1, l2, evaluation):
-    """ Si existen parametros del CLI los setea en el diccionario hyper
+    """ Setea parametros del CLI en diccionario
+
+    Si existen parametros del CLI los setea en el diccionario hyper que es
+    el que se encarga manejar los hiperparametros
+
+    :param hyper: diccionario encargado de manejar los hiperparametros
+    :type: dict
+    :param model_name: nombre del modelo de entrenamiento
+    :type: str
+    :param test_size: porcentaje del conjunto de pruebas
+    :type: float
+    :param iterations: Número de iteraciones maximas para entrenamiento
+    :type: int
+    :param l1: Parametro de penalización Elasticnet L1
+    :type: float
+    :param l2: Parámetro de penalización Elasticnet L2
+    :type: float
+    :param evaluation: Método de evaluación
+    :type: str
+    :return: Diccionario hyper modificado si existen parámetros en CLI
+    :rtype: dict
     """
     if model_name:
         hyper['name'] = model_name
@@ -54,7 +119,25 @@ def param_setter(hyper, model_name, test_size, iterations, l1, l2, evaluation):
 
 
 def model_trainer(train_data, models_path, hyper, verbose, k=0):
-    """
+    """ Entrena un modelo y lo guarda
+
+    Función encargada de entrenar un modelo con base en los hyperparametro y
+    lo guarda como un archivo utilizable por `pycrfsuite`
+
+    Parameters
+    ----------
+    train_data : list
+    models_path : str
+    hyper : dict
+    verbose : bool
+    k : int, optional
+
+    Returns
+    -------
+    train_time : float
+        Tiempo de entrenamiento
+    compositive_name : str
+        Nombre del modelo entrenado
     """
     X_train = sent2features(train_data)
     y_train = sent2labels(train_data)
@@ -77,7 +160,7 @@ def model_trainer(train_data, models_path, hyper, verbose, k=0):
         compositive_name = f"tsu_{hyper['name']}_{hyper['max-iter']}_{hyper['L1']}_{hyper['L2']}_k_{k}.crfsuite"
     else:
         compositive_name = f"tsu_{hyper['name']}_{hyper['max-iter']}_{hyper['L1']}_{hyper['L2']}.crfsuite"
-    # The program saves the trained model to a file:
+    w# The program saves the trained model to a file:
     if not os.path.isfile(models_path + compositive_name):
         print(f"Entrenando nuevo modelo '{compositive_name}'")
         start = time.time()
@@ -93,7 +176,25 @@ def model_trainer(train_data, models_path, hyper, verbose, k=0):
 
 
 def model_tester(test_data, models_path, model_name, verbose):
-    """
+    """ Prueba un modelo preentrenado
+
+    Recibe los datos de prueba y realiza las pruebas con el modelo previo
+
+    Parameters
+    ----------
+    test_data : list
+    models_path : str
+    model_name : str
+    verbose : bool
+
+    Returns
+    -------
+    y_test : list
+        Etiquetas reales
+    y_pred : list
+        Etiquetas predichas por el modelo
+    tagger : Object
+        Objeto que etiqueta con base en el modelo
     """
     X_test = sent2features(test_data)
     y_test = sent2labels(test_data)
@@ -173,44 +274,44 @@ def XMLtoWords(filename):
 
     for text in root:
         for paragraphs in text:
-            #Only get paragraphs, ignore metadata.
+            # Only get paragraphs, ignore metadata.
             if paragraphs.tag == 'paragraphs':
                 for paragraph in paragraphs:
-                    #jump straight into items under phrases
+                    # jump straight into items under phrases
                     for j, phrase in enumerate(paragraph[0]):
                         sent = []
                         # ignore first item tag which is the sentence number
                         for i, word in enumerate(phrase[1]):
-                            #ignore punctuation tags which have no attributes
+                            # ignore punctuation tags which have no attributes
                             if word.attrib:
                                 lexeme = []
                                 for node in word:
                                     if node.tag == 'morphemes':
                                         for morph in node:
                                             morpheme = []
-                                            #note morph type
+                                            # note morph type
                                             morph_type = morph.get('type')
-                                            #Treat MWEs or unlabled morphemes as stems.
+                                            # Treat MWEs or unlabled morphemes as stems.
                                             if morph_type == None or morph_type == 'phrase':
                                                 morph_type = 'stem'
                                             for item in morph:
-                                                #get morpheme token
+                                                # get morpheme token
                                                 if item.get('type') == 'txt':
                                                     form = item.text
-                                                    #get rid of hyphens demarcating affixes
+                                                    # get rid of hyphens demarcating affixes
                                                     if morph_type == 'suffix':
                                                         form = form[1:]
                                                     if morph_type == 'prefix':
                                                         form = form[:-1]
                                                     morpheme.append(form)
-                                                #get affix glosses
+                                                # get affix glosses
                                                 if item.get('type') == 'gls' and morph_type != 'stem':
                                                     morpheme.append(item.text)
-                                            #get stem "gloss" = 'stem'
+                                            # get stem "gloss" = 'stem'
                                             if morph_type == 'stem':
                                                 morpheme.append(morph_type)
                                             lexeme.append(morpheme)
-                                    #get word's POS
+                                    # get word's POS
                                     if node.get('type') == 'pos':
                                         lexeme.append(node.text)
                                 sent.append(lexeme)
@@ -220,15 +321,13 @@ def XMLtoWords(filename):
 
 def WordsToLetter(wordlists, flag=False):
     '''
-    Takes data from XMLtoWords: [[[[[[morpheme, gloss], pos],...],words],sents]].
+    Takes data from XMLtoWords:
+        `[[[[[[morpheme, gloss], pos],...],words],sents]]`
     Returns [[[[[letter, POS, BIO-label],...],words],sents]]
     '''
 
-    #print("=================Words to letter")
     letterlists = []
-    #print("Objeto recibido", wordlists[:3], "...")
     for i, phrase in enumerate(wordlists):
-        #print(i, "phrase=================")
         sent = []
         for lexeme in phrase:
             if flag:
@@ -242,38 +341,27 @@ def WordsToLetter(wordlists, flag=False):
                 palabra += ''.join([l for l in morpheme[0]])
                 #use gloss as BIO label
                 label = morpheme[1]
-                #print("\t\tLabel >>", label)
                 #Break morphemes into letters
-                #print("\t\t*** LETTERS")
                 for i in range(len(morpheme[0])):
                     letter = [morpheme[0][i]]  # Adding assci for encoding
-                    #print("\t\t\tL >>", letter[0])
                     #add POS label to each letter
                     letter.append(lexeme[-1])
-                    #print("\t\t\tAdd POS >>", letter)
                     #add BIO label
                     if i == 0:
                         letter.append('B-' + label)
                     else:
                         letter.append('I-' + label)
                         #letter.append('I')
-                    #print("\t\tAdd BIO label >>", letter)
                     word.append(letter)
-                    #print("\t*** WORD >>", word)
             sent.append(word)
-            #print("*** SENT>>", sent)
         letterlists.append(sent)
-    #for j, l in enumerate(letterlists[:5]):
-        #print("sent #", j)
-        #for i in l:
-            #print(i)
     return letterlists
 
 
 def extractFeatures(sent):
     ''' Reglas que configuran las feature functions para entrenamiento
 
-    :param sent: Data as [[[[[letter, POS, BIO-label],...],words],sents]]
+    :param sent: Data as `[[[[[letter, POS, BIO-label],...],words],sents]]`
     :type: list
     :return: list of words with characters as features list:
         [[[[[letterfeatures],POS,BIO-label],letters],words]]
@@ -284,7 +372,7 @@ def extractFeatures(sent):
     senlen = len(sent)
 
     # TODO: Optimizar los parametros hardcode para el otomí.
-    #each word in a sentence
+    # each word in a sentence
     for i in range(senlen):
         word = sent[i]
         wordlen = len(word)
@@ -559,6 +647,7 @@ def write_report(model_name, train_size, test_size, accuracy, train_time,
     if hyper['k']:
         hyper['dataset-test'] = 'N/A'
         hyper['test-split'] = 'N/A'
+        hyper['dataset-train'] += "+corpus_hard"
     line += model_name + ','
     line += hyper['dataset-train'] + ','
     line += hyper['dataset-test'] + ','
