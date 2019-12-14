@@ -89,22 +89,49 @@ nombre de los modelos sigue la siguiente estructura
 * [x] Agregar una seccion de parametros para no hardcodear
 * [x] Correr experimentos con diferentes parámetros
 * [x] Correr adaptación de lezgi con el CLI
-* [ ] Correr K folds con K = 10
-* [ ] Correr con parametros de penalización = 0
-* [ ] Obtener el vocabulario de etiquétas 
+* [x] Correr K folds con K = 10
+* [x] Correr con parametros de penalización = 0
+* [ ] Obtener el vocabulario de etiquétas
 
 ## Modificación de *feature functions*
 
-1. [ ] Quitar todas las etiquetas POS
+1. [x] Quitar todas las etiquetas POS
 2. [ ] Quitar la ventana de contexto y limitarla a 3
-3. [ ] Quitar la ventana de contexto y limitarla a 1 simulando un HMM
+3. [x] Quitar la ventana de contexto y limitarla a 1 simulando un HMM
+
+## *Baseline*
+
+* Feature functions solo con la letra anterior
+  * Sin regularización L1 y L2
+  * Simulando HMM
+  * Nombre del modelo: *`tsu_baseline_zero_l1_l2_test_30%_50_0_0.crfsuite`*
+
+### Esperimentos finales
+
+* Trabajar con todas las feature functions
+  * K fold = 10
+  * [x] L1 = 0.1 y L2 = 0.001 *`tsu_base_k_fold_50_0.1_0.001_k_10.crfsuite`*
+  * [x] L1 = 0 *``*
+  * [x] L2 = 0 *``*
+  * [x] L1 = 0 y L2 = 0 *`tsu_l1_l2_zero_k_fold_10_50_0_0_k_10.crfsuite`*
+* Trabajar con todas las las feature functions excepto POS
+  * K fold = 10
+  * [x] L1 = 0.1 y L2 = 0.001
+  * [x] L1 = 0
+  * [x] L2 = 0
+  * [x] L1 = 0 y L2 = 0
+
+## Graficas
+
+* Graficar la funcion de perdida
+  * Guardar la información y recuperar la de los modelos previos
 
 ## Manejo de Datos para evaluación
 
 1. Juntar todo: Un solo dataset y hacer validación cruzada (k-fold cross validation)
 	* Dataset (original) + instancias nuevas ("hard" etiquetadas por Vic)
 	* [x] K=5
-	* [ ] K=10
+	* [x] K=10
 	* El accuracy es el promedio de todas las particiones de como lo está haciendo
 2. Hold out evaluation (Actual): Se aparta una partición de datos para test
 	* Data set original
@@ -168,3 +195,26 @@ letras en otomí:
 * a̱̱ -> α
 * e̱ -> ε
 * i̱ -> ι
+
+# Trabajando con el base line
+
+## Baseline
+Sin regularización L1 y L2 y feature functions solo con la letra anterior (simulando HMM).
+Nombre del modelo: *`tsu_baseline_zero_l1_l2_test_30%_50_0_0.crfsuite`*
+
+* Trabajar con todas las feature functions
+  * K fold = 10
+  * L1 = 0
+  * L2 = 0
+  * L1 = 0 y L2 = 0
+* Trabajar con todas las las feature functions excepto POS
+  * K fold = 10
+  * L1 = 0
+  * L2 = 0
+  * L1 = 0 y L2 = 0
+
+## Agregar más feature functions??
+
+## Graficas
+
+* Graficar la funcion de perdida

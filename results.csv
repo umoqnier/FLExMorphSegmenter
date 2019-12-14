@@ -14,3 +14,17 @@ tsu_original_l2_zero_50_0.1_0.crfsuite,corpus_otomi_original,corpus_otomi_origin
 tsu_base_k_fold_50_0.1_0.001_k_10.crfsuite,corpus_otomi_original,N/A,N/A,1608,178,40.23[m],50,0.1,0.001,0.9664,k_fold,10,Base de parametros con evaluación k fold
 tsu_base_k_fold_5_50_0.1_0.001_k_5.crfsuite,corpus_otomi_original+corpus_hard,N/A,N/A,1429,357,16.94[m],50,0.1,0.001,0.9653,k_fold,5,Base de parametros con evaluación k fold k = 5
 tsu_l1_l2_zero_k_fold_10_50_0_0_k_10.crfsuite,corpus_otomi_original+corpus_hard,N/A,N/A,1608,178,45.94[m],50,0,0,0.9666,k_fold,10,Parametros l1 y l2 en cero con evaluación k fold k = 10
+tsu_baseline_50_0.1_0.001.crfsuite,corpus_otomi_original,corpus_otomi_original,0.2,1364,341,12.07[m],50,0.1,0.001,0.882,hold_out,0,Simulación de HMM con feature functions reducidas
+tsu_baseline_test_30%_50_0.1_0.001.crfsuite,corpus_otomi_original,corpus_otomi_original,0.3,1193,512,3.05[m],50,0.1,0.001,0.8615,hold_out,0,Simulación de HMM con feature functions reducidas. Test al 30%
+tsu_baseline_zero_l1_test_30%_50_0_0.001.crfsuite,corpus_otomi_original,corpus_otomi_original,0.3,1193,512,2.62[m],50,0,0.001,0.8714,hold_out,0,Simulación de HMM con feature functions reducidas. Quitando L1 y test al 30%
+tsu_baseline_zero_l2_test_30%_50_0.1_0.crfsuite,corpus_otomi_original,corpus_otomi_original,0.3,1193,512,2.89[m],50,0.1,0,0.8693,hold_out,0,Simulación de HMM con feature functions reducidas. Quitando L2 y test al 30%
+tsu_baseline_zero_l1_l2_test_30%_50_0_0.crfsuite,corpus_otomi_original,corpus_otomi_original,0.3,1193,512,3.01[m],50,0,0,0.8657,hold_out,0,Simulación de HMM con feature functions reducidas. Quitando L1  L2 y test al 30% 
+tsu_baseline_hard_test_30%_50_0.1_0.001.crfsuite,corpus_otomi_original,corpus_hard,0.3,1193,593,3.34[m],50,0.1,0.001,0.8696,hold_out,0,Simulación de HMM con feature functions reducidas. Corpus retador
+tsu_baseline_hard_zero_l1_test_30%_50_0_0.001.crfsuite,corpus_otomi_original,corpus_hard,0.3,1193,593,2.81[m],50,0,0.001,0.8626,hold_out,0,Simulación de HMM con feature functions reducidas. Corpus retador. Quitando L1
+tsu_baseline_hard_zero_l1_l2_test_30%_50_0_0.crfsuite,corpus_otomi_original,corpus_hard,0.3,1193,593,2.54[m],50,0,0,0.8546,hold_out,0,Simulación de HMM con feature functions reducidas. Corpus retador. Quitando L1 y L2
+tsu_baseline_hard_k_fold_50_0.1_0.001_k_5.crfsuite,corpus_otomi_original+corpus_hard,N/A,N/A,1429,357,18.76[m],50,0.1,0.001,0.8774,k_fold,5,Simulación de HMM con feature functions reducidas. K Fold validation
+tsu_baseline_k_fold_50_0.1_0.001_k_10.crfsuite,corpus_otomi_original+corpus_hard,N/A,N/A,1608,178,45.99[m],50,0.1,0.001,0.8759,k_fold,10,Simulación de HMM con feature functions reducidas. K Fold validation
+,,,,,,,,,:,,,,
+tsu_baseline_k_fold_zero_L1_50_0_0.001_k_10.crfsuite,corpus_otomi_original+corpus_hard,N/A,N/A,1608,178,51.57[m],50,0,0.001,0.8664,k_fold,10,Simulación de HMM con feature functions reducidas. K Fold validation y quitando L1
+tsu_baseline_k_fold_zero_L2_50_0.1_0_k_10.crfsuite,corpus_otomi_original+corpus_hard,N/A,N/A,1608,178,69.05[m],50,0.1,0,0.8745,k_fold,10,Simulación de HMM con feature functions reducidas. K Fold validation y quitando L2
+tsu_baseline_k_fold_zero_L1_L2_50_0_0_k_10.crfsuite,corpus_otomi_original+corpus_hard,N/A,N/A,1608,178,41.32[m],50,0,0,0.87,k_fold,10,Simulación de HMM con feature functions reducidas. K Fold validation y quitando L1 L2
