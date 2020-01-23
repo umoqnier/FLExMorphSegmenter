@@ -5,3 +5,9 @@ venv/
 corpora/
 env/
 *.txt
+latex/*.aux
+latex/*.log
+latex/*.toc
+latex/*.synctex.*
+
+
