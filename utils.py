@@ -160,7 +160,7 @@ def model_trainer(train_data, models_path, hyper, verbose, k=0):
         compositive_name = f"tsu_{hyper['name']}_{hyper['max-iter']}_{hyper['L1']}_{hyper['L2']}_k_{k}.crfsuite"
     else:
         compositive_name = f"tsu_{hyper['name']}_{hyper['max-iter']}_{hyper['L1']}_{hyper['L2']}.crfsuite"
-    w# The program saves the trained model to a file:
+    # The program saves the trained model to a file:
     if not os.path.isfile(models_path + compositive_name):
         print(f"Entrenando nuevo modelo '{compositive_name}'")
         start = time.time()
@@ -370,24 +370,22 @@ def extractFeatures(sent):
 
     featurelist = []
     senlen = len(sent)
-
     # TODO: Optimizar los parametros hardcode para el otomí.
     # each word in a sentence
     for i in range(senlen):
         word = sent[i]
         wordlen = len(word)
         lettersequence = ''
-        #each letter in a word
+        # each letter in a word
         for j in range(wordlen):
             letter = word[j][0]
-            #gathering previous letters
+            # gathering previous letters
             lettersequence += letter
-            #ignore     digits
+            # ignore     digits
             if not letter.isdigit():
                 features = [
                     'bias',
                     'letterLowercase=' + letter.lower(),
-                    'postag=' + word[j][1],
                 ]
                 # position of word in sentence and pos tags sequence
                 if i > 0:
@@ -401,14 +399,14 @@ def extractFeatures(sent):
                     #Don't get pos tag if sentence is 1 word long
                     if i != senlen-1:
                         features.append('nxtpostag=' + sent[i+1][0][1])
-                #position of letter in word
+                # position of letter in word
                 if j == 0:
                     features.append('BOW')
                 elif j == wordlen-1:
                     features.append('EOW')
                 else:
                     features.append('letterposition=-%s' % str(wordlen-1-j))
-                #letter sequences before letter
+                # letter sequences before letter
                 if j >= 4:
                     features.append('prev4letters=' + lettersequence[j-4:j].lower() + '>')
                 if j >= 3:
@@ -417,7 +415,7 @@ def extractFeatures(sent):
                     features.append('prev2letters=' + lettersequence[j-2:j].lower() + '>')
                 if j >= 1:
                     features.append('prevletter=' + lettersequence[j-1:j].lower() + '>')
-                #letter sequences after letter
+                # letter sequences after letter
                 if j <= wordlen-2:
                     nxtlets = word[j+1][0]
                     features.append('nxtletter=<' + nxtlets.lower())
@@ -432,7 +430,8 @@ def extractFeatures(sent):
                 if j <= wordlen-5:
                     nxtlets += word[j+4][0]
                     features.append('nxt4letters=<' + nxtlets.lower())
-            featurelist.append([f.encode('utf-8') for f in features])  # Add encoding for pysrfsuite
+            # Add encoding for pysrfsuite
+            featurelist.append([f.encode('utf-8') for f in features])
     return featurelist
 
 
