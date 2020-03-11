@@ -6,11 +6,15 @@
 \usepackage{natbib}  % Usando paquete para citas
 \usepackage{amsmath} % Notación
 \usepackage{amssymb}
+\usepackage{amsthm}  % Definiciones
 
-\bibliographystyle{acl_natbib}  % Cargando estilo de bibliografia
+
 \graphicspath{{./img/}}
 
+\newtheorem{definition}{Definición}
+
 \begin{document}
+\bibliographystyle{acl_natbib}  % Cargando estilo de bibliografia
 
 \author{Diego Alberto Barriga Martínez}
 \title{Etiquetador automático de la morfología del otomí usando predicción estructurada}
@@ -19,26 +23,64 @@
 
 \chapter{Etiquetador morfológico para el otomí}
 
-En este capítulo se mostrará el pipeline y arquitectura utilizada para la
-realización de esta tesis. Adicionalmente, se explicará el diseño,
-implementación y las feature functions elegidas para el correcto glosado de
-frases en otomí.
+En este capítulo se explicará qué ventajas tienen los \emph{Conditional Random Fields (CRF)} sobre otros modelos de aprendizaje, se mencionan formalmente los elementos fundamentales que describen los \emph{CRF's} y se mostrará el \textit{pipeline} y arquitectura utilizada para la realización de esta tesis. Adicionalmente, se explicará el diseño, implementación y las \textit{feature functions} elegidas para el correcto glosado de frases en otomí.
 
-\section{CRF}
+\section{Limitantes de otros modelos de aprendizaje}
 
-1. Que son
-2. Como funcionan
+En lingüística computacional una tarea de interés es el procesamiento estadístico del lenguaje natural, en particular, el etiquetado y segmentación de secuencias de datos. En ese sentido, es habitual la utilización de \textbf{modelos generativos}, cómo los \textit{Hidden Markov Models (HMMs)}, o \textbf{modelos condicionales}, como los \textit{Maximum Entropy Markov Models (MEMMs)}.
+
+Por una parte, los modelos generativos intentan modelar una probabilidad conjunta $P(x,y)$ sobre observaciones y etiquetas. Para definir esta probabilidad conjunta se necesita enumerar todas las observaciones posibles. Las limitantes de este enfoque son de diversas índoles como las grandes dimensionalidades en el vector de entrada $X$, la dificultad de representar múltiples características que interactúan unas con otras y dependencias complejas que hacen la construcción de la distribución de probabilidad un problema intratable con un enfoque computacional.
+
+Por otro lado, una solución a las limitantes de los modelos generativos es un modelo condicional. Estos modelos no son tan estrictos como los primeros al momento de asumir independencias en las observaciones. Los modelos condicionales especifican la probabilidad de posibles etiquetas dada una secuencia de observación.
+
+Consecuencia de lo anterior, no se gasta esfuerzo en modelar las observaciones, dado que en al momento de realizar pruebas estas observaciones son fijas. Segundo, la probabilidad condicional puede depender de características arbitrarias y no dependientes de la secuencia de observación sin forzar al modelo a tomar en cuenta la distribución de estas características, permitiendo que el modelo sea tratable \citep{lafferty2001conditional}.
+
+Un ejemplo de estas ventajas con los \textit{MEMMs} que son modelos secuenciales de probabilidad condicional. Sin embargo, estos modelos y otros que son no generativos, de estados finitos y que son clasificadores basados en el estado siguiente comparten una debilidad llamada \emph{label bias problem}. \citet{lafferty2001conditional} define que existe el \emph{label bias problem} cuando "las transiciones que dejan un estado compiten solo entre sí, en lugar de entre todas las demás transiciones en el modelo".
+
+Dado que las transiciones son las probabilidades condicionales de los siguientes posibles estados una observación puede afectar cuál será el estado siguiente sin tomar en cuenta que tan adecuado será este. Por tanto, se tendrá un sesgo en los estados con menos transiciones de salida.  
+
+\section{Conditional Random Fields}
+
+Como menciona \citet{sutton2012introduction} modelar las dependencias entre las entrada puede conducir a modelos intratables, pero ignorar estas dependencias puede reducir el rendimiento.
+
+Dado el que problema abordado en este trabajo, dónde se requiere del etiquetado de secuencias y es en contexto de bajos recursos lingüísticos, se hace necesario utilizar un enfoque más conveniente.
+
+Los \textit{Conditional Random Fields (CRFs)} son un framework para la creación de modelos probabilístico utilizado en técnicas de aprendizaje estructurado. Tienen las ventajas de los \textit{MEMMs} y, en principio, solucionan el \emph{label bias problem}. El framework tiene un solo modelo exponencial para la probabilidad conjunta de todas las secuencias de las etiquetas de salida dada la secuencia de observación. En contraste los \emph{MEMMs} usan modelos exponenciales para cada probabilidad condicional de los estados siguientes dado el estado actual.
+
+Formalmente \citet{lafferty2001conditional} definen los \textit{CRFs} como a continuacion se enuncia:
+
+\begin{definition}
+	Sea $G = (V,E)$ una gráfica tal que $\mathbf{Y} = (\mathbf{Y}_{v})_{v \in V}$, entonces esa $\mathbf{Y}$ es indexada por los vertices de $G$. Entonces $(\mathbf{X}, \mathbf{Y})$ es un \textsf{conditional random field} en caso de que las variables aleatorias $\mathbf{Y}$ se condicionen por $\mathbf{X}$, la variable aleatoria $\mathbf{Y}_{v}$ cumple la \textit{propiedad de Markov} con respecto a la gráfica: $p(\mathbf{Y}_{v}|\mathbf{X},\mathbf{Y}_{w},w \ne v) = p(\mathbf{Y}_{v}|\mathbf{X},\mathbf{Y}_{w},w \sim v)$, dónde $w \sim v$ significa que $w$ y $v$ son vecinos en $G$.
+\end{definition}
+
+En esta tesis, para el modelado de secuencias, se utiliza la forma más sencilla de la gráfica $G$ dónde es una cadena simple o línea. Esto quiere decir que $G = (V = \{1,2,...m\}, E = \{(i,i+1)\})$. A este tipo de \textit{CRFs} se les conoce como \textit{linear-chain CRFs}. Como menciona \citet{lafferty2001conditional} "si la gráfica $G = (V,E)$ de $\mathbf{Y}$ es un árbol (del cual una cadena es el ejemplo más sencillo), los cliques??? son los límites y vertices. Entonces, por el teorema de los \textit{random fields} \citep{hammersley1971markov}, la distribución conjunta sobre las etiquetas de secuencias $\mathbf{Y}$ y $\mathbf{X}$ tiene la forma: "
+
+
+% TODO: Poner tag
+\begin{equation}
+	p{_{\theta}}(y|x) \propto \exp \bigg( \sum\limits_{e \in \mathbf{E},k} \lambda_{k}f_{k}(e,\mathbf{y}|_{e},\mathbf{x}) + \sum\limits_{v \in \mathbf{V},k}\mu_{k}g_{k}(v,\mathbf{y}|_{v},\mathbf{x}) \bigg)
+\end{equation}
+
+
+% TODO: Mencionar la ecucacion
+
+De la ecuación  se destacan $f_{k}$ y $g_{k}$ que representan las \textit{feature functions}. Estas están definidas y son fijas. Las \textit{feature functions} de está tesis serán descritas más adelante. % TODO: Descripcion de la estimacion de parametros y caracteristica de la funcion de perdida
+ 
+
+Los \textit{CRFs} han sido utilizados para la clasificación de regiones en una imagen, estimar el puntaje en un juego de Go, segmentar genes en una hebra de ADN y análisis sintáctico de lenguaje natural en un texto por mencionar algunas \citep{sutton2012introduction}.
+
 
 \section{Corpus}
 
-1. De donde viene
-2. Tipo de otomi, quien lo recolecta y quien lo glosa
-3. Tamaño de tipos y tokens.
-4. Numero de etiquetas diferentes
-5. Tipos de POS y cuantos de cada uno
+% TODO:
+%1. De donde viene
+%2. Tipo de otomi, quien lo recolecta y quien lo glosa
+%3. Tamaño de tipos y tokens.
+%4. Numero de etiquetas diferentes
+%5. Tipos de POS y cuantos de cada uno
 
-Descripción general del corpus. Orientar que la arquitectura esta enfocada en
-resolver el problema de low resources
+%Descripción general del corpus. Orientar que la arquitectura esta enfocada en
+%resolver el problema de low resources
 
 \section{Arquitectura}
 
@@ -92,7 +134,7 @@ HACER ESTA PARTE POR PUNTOS MAS BREVES Y CADA PUNTO HACERLO SECCION Y PROFUNDIZA
 		y asi obtener una precisión, recall y F-score.
 \end{itemize}
 
-MENCIONAR python, version, paquetes y donde corrio. En promedio cuanto tarda
+MENCIONAR python, versión, paquetes y donde corrio. En promedio cuanto tarda
 en correr en la maquina. Mencionar el original en c++
 
 
@@ -104,7 +146,7 @@ Hablar del Base line y como mejoró con mas features
 
 \section{Corpus de evaluación}
 
-Aqui se habla del K fold y de como se introdujo el corpus retador
+Aquí se habla del K fold y de como se introdujo el corpus retador( ,
 
 \citet{singh2005comparison}
 
@@ -113,6 +155,6 @@ Aqui se habla del K fold y de como se introdujo el corpus retador
 \chapter{Conclusiones}
 
 
-\bibliography{/tesis}
+\bibliography{tesis}
 
 \end{document}
