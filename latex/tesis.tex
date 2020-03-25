@@ -21,9 +21,34 @@
 \tableofcontents
 \maketitle
 
-\chapter{Etiquetador morfológico para el otomí}
+\chapter{Introducción}
 
-En este capítulo se explicará qué ventajas tienen los \emph{Conditional Random Fields (CRF)} sobre otros modelos de aprendizaje, se mencionan formalmente los elementos fundamentales que describen los \emph{CRF's} y se mostrará el \textit{pipeline} y arquitectura utilizada para la realización de esta tesis. Adicionalmente, se explicará el diseño, implementación y las \textit{feature functions} elegidas para el correcto glosado de frases en otomí.
+\section{Problemática}
+
+\subsection{Lengua otomí}
+
+En este trabajo se utilizará un corpus en otomí que, además, cumple la característica de estar glosado. En las siguientes secciones se menciona los lugares donde se habla otomí, la variante que se utilizará con sus características y una descripción cuantitativa del corpus
+
+\subsection{Origen}
+
+% Pie de pagina, no meter cosas tangenicales. Citar esta definicion
+La palabra otomí es de origen náhuatl (singular: \textit{otomitl}, plural: \textit{otomí}). Por otra parte, los otomíes se nombran a sí mismos \textit{ñähñu}\footnote{Existen organizaciones indígenas, como el Consejo de la Nacionalidad Otomí, que escriben la auto-denominación como hñätho hñähñu y también ñätho ñähño}, que significa "los que hablan otomí".
+
+Los grupos indígenas que hablan el idioma otomí se encuentran en diversas partes del territorio mexicano como: Estado de México, Querétaro, Hidalgo, Puebla y Veracruz \citep{barrientos2004otomies}. El otomí es una lengua indígena una gran variación dialectal que depende de su distribución geográfica.
+
+En el Estado de México el pueblo \textit{ñähñu} está disperso por varios municipios tales como: Toluca, Lerma, Chapa de Mota, Aculco, Amanalco, Atizapán de Zaragoza, por mencionar algunos. En otros municipios como Naucalpan, Ecatepec, Nezahualcóyotl y Tlalnepantla se pueden encontrar hablantes por efectos de la migración. Según \citet{barrientos2004otomies} la población total de hablantes otomíes en el Estado de México supera los cien mil, sin embargo, datos actuales .
+
+En concreto existen \textbf{nueve} variantes del otomí y cabe recalcar que dicha variación puede presentarse incluso dentro del mismo estado. Tan solo el Estado de México presenta tres variantes del otomí: El otomí de Tilapa, hablado en el municipio de Santiago Tianguistenco; el Otomí de Acazulco, del municipio de San Jerónimo Acazulco; y el Otomí de Toluca, de San Andrés Cuexcontitlán.
+
+\section{Objetivo}
+
+\section{Hipótesis}
+
+\chapter{Avances en etiquetadores automáticos}
+
+\section{Marco teórico}
+
+\section{Estado del arte}
 
 \section{Limitantes de otros modelos de aprendizaje}
 
@@ -37,7 +62,8 @@ Consecuencia de lo anterior, no se gasta esfuerzo en modelar las observaciones, 
 
 Un ejemplo de estas ventajas con los \textit{MEMMs} que son modelos secuenciales de probabilidad condicional. Sin embargo, estos modelos y otros que son no generativos, de estados finitos y que son clasificadores basados en el estado siguiente comparten una debilidad llamada \emph{label bias problem}. \citet{lafferty2001conditional} define que existe el \emph{label bias problem} cuando "las transiciones que dejan un estado compiten solo entre sí, en lugar de entre todas las demás transiciones en el modelo".
 
-Dado que las transiciones son las probabilidades condicionales de los siguientes posibles estados una observación puede afectar cuál será el estado siguiente sin tomar en cuenta que tan adecuado será este. Por tanto, se tendrá un sesgo en los estados con menos transiciones de salida.  
+Dado que las transiciones son las probabilidades condicionales de los siguientes posibles estados una observación puede afectar cuál será el estado siguiente sin tomar en cuenta que tan adecuado será este. Por tanto, se tendrá un sesgo en los estados con menos transiciones de salida.
+
 
 \section{Conditional Random Fields}
 
@@ -58,25 +84,53 @@ En esta tesis, para el modelado de secuencias, se utiliza la forma más sencilla
 
 % TODO: Poner tag
 \begin{equation}
-	p{_{\theta}}(y|x) \propto \exp \bigg( \sum\limits_{e \in \mathbf{E},k} \lambda_{k}f_{k}(e,\mathbf{y}|_{e},\mathbf{x}) + \sum\limits_{v \in \mathbf{V},k}\mu_{k}g_{k}(v,\mathbf{y}|_{v},\mathbf{x}) \bigg)
+p{_{\theta}}(y|x) \propto \exp \bigg( \sum\limits_{e \in \mathbf{E},k} \lambda_{k}f_{k}(e,\mathbf{y}|_{e},\mathbf{x}) + \sum\limits_{v \in \mathbf{V},k}\mu_{k}g_{k}(v,\mathbf{y}|_{v},\mathbf{x}) \bigg)
 \end{equation}
-
 
 % TODO: Mencionar la ecucacion
 
 De la ecuación  se destacan $f_{k}$ y $g_{k}$ que representan las \textit{feature functions}. Estas están definidas y son fijas. Las \textit{feature functions} de está tesis serán descritas más adelante. % TODO: Descripcion de la estimacion de parametros y caracteristica de la funcion de perdida
- 
+
 
 Los \textit{CRFs} han sido utilizados para la clasificación de regiones en una imagen, estimar el puntaje en un juego de Go, segmentar genes en una hebra de ADN y análisis sintáctico de lenguaje natural en un texto por mencionar algunas \citep{sutton2012introduction}.
 
+\chapter{Etiquetador morfológico para el otomí (Metodología)}
 
-\section{Corpus}
+En este capítulo se explicará qué ventajas tienen los \emph{Conditional Random Fields (CRF)} sobre otros modelos de aprendizaje, se mencionan formalmente los elementos fundamentales que describen los \emph{CRF's} y se mostrará el \textit{pipeline} y arquitectura utilizada para la realización de esta tesis. Adicionalmente, se explicará el diseño, implementación y las \textit{feature functions} elegidas para el correcto glosado de frases en otomí.
 
-% TODO:
-%1. De donde viene
-%2. Tipo de otomi, quien lo recolecta y quien lo glosa
+%TODO: Descripcion de la estimacion de parametros y caracteristica de la funcion de perdida
+
+\section{Conditional Random Fields para low resources}
+
+\section{Corpus: otomí de Toluca}
+
+% Otomi en general, Familia y rama
+En este trabajo se utilizará un corpus en otomí que, además, cumple la característica de estar glosado. En las siguientes secciones se describe de forma general la lengua otomí, en particular la variante del otomí de toluca y sus características, y una descripción cuantitativa del corpus
+
+%2. Tipo de otomi
+La clasificación lingüística introduce al otomí dentro de las lenguas otomianas, las cuales a su vez pertenecen a la rama otopame de la familia otomangue \citep{barrientos2004otomies}. Cada variante muestra particularidades fonológicas, morfológicas, sintácticas y léxicas. En el tratamiento de textos por medio de técnicas de \textit{NLP} se requiere que estos estén normalizados y homogéneos. Lo anterior propicia la obtención del mejor desempeño posible en los diversos métodos de aprendizaje automático. 
+
+% De donde vienen los textos, quien lo glosa y quien lo recolecta
+Esta tesis recoge un corpus basado en el trabajo de \citet{lastra1992otomi} titulado \textbf{El otomí de Toluca} y que a su vez es etiquetado y glosado manualmente por el lingüista Víctor Germán Mijangos de la Cruz. Este corpus forma parte del corpus que se encuentra en la plataforma web Tsunkua (Elotl, 2019) TODO: ¿Como se cita?
+
+% Caracteristicas escenciales que tiene que ver con el etiquetado POS de las lenguas otomies
+% caracteristicas de la Variante
+% Descripcion del corpus (tipos, tokens)
+% Particularidades del corpus (Analisis cualitativo)
+% Descripcion detalla del etiquetado POS
+% Grafica de Zipf para las etiquetas POS
+% Distribucion de etiquetas
+
+
+\subsection{Variante}
+
+
 %3. Tamaño de tipos y tokens.
+\subsection{Tipos, tokens y etiquetas POS}
+
 %4. Numero de etiquetas diferentes
+
+\subsection{Particularidades del corpus}
 %5. Tipos de POS y cuantos de cada uno
 
 %Descripción general del corpus. Orientar que la arquitectura esta enfocada en
@@ -95,18 +149,13 @@ se utiliza el modelo gráfico 1st-order Markov CRF with dyad features.
 Adicionalmente, es utilizado el algoritmo de aprendizaje de Limited-memory
 Broyden-Fletcher-Goldfarb-Shanno (L-BFGS) como se menciono en TODO.
 
-Con base en el trabajo previo para del idioma Lezgi (Moeller, S. \& Hulden, M, 2018) se plantea como hipótesis que dado el tamaño del corpus y la glosa que contiene
-se obtendrá texto correctamente glosado con una precisión de al menos 80\%. El objetivo de esta arquitectura es obtener almenos un bla\% de preciosion
+Con base en el trabajo previo para del idioma Lezgi \citep{moeller2018automatic} se plantea como hipótesis que dado el tamaño del corpus y la glosa que contiene
+se obtendrá texto correctamente glosado con una precisión de al menos 80\%. El objetivo de esta arquitectura es obtener al menos un TODO\% de precisión
 Ya que el resultado esperado es la generación de etiquetas que, en principio,
 dependen unas de otras un método basado en grafos como los CRF puede ser
-adecuado. Se definierón de aprender un conjunto de feature functions que
+adecuado. Se definieron de aprender un conjunto de feature functions que
 describen TODO el contexto y brindan información útil para la fase de
 entrenamiento.
-
-En este trabajo se utilizará un corpus del otomí que, además, cumple la
-característica de estar glosado. Se tomará el corpus Tsunkua (Elotl, 2019)
-etiquetado por el lingüista Víctor Germán Mijangos de la Cruz y que está basado
-en el trabajo El otomí de Toluca (Lastra, 1992).
 
 El modelo de aprendizaje semi-supervisado, para la generación de glosa para
 el otomí se describe a continuación:
@@ -115,28 +164,43 @@ HACER ESTA PARTE POR PUNTOS MAS BREVES Y CADA PUNTO HACERLO SECCION Y PROFUNDIZA
 
 \begin{itemize}
 	\item Obtener el corpus en otomí previamente glosado y obtenerlo en un
-		formato que especifique la información de las oraciones a nivel
-		de letra especificando su Bio Label.
+	formato que especifique la información de las oraciones a nivel
+	de letra especificando su Bio Label.
 	\item Los CRF toman como entrada los datos $X$ que corresponden al
-		corpus en otomí introducido en las feature functions asociados
-		de forma biyectiva con la etiqueta Bio Label que le corresponde.
-		Con base en esto se entrenará un modelo que busque maximizar el
-		logaritmo de verosimilitud con el método de aprendizaje L-BFGS
+	corpus en otomí introducido en las feature functions asociados
+	de forma biyectiva con la etiqueta Bio Label que le corresponde.
+	Con base en esto se entrenará un modelo que busque maximizar el
+	logaritmo de verosimilitud con el método de aprendizaje L-BFGS
 	\item Posterior se obtendrá un modelo entrenado con el que se generarán
-		etiquetas de glosa para el otomí. Por lo tanto, el modelo
-		recibirá párrafos de texto en otomí y retornará el texto
-		glosado.
+	etiquetas de glosa para el otomí. Por lo tanto, el modelo
+	recibirá párrafos de texto en otomí y retornará el texto
+	glosado.
 	\item Se considera exitosa la predicción si se logra maximizar la
-		correcta clasificación de las secuencias de salida. Para
-		determinar si la predicción fue exitosa se utilizaron técnicas
-		típicas de ML como K-folds que consiste en tomar K fragmentos
-		de los datos de entrada para utilizarlos para probar el modelo
-		y asi obtener una precisión, recall y F-score.
+	correcta clasificación de las secuencias de salida. Para
+	determinar si la predicción fue exitosa se utilizaron técnicas
+	típicas de ML como K-folds que consiste en tomar K fragmentos
+	de los datos de entrada para utilizarlos para probar el modelo
+	y asi obtener una precisión, recall y F-score.
 \end{itemize}
+
+% Definir el metodo en funcion del marco teorico
+% ¿Que es X y Y?
+% Feature functions
+% Como se decidieron
+% ¿Porque estas caracteristicas son reelevantes?
+% Que es para nosotrxs una FF
+% Experimentos quitando features functions
+% Diagram de donde se encuentran estos elementos en la arquitectura
+% Como se calculan lambdas y mu
+% Variacion de hiperparametros
+% Descripcion de que variaciones se hicieron
+
+% Resumen al final (pasos de todo lo que se hizo)
 
 MENCIONAR python, versión, paquetes y donde corrio. En promedio cuanto tarda
 en correr en la maquina. Mencionar el original en c++
 
+\section{Feature functions}
 
 \chapter{Experimentación y Resultados}
 
@@ -154,7 +218,6 @@ Aquí se habla del K fold y de como se introdujo el corpus retador( ,
 
 \chapter{Conclusiones}
 
-
 \bibliography{tesis}
-
+	
 \end{document}
