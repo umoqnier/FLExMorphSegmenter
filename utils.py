@@ -9,46 +9,38 @@ from sklearn.preprocessing import LabelBinarizer
 import xml.etree.ElementTree as ET
 
 
-def get_vic_data(path, file_name):
-    """ Obtiene el corpus original
+def get_corpus(file_name, path='corpora/'):
+    """ Obtiene el corpus con el nombre indicado
 
     Cada renglon del archivo es una oración codificada con glosa por cada
-    fragmento de la oración y con su etiqueta POS por palabra.
-    El formato por renglon es el siguiente:
+    fragmento de palabras y con su etiqueta POS por oración.
+    El formato por renglon puede ser el siguiente:
         `[[[letras, glosa], [letras, glosa], ..., POS],...]`
-
-    :param path: Ruta donde se encuentra el corpus
+    o
+        `[[[[letras, glosa], [letras, glosa]], ..., POS],...]`
+    :param path: Carpeta donde se encuentra el corpus
     :type: str
     :param file_name: Nombre del archivo que contiene el corpus
     :type: str
     :return: Lista donde cada elemento es un renglon el corpus
     :rtype: list
     """
-    with open(path + file_name, encoding='utf-8', mode='r') as f:
-        plain_text = f.read()
-    raw_data = plain_text.split('\n')
-    return [eval(row) for row in raw_data if row]
-
-
-def get_hard_corpus(path, file_name):
-    """ Obtiene el corpus retador
-
-    Esta archivo contiene una lista donde cada elemento es una oración
-    codificada con glosa para cada fragmento de la oración y con su
-    respectiva etiqueta POS por palabra.
-    El formato del archivo es el siguiente:
-        `[[[[letras, glosa], [letras, glosa], ..., POS],...], ...]`
-
-    :param path: Ruta donde se encuentra el corpus
-    :type: str
-    :param file_name: Nombre del archivo que contiene el corpus
-    :type: str
-    :return: Lista donde cada elemento es un renglon el corpus
-    :rtype: list
-    """
-    with open(path + file_name, encoding='utf-8', mode='r') as f:
-        plain_text = f.read()
-    return eval(plain_text)
+    if 'original' in file_name:
+        with open(path + file_name, encoding='utf-8', mode='r') as f:
+            plain_text = f.read()
+        raw_data = plain_text.split('\n')
+        return [eval(row) for row in raw_data if row]
+    elif 'hard' in file_name:
+        with open(path + file_name, encoding='utf-8', mode='r') as f:
+            plain_text = f.read()
+        data = eval(plain_text)
+        for frase in data:
+            for i, chunk in enumerate(frase):
+                pos_tag = chunk.pop(-1)
+                chunk = chunk[0]
+                chunk.append(pos_tag)
+                frase[i] = chunk
+        return data
 
 
 def get_train_test(data, test_size, datatest, corpora_path):
@@ -319,7 +311,7 @@ def XMLtoWords(filename):
     return datalists
 
 
-def WordsToLetter(wordlists, flag=False):
+def WordsToLetter(wordlists):
     '''
     Takes data from XMLtoWords:
         `[[[[[[morpheme, gloss], pos],...],words],sents]]`
@@ -330,10 +322,6 @@ def WordsToLetter(wordlists, flag=False):
     for i, phrase in enumerate(wordlists):
         sent = []
         for lexeme in phrase:
-            if flag:
-                pos = lexeme[-1]
-                lexeme = lexeme.pop(0)
-                lexeme.append(pos)
             palabra = ''
             word = []
             #Skip POS label

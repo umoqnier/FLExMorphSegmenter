@@ -7,13 +7,12 @@ import click
 import json
 import numpy as np
 from sklearn.model_selection import KFold
-from utils import (get_hard_corpus, get_vic_data, WordsToLetter,
-                   sent2features, sent2labels, extractTokens,
+from utils import ( WordsToLetter, sent2features, sent2labels, extractTokens,
                    extractLabels, extractFeatures, eval_labeled_positions,
                    bio_classification_report, labels_decoder,
                    print_state_features, print_transitions, accuracy_score,
                    write_report, get_train_test, param_setter, XMLtoWords,
-                   model_trainer, model_tester)
+                   model_trainer, model_tester, get_corpus)
 
 
 @click.command()
@@ -48,14 +47,14 @@ def cli(corpora_path, models_path, model_name, debug, verbose, test_size,
     hyper = param_setter(hyper, model_name, test_size, iterations, l1, l2,
                          evaluation)
     if hyper['dataset-train'] == "lezgi":
-        data = XMLtoWords('FLExTxtExport2.xml')
+        corpus = XMLtoWords('FLExTxtExport2.xml')
     else:
-        data = get_vic_data(corpora_path, hyper['dataset-train'])
+        corpus = get_corpus(hyper['dataset-train'], corpora_path)
     if hyper['evaluation'] == 'hold_out':
         print("*"*10)
         print("HOLD OUT VALIDATION")
         print("*"*10)
-        train_data, test_data = get_train_test(data, hyper['test-split'],
+        train_data, test_data = get_train_test(corpus, hyper['test-split'],
                                                hyper['dataset-test'],
                                                corpora_path)
         train_size = len(train_data)
@@ -76,10 +75,10 @@ def cli(corpora_path, models_path, model_name, debug, verbose, test_size,
         partial_time = 0
         partial_accuracy = 0
         kf = KFold(n_splits=hyper['k'], shuffle=True)
-        data = WordsToLetter(data)
-        hard_data = WordsToLetter(get_hard_corpus(corpora_path, 'corpus_hard'),
-                                  True)
-        dataset = np.array(data + hard_data)
+        hard_corpus = get_corpus('corpus_hard', corpora_path)
+        corpus = WordsToLetter(corpus)
+        hard_corpus = WordsToLetter(hard_corpus)
+        dataset = np.array(corpus + hard_corpus
         print("*"*10)
         print("K FOLDS VALIDATION")
         print("*"*10)
