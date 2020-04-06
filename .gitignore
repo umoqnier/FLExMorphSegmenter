@@ -9,5 +9,6 @@ latex/*.aux
 latex/*.log
 latex/*.toc
 latex/*.synctex.*
-
+latex/*.bbl
+latex/*.blg
 
