@@ -27,12 +27,12 @@
 
 \subsection{Lengua otomí}
 
-En este trabajo se utilizará un corpus en otomí que, además, cumple la característica de estar glosado. En las siguientes secciones se menciona los lugares donde se habla otomí, la variante que se utilizará con sus características y una descripción cuantitativa del corpus
+En esta sección se menciona los lugares donde se describe el idioma otomí de forma somera, se mencionan algunos lugares donde es hablado el otomí y características fundamentales de la lengua.
 
 \subsection{Origen}
 
 % Pie de pagina, no meter cosas tangenicales. Citar esta definicion
-La palabra otomí es de origen náhuatl (singular: \textit{otomitl}, plural: \textit{otomí}). Por otra parte, los otomíes se nombran a sí mismos \textit{ñähñu}\footnote{Existen organizaciones indígenas, como el Consejo de la Nacionalidad Otomí, que escriben la auto-denominación como hñätho hñähñu y también ñätho ñähño}, que significa "los que hablan otomí".
+La palabra otomí es de origen náhuatl (singular: \textit{otomitl}, plural: \textit{otomí}). Por otra parte, los otomíes se nombran a sí mismos \textit{ñähñu}\footnote{Existen organizaciones indígenas, como el Consejo de la Nacionalidad Otomí, que escriben la auto-denominación como hñätho hñähñu y también ñätho ñähño. Sin embargo, esta auto denominación puede variar.}, que significa "los que hablan otomí".
 
 Los grupos indígenas que hablan el idioma otomí se encuentran en diversas partes del territorio mexicano como: Estado de México, Querétaro, Hidalgo, Puebla y Veracruz \citep{barrientos2004otomies}. El otomí es una lengua indígena una gran variación dialectal que depende de su distribución geográfica.
 
@@ -104,20 +104,20 @@ En este capitulo se describe el corpus utilizado en este trabajo, se mostrará l
 
 \section{Conditional Random Fields para low resources}
 
-Los CRFs muestran claras ventajas sobre otros métodos de aprendizaje basados en gráficas. Su habilidad de tomar las virtudes de los modelos generativos y de los modelos condicionales presentan a este framework como una opción para el contexto de \textit{low resouces} que nos impone el tamaño del corpus.
+Los CRFs muestran claras ventajas sobre otros métodos de aprendizaje basados en gráficas. Su habilidad de tomar las virtudes de los modelos generativos y de los modelos condicionales presentan a este \textit{framework} como una opción para el contexto de \textit{low resouces} que nos impone, como se describirá más adelante, el tamaño del corpus.
  
 
 % Particularidades del corpus (Analisis cualitativo y cuantitativo)
 \section{Corpus: otomí de Toluca}
 
 % Otomi en general, Familia y rama
-En este trabajo se utilizará un corpus en otomí que, además, cumple la característica de estar glosado. Se trabaja con la variante del otomí de Toluca de la región de San Andrés Cuexcontitlan. A continuación, se hace una descripción somera de sus características principales.
+En este trabajo se utilizará un corpus en otomí que, además, cumple la característica de estar glosado. Se trabaja con la variante del otomí de Toluca de la región de San Andrés Cuexcontitlan. A continuación, una descripción de sus características principales.
 
 % Tipo de otomi y caracteristicas de la variante
 La clasificación lingüística introduce al otomí dentro de las lenguas otomianas, las cuales a su vez pertenecen a la rama otopame de la familia otomangue \citep{barrientos2004otomies}. Cada variante muestra particularidades fonológicas, morfológicas, sintácticas y léxicas. En el tratamiento de textos por medio de técnicas de \textit{NLP} se requiere que estos estén normalizados y homogéneos. Lo anterior propicia la obtención del mejor desempeño posible en los diversos métodos de aprendizaje automático. 
 
 % De donde vienen los textos, quien lo glosa y quien lo recolecta
-Esta tesis recoge un corpus basado en el trabajo de \citet{lastra1992otomi} titulado \textbf{El otomí de Toluca} y que a su vez es etiquetado y glosado manualmente por el lingüista Víctor Germán Mijangos de la Cruz. Este corpus forma parte del corpus que se encuentra en la plataforma web Tsunkua (Elotl, 2019) TODO: ¿Como se cita?. El corpus está conformado de los siguientes textos:
+Esta tesis recoge un corpus basado en el trabajo de \citet{lastra1992otomi} titulado \textbf{El otomí de Toluca} y que a su vez es etiquetado y glosado manualmente por el lingüista Víctor Germán Mijangos de la Cruz (TODO: Liga al repositorio). Este corpus es un subconjunto del corpus que se encuentra en la plataforma web Tsunkua (Elotl, 2019) TODO: ¿Como se cita?. El corpus está conformado de los siguientes textos:
 
 \begin{center}
 	\begin{tabular}{ c | c }
@@ -127,6 +127,7 @@ Esta tesis recoge un corpus basado en el trabajo de \citet{lastra1992otomi} titu
 	\end{tabular}
 \end{center}
 
+Los textos que componen el corpus fueron construidos a partir de las aportaciones de diez hablantes distintos de entre diez y setenta y tres años, de los cuales, siete son de sexo femenino y tres masculino \citep{lastra1992otomi}. 
 % Caracteristicas escenciales que tiene que ver con el etiquetado POS de las lenguas otomies
 
 % Descripcion detalla del etiquetado POS
@@ -159,21 +160,36 @@ Esta tesis recoge un corpus basado en el trabajo de \citet{lastra1992otomi} titu
 \begin{center}
 	\begin{tabular}{| c | c | c | c | c | c | c |}
 		\hline
-			stem & det & 3.cpl & psd & lim & prag & 3.icp \\
-			det.pl & 1.icp & 3.pot & ctrf & 1.pot & pl.exc & 1.cpl \\
-			dem & 1.pss & dim & pl & 1.obj & ila & 2.icp \\
-			1.prf & 3.cnt & 3.obj & loc & mod & 1.cnt & 3.pls \\
-			muy & prt & it & dual.exc & 3.prf & 3.icp.irr & 3.pss \\
-			2.pss & 1.enf & med & dual & p.loc & 2.cnt & 2 \\
-			3.imp & int & neg & 1.icp.irr & 1.cpl.irr & 2.obj & pues \\
-			que & aum & 1.pls & y & 2.cpl & toluca & 2.prf \\
-			aqui & gen & hasta & com & 2.pot & adj & cuando \\
-			cond & como & 3.cpl.irr & 1.sg & encl & por.que & solo \\
-			agujerear/v & mientras & 3.sg & uno & 3.pss.pl & spt & mexico \\
-			1.irr & mucho & 2.enf & conj.adv & pueblo & animal.de.dios & caus \\
-			tiempo & con & lugar/v & chico & eh & para & comp \\
-			prf & dónde & dist & mov & pascuala & 3.irr & loco \\
-			coraje & si & det.dem & dcl & nom & chente & vez \\
+			stem & det & 3.cpl & psd & lim & prag & 3.icp \\
+
+			det.pl & 1.icp & 3.pot & ctrf & 1.pot & pl.exc & 1.cpl \\
+
+			dem & 1.pss & dim & pl & 1.obj & ila & 2.icp \\
+
+			1.prf & 3.cnt & 3.obj & loc & mod & 1.cnt & 3.pls \\
+
+			muy & prt & it & dual.exc & 3.prf & 3.icp.irr & 3.pss \\
+
+			2.pss & 1.enf & med & dual & p.loc & 2.cnt & 2 \\
+
+			3.imp & int & neg & 1.icp.irr & 1.cpl.irr & 2.obj & pues \\
+
+			que & aum & 1.pls & y & 2.cpl & toluca & 2.prf \\
+
+			aqui & gen & hasta & com & 2.pot & adj & cuando \\
+
+			cond & como & 3.cpl.irr & 1.sg & encl & por.que & solo \\
+
+			agujerear/v & mientras & 3.sg & uno & 3.pss.pl & spt & mexico \\
+
+			1.irr & mucho & 2.enf & conj.adv & pueblo & animal.de.dios & caus \\
+
+			tiempo & con & lugar/v & chico & eh & para & comp \\
+
+			prf & dónde & dist & mov & pascuala & 3.irr & loco \\
+
+			coraje & si & det.dem & dcl & nom & chente & vez \\
+
 			rapido & maria & 2.icp.irr & tal.vez & mujer/v & dios & lig \\
 		\hline
 	\end{tabular}
@@ -184,43 +200,80 @@ Esta tesis recoge un corpus basado en el trabajo de \citet{lastra1992otomi} titu
 \begin{center}
 	\begin{longtable}{| c | c | c | c | c | c |}
 		\hline
-		I-stem & B-stem & I-det & I-lim & B-det & I-det.pl \\
-		I-dem & B-3.cpl & I-3.cpl & B-psd & B-lim & I-prag \\
-		B-prag & B-3.icp & B-lig & I-dim & B-det.pl & B-1.icp \\
-		I-1.icp & I-ila & B-3.pot & I-3.pot & B-ctrf & I-ctrf \\
-		B-1.pot & I-1.pot & B-pl.exc & I-pl.exc & B-1.cpl & I-1.cpl \\
-		B-dem & I-1.cnt & I-pl & B-1.pss & I-1.pss & I-muy \\
-		I-3.cnt & I-loc & B-dim & I-mod & B-pl & B-1.obj \\
-		I-1.obj & B-ila & B-2.icp & I-2.icp & B-1.prf & I-1.prf \\
-		B-3.cnt & I-prt & I-3.obj & B-3.obj & B-loc & B-mod \\
-		B-1.cnt & I-3.pss & B-3.pls & I-3.pls & B-muy & B-prt \\
-		I-toluca & B-it & I-it & B-dual.exc & I-dual.exc & B-3.prf \\
-		I-3.prf & B-3.icp.irr & I-3.icp.irr & I-2.cnt & B-3.pss & I-3.imp \\
-		B-2.pss & I-2.pss & I-neg & I-1.icp.irr & B-1.enf & I-1.enf \\
-		B-med & B-dual & I-dual & I-2.obj & I-aum & B-p.loc \\
-		I-p.loc & B-2.cnt & B-2 & I-2 & I-int & B-3.imp \\
-		B-int & B-neg & B-1.icp.irr & B-1.cpl.irr & I-1.cpl.irr & B-2.obj \\
-		I-3.icp & I-gen & I-aqui & B-pues & I-pues & B-que \\
-		I-que & B-aum & B-1.pls & I-1.pls & B-y & B-2.cpl \\
-		I-2.cpl & I-3.cpl.irr & I-1.sg & I-agujerear/v & I-mientras & B-toluca \\
-		B-2.prf & I-2.prf & I-mexico & I-pueblo & I-animal.de.dios & B-aqui \\
-		B-gen & B-hasta & I-hasta & I-3.sg & B-com & I-com \\
-		I-pascuala & I-solo & I-mucho & I-tiempo & I-cuando & I-chente \\
-		I-mujer/v & I-lugar/v & I-chico & I-cond & I-3.pss.pl & I-por.que \\
-		I-1.irr & I-maria & B-2.pot & I-2.pot & B-adj & I-adj \\
-		B-cuando & B-cond & B-como & I-como & B-3.cpl.irr & B-1.sg \\
-		B-encl & I-encl & B-por.que & B-solo & I-loco & I-coraje \\
-		B-agujerear/v & I-det.dem & B-mientras & I-con & B-3.sg & I-lig \\
-		B-uno & I-uno & B-3.pss.pl & B-spt & I-spt & B-mexico \\
-		B-1.irr & B-mucho & I-dcl & B-2.enf & I-2.enf & B-conj.adv \\
-		I-vez & I-2.icp.irr & B-pueblo & I-dios & B-animal.de.dios & B-caus \\
-		I-caus & B-tiempo & B-con & B-lugar/v & B-chico & B-eh \\
-		I-eh & B-para & I-para & B-comp & I-comp & B-prf \\
-		I-prf & B-dónde & B-dist & I-dist & B-mov & I-mov \\
-		I-med & B-pascuala & B-3.irr & I-3.irr & B-loco & B-coraje \\
-		B-si & I-si & I-y & B-det.dem & B-dcl & B-nom \\
-		I-nom & B-chente & B-vez & B-rapido & I-rapido & B-maria \\
-		B-2.icp.irr & B-tal.vez & I-tal.vez & B-mujer/v & B-dios & \\
+		I-stem & B-stem & I-det & I-lim & B-det & I-det.pl \\
+
+		I-dem & B-3.cpl & I-3.cpl & B-psd & B-lim & I-prag \\
+
+		B-prag & B-3.icp & B-lig & I-dim & B-det.pl & B-1.icp \\
+
+		I-1.icp & I-ila & B-3.pot & I-3.pot & B-ctrf & I-ctrf \\
+
+		B-1.pot & I-1.pot & B-pl.exc & I-pl.exc & B-1.cpl & I-1.cpl \\
+
+		B-dem & I-1.cnt & I-pl & B-1.pss & I-1.pss & I-muy \\
+
+		I-3.cnt & I-loc & B-dim & I-mod & B-pl & B-1.obj \\
+
+		I-1.obj & B-ila & B-2.icp & I-2.icp & B-1.prf & I-1.prf \\
+
+		B-3.cnt & I-prt & I-3.obj & B-3.obj & B-loc & B-mod \\
+
+		B-1.cnt & I-3.pss & B-3.pls & I-3.pls & B-muy & B-prt \\
+
+		I-toluca & B-it & I-it & B-dual.exc & I-dual.exc & B-3.prf \\
+
+		I-3.prf & B-3.icp.irr & I-3.icp.irr & I-2.cnt & B-3.pss & I-3.imp \\
+
+		B-2.pss & I-2.pss & I-neg & I-1.icp.irr & B-1.enf & I-1.enf \\
+
+		B-med & B-dual & I-dual & I-2.obj & I-aum & B-p.loc \\
+
+		I-p.loc & B-2.cnt & B-2 & I-2 & I-int & B-3.imp \\
+
+		B-int & B-neg & B-1.icp.irr & B-1.cpl.irr & I-1.cpl.irr & B-2.obj \\
+
+		I-3.icp & I-gen & I-aqui & B-pues & I-pues & B-que \\
+
+		I-que & B-aum & B-1.pls & I-1.pls & B-y & B-2.cpl \\
+
+		I-2.cpl & I-3.cpl.irr & I-1.sg & I-agujerear/v & I-mientras & B-toluca \\
+
+		B-2.prf & I-2.prf & I-mexico & I-pueblo & I-animal.de.dios & B-aqui \\
+
+		B-gen & B-hasta & I-hasta & I-3.sg & B-com & I-com \\
+
+		I-pascuala & I-solo & I-mucho & I-tiempo & I-cuando & I-chente \\
+
+		I-mujer/v & I-lugar/v & I-chico & I-cond & I-3.pss.pl & I-por.que \\
+
+		I-1.irr & I-maria & B-2.pot & I-2.pot & B-adj & I-adj \\
+
+		B-cuando & B-cond & B-como & I-como & B-3.cpl.irr & B-1.sg \\
+
+		B-encl & I-encl & B-por.que & B-solo & I-loco & I-coraje \\
+
+		B-agujerear/v & I-det.dem & B-mientras & I-con & B-3.sg & I-lig \\
+
+		B-uno & I-uno & B-3.pss.pl & B-spt & I-spt & B-mexico \\
+
+		B-1.irr & B-mucho & I-dcl & B-2.enf & I-2.enf & B-conj.adv \\
+
+		I-vez & I-2.icp.irr & B-pueblo & I-dios & B-animal.de.dios & B-caus \\
+
+		I-caus & B-tiempo & B-con & B-lugar/v & B-chico & B-eh \\
+
+		I-eh & B-para & I-para & B-comp & I-comp & B-prf \\
+
+		I-prf & B-dónde & B-dist & I-dist & B-mov & I-mov \\
+
+		I-med & B-pascuala & B-3.irr & I-3.irr & B-loco & B-coraje \\
+
+		B-si & I-si & I-y & B-det.dem & B-dcl & B-nom \\
+
+		I-nom & B-chente & B-vez & B-rapido & I-rapido & B-maria \\
+
+		B-2.icp.irr & B-tal.vez & I-tal.vez & B-mujer/v & B-dios & 
+\\
 		\hline
 	\end{longtable}
 \end{center}
@@ -232,16 +285,26 @@ Esta tesis recoge un corpus basado en el trabajo de \citet{lastra1992otomi} titu
 \begin{center}
 	\begin{tabular}{c | c}
 		\textbf{Etiqueta} & \textbf{tokens} \\ \hline \hline
-		v & 2596 \\
-		obl & 2447 \\
-		det & 975 \\
-		cnj & 837 \\
-		dem & 543 \\
-		unkwn & 419 \\
-		n & 273 \\
-		neg & 178 \\
-		p.loc & 81 \\
-		prt & 49 \\
+		v & 2596 \\
+
+		obl & 2447 \\
+
+		det & 975 \\
+
+		cnj & 837 \\
+
+		dem & 543 \\
+
+		unkwn & 419 \\
+
+		n & 273 \\
+
+		neg & 178 \\
+
+		p.loc & 81 \\
+
+		prt & 49 \\
+
 	\end{tabular}
 
 \end{center}
@@ -251,15 +314,24 @@ Esta tesis recoge un corpus basado en el trabajo de \citet{lastra1992otomi} titu
 \begin{center}
 	\begin{tabular}{c | c}                            
 		\textbf{Etiqueta} & \textbf{tokens} \\ \hline \hline
-		stem & 7527 \\
-		det & 733 \\
-		3.cpl & 450 \\
-		psd & 418 \\
-		lim & 374 \\
-		prag & 362 \\
-		3.icp & 346 \\
-		lig & 289 \\
-		det.pl & 271 \\
+		stem & 7527 \\
+
+		det & 733 \\
+
+		3.cpl & 450 \\
+
+		psd & 418 \\
+
+		lim & 374 \\
+
+		prag & 362 \\
+
+		3.icp & 346 \\
+
+		lig & 289 \\
+
+		det.pl & 271 \\
+
 		1.icp & 270 \\
 	\end{tabular}
 
@@ -269,18 +341,48 @@ Esta tesis recoge un corpus basado en el trabajo de \citet{lastra1992otomi} titu
 \begin{center}
 	\begin{tabular}{c | c}
 		\textbf{Etiqueta} & \textbf{tokens} \\ \hline \hline
-		I-stem & 21934 \\
-		B-stem & 7527 \\
-		I-det & 1469 \\
-		I-lim & 1092 \\
-		B-det & 733 \\
-		I-det.pl & 553 \\
-		I-dem & 485 \\
-		B-3.cpl & 450 \\
-		I-3.cpl & 450 \\
-		B-psd & 418 \\
+		I-stem & 21934 \\
+
+		B-stem & 7527 \\
+
+		I-det & 1469 \\
+
+		I-lim & 1092 \\
+
+		B-det & 733 \\
+
+		I-det.pl & 553 \\
+
+		I-dem & 485 \\
+
+		B-3.cpl & 450 \\
+
+		I-3.cpl & 450 \\
+
+		B-psd & 418 \\
+
 	\end{tabular}
 \end{center}
+
+\subsection{Distribución de etiquetas}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{zipf_pos}
+	\caption{Distribución de etiquetas POS}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{zipf_gloss}
+	\caption{Distribución de glosa (primeras 50)}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{zipf_bio}
+	\caption{Distribución de Bio Labels (primeras 50)}
+\end{figure}
 
 %4. Numero de etiquetas diferentes
 %5. Tipos de POS y cuantos de cada uno
