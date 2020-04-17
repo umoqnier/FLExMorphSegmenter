@@ -11,17 +11,26 @@
 \usepackage{todonotes}   % insert [disable] to disable all notes
 
 \newcommand{\note}[4][]{\todo[author=#2,color=#3,size=\scriptsize,fancyline,caption={},#1]{#4}} % default
+
+%For comments in a bubble on the document margins:
 \newcommand{\ximena}[2][]{\note[#1]{Ximena}{green!40}{#2}}
 \newcommand{\vic}[2][]{\note[#1]{Vic}{orange!40}{#2}}
 \newcommand{\diego}[2][]{\note[#1]{Diego}{blue!40}{#2}}
+
+%For inline comments:
 \newcommand{\Ximena}[2][]{\ximena[inline,#1]{#2}\noindent}
 \newcommand{\Vic}[2][]{\vic[inline,#1]{#2}\noindent}
 \newcommand{\Diego}[2][]{\diego[inline,#1]{#2}\noindent}
 
+% For code formatting
+\def\code#1{\texttt{#1}}
+
+% Teoremas y ejemplos
+\theoremstyle{definition}
+\newtheorem{exmp}{Ejemplo}[section]
+\newtheorem{definition}{Definición}
 
 \graphicspath{{./img/}}
-
-\newtheorem{definition}{Definición}
 
 \begin{document}
 	\bibliographystyle{acl_natbib}  % Cargando estilo de bibliografia
@@ -38,23 +47,7 @@
 	
 	% Capitulo corto con el objetivo, hipótesis y tocar los temas del marco teorico de forma muy superficial. Se definen en el marco teorico
 	
-	\section{Problemática}
-	
-	% TODO: Cambiar las citas a bibtex
-	El NLP es un área de la computación que permite reconocer, procesar e interpretar el lenguaje humano dentro de un sistema computacional. El objetivo de esta área es hacer que las computadoras realicen tareas que involucran el lenguaje humano. Algunas tareas generales consisten en permitir la comunicación humano-máquina, o simplemente hacer un exitoso procesamiento de texto o voz humanos. (Jurafsky \& Martin, 2014). Ejemplos de aplicación actuales son los traductores automáticos, asistentes personales que reconocen voz, motores de búsquedas en Internet, análisis de sentimientos en textos,  síntesis de voz, etiquetado de textos y muchas más aplicaciones.
-	
-	% Voy de lo mas general a lo particular
-	Una de las tareas más populares de NLP es el etiquetado automático de textos. Este etiquetado puede realizarse a diferentes niveles lingüísticos, por ejemplo, morfosintáctico (Part-Of-Speech tagging), sintáctico (parsing), morfológico, etc.  El nivel morfológico tiene que ver con la estructura interna de las palabras (Haspelmath y Sims, 2013); en particular, existe un tipo de etiquetado, de gran importancia para el análisis lingüístico, llamado glosado que asigna etiquetas a las unidades que conforman a una palabra. 
-	
-	% Hablando de ML
-	Para lograr lo anterior, los enfoques actuales aplican técnicas de ML. El ML es un subcampo de la Inteligencia Artificial (IA), que constituye un enfoque de resolución de problemas caracterizado por estimar una solución a partir de la experiencia (Mitchell, 1997).  La experiencia se refiere a datos etiquetados (ejemplos) que permiten inferir un modelo estadístico de aprendizaje. Entre los métodos de ML ampliamente utilizados se pueden mencionar las Support Vector Machines (SVMs), árboles de decisión, o bien los modelos gráficos, como las redes neuronales o los métodos generativos, solo por mencionar algunos. Para las tareas de etiquetado en NLP generalmente se utilizan modelos gráficos supervisados, por ejemplo, modelos ocultos de Markov (Hidden Markov Models, HMM).
-	
-	% Introduccion de la problematica
-	No obstante, el lenguaje natural es complejo y dinámico, ya que tiene fenómenos que hacen que las tareas de reconocimiento, generación y procesamiento se vuelvan difíciles para las computadoras. Adicionalmente, existen escenarios donde estos métodos no son efectivos como es el caso de las lenguas de bajos recursos, que son lenguas que tienen pocos recursos digitales con los que trabajar. Por ejemplo, si se tienen pocos datos iniciales para el entrenamiento del modelo de aprendizaje las predicciones serán poco precisas o equivocadas. Los bajos recursos son un escenario común en México donde, a pesar de que existe una rica diversidad lingüística, gran parte de las lenguas originarias no poseen contenido web ni publicaciones digitales y por tanto carecen también de tecnologías del lenguaje.  El escenario mencionado anteriormente supone un reto para los métodos de aprendizaje convencionales, que requieren de grandes cantidades de datos de entrenamiento para funcionar correctamente. Por lo tanto, es un importante reto de investigación desarrollar aproximaciones que funcionen con lenguas de escasos recursos. En particular, nos enfocaremos en el glosado automático del  otomí, una lengua con gran riqueza morfológica y con escasez de recursos digitales.
-	
-	El glosado puede ser un primer paso para el desarrollo de más tecnologías del lenguaje; no solo para el otomí, que presenta un grado de extinción acelerada (CDI), sino para las 68 agrupaciones lingüísticas que se hablan en México.
-	
-	\subsection{Lengua otomí}
+	\section{Lengua otomí}
 	
 	En esta sección se menciona los lugares donde se describe el idioma otomí de forma somera, se mencionan algunos lugares donde es hablado el otomí y características fundamentales de la lengua.
 	
@@ -69,10 +62,25 @@
 	
 	En concreto existen \textbf{nueve} variantes del otomí y cabe recalcar que dicha variación puede presentarse incluso dentro del mismo estado. Tan solo el Estado de México presenta tres variantes del otomí: El otomí de Tilapa, hablado en el municipio de Santiago Tianguistenco; el Otomí de Acazulco, del municipio de San Jerónimo Acazulco; y el Otomí de Toluca, de San Andrés Cuexcontitlán.
 	
+	\section{Problemática}
+	
+	% TODO: Cambiar las citas a bibtex
+	El NLP es un área de la computación que permite reconocer, procesar e interpretar el lenguaje humano dentro de un sistema computacional. El objetivo de esta área es hacer que las computadoras realicen tareas que involucran el lenguaje humano. Algunas tareas generales consisten en permitir la comunicación humano-máquina, o simplemente hacer un exitoso procesamiento de texto o voz humanos \citep{jurafsky2008speech}. Ejemplos de aplicación actuales son los traductores automáticos, asistentes personales que reconocen voz, motores de búsquedas en Internet, análisis de sentimientos en textos,  síntesis de voz, etiquetado de textos y muchas más aplicaciones.
+	
+	% Voy de lo mas general a lo particular
+	Una de las tareas más populares de NLP es el etiquetado automático de textos. Este etiquetado puede realizarse a diferentes niveles lingüísticos, por ejemplo, morfosintáctico (\textit{Part-Of-Speech tagging, POS}), sintáctico (\textit{parsing}), morfológico, etc.  El nivel morfológico tiene que ver con la estructura interna de las palabras \citep{haspelmath2013understanding}; en particular, existe un tipo de etiquetado, de gran importancia para el análisis lingüístico, llamado glosado que asigna etiquetas a las unidades que conforman a una palabra. 
+	
+	% Hablando de ML
+	Para lograr lo anterior, los enfoques actuales aplican técnicas de ML. El ML es un subcampo de la Inteligencia Artificial (IA), que constituye un enfoque de resolución de problemas caracterizado por estimar una solución a partir de la experiencia \citep{mitchell1997machine}.  La experiencia se refiere a datos etiquetados (ejemplos) que permiten inferir un modelo estadístico de aprendizaje. Entre los métodos de ML ampliamente utilizados se pueden mencionar las Support Vector Machines (SVMs), árboles de decisión, o bien los modelos gráficos, como las redes neuronales o los métodos generativos, solo por mencionar algunos. Para las tareas de etiquetado en NLP generalmente se utilizan modelos gráficos supervisados, por ejemplo, modelos ocultos de Markov (\textit{Hidden Markov Models, HMM}).
+	
+	% Introduccion de la problematica
+	No obstante, el lenguaje natural es complejo y dinámico, ya que tiene fenómenos que hacen que las tareas de reconocimiento, generación y procesamiento se vuelvan difíciles para las computadoras. Adicionalmente, existen escenarios donde estos métodos no son efectivos como es el caso de las lenguas de bajos recursos, que son lenguas que tienen pocos recursos digitales con los que trabajar. Por ejemplo, si se tienen pocos datos iniciales para el entrenamiento del modelo de aprendizaje las predicciones serán poco precisas o equivocadas. Los bajos recursos son un escenario común en México donde, a pesar de que existe una rica diversidad lingüística, gran parte de las lenguas originarias no poseen contenido web ni publicaciones digitales y por tanto carecen también de tecnologías del lenguaje.  El escenario mencionado anteriormente supone un reto para los métodos de aprendizaje convencionales, que requieren de grandes cantidades de datos de entrenamiento para funcionar correctamente. Por lo tanto, es un importante reto de investigación desarrollar aproximaciones que funcionen con lenguas de escasos recursos. En particular, en este trabajo nos enfocamos en el glosado automático del otomí, una lengua con gran riqueza morfológica y con escasez de recursos digitales.
+	
+	El glosado puede ser un primer paso para el desarrollo de más tecnologías del lenguaje; no solo para el otomí, que presenta un grado de extinción acelerada \Diego{¿Esta cita donde la puedo encontrar?} (CDI), sino para las 68 agrupaciones lingüísticas que se hablan en México.
+	
 	\section{Objetivo}
 	
-	Diseñar e implementar un etiquetador morfológico para el otomí basado en técnicas de
-	Procesamiento del Lenguaje Natural (Natural Language Processing, NLP) con Aprendizaje de Máquina (Machine Learning, ML). En particular, se hará énfasis en métodos de aprendizaje estructurado débilmente supervisados. Específicamente, se aplicará \textit{Conditional Random Fields (CRF)} para etiquetado morfológico (glosado) del otomí, una lengua de bajos recursos.
+	Diseñar e implementar un etiquetador morfológico para el otomí basado en técnicas de Procesamiento del Lenguaje Natural (\textit{Natural Language Processing, NLP}) con Aprendizaje de Máquina (\textit{Machine Learning, ML}). En particular, se hará énfasis en métodos de aprendizaje estructurado débilmente supervisados. Específicamente, se aplicará \textit{Conditional Random Fields (CRF)} para etiquetado morfológico (glosado) del otomí, una lengua de bajos recursos.
 	
 	\section{Hipótesis}
 	
@@ -82,11 +90,10 @@
 	
 	% Mencionar los bajos recursos
 	
-	\section{Marco teórico}
+	\section{Marco teórico}\label{sec:marco}
 	
 	% Se tiene que explicar los conceptos de low resouces 
-	% -NLP
-	% -Machine learning
+	
 	% .Etiquetadores a diferentes niveles lingüísticos
 	% -Etiquetadores a nivel morfológico
 	% -modelos gráficos
@@ -97,12 +104,14 @@
 	% Algoritmo L-BFGS
 	% L1 - L2
 	
-	\subsection{NLP}
+	% -NLP
+	\subsection{Natural Language Processing (NLP)}
 	% Introduccion
 	
 	\subsection{Etiquetadores}
 	
-	\subsection{ML}
+	% -Machine learning
+	\subsection{Machine Learning (ML)}
 	
 	\subsection{Modelos gráficos}
 	
@@ -141,13 +150,12 @@
 		Sea $G = (V,E)$ una gráfica tal que $\mathbf{Y} = (\mathbf{Y}_{v})_{v \in V}$, entonces esa $\mathbf{Y}$ es indexada por los vertices de $G$. Entonces $(\mathbf{X}, \mathbf{Y})$ es un \textsf{conditional random field} en caso de que las variables aleatorias $\mathbf{Y}$ se condicionen por $\mathbf{X}$, la variable aleatoria $\mathbf{Y}_{v}$ cumple la \textit{propiedad de Markov} con respecto a la gráfica: $p(\mathbf{Y}_{v}|\mathbf{X},\mathbf{Y}_{w},w \ne v) = p(\mathbf{Y}_{v}|\mathbf{X},\mathbf{Y}_{w},w \sim v)$, dónde $w \sim v$ significa que $w$ y $v$ son vecinos en $G$.
 	\end{definition}
 	
-	En esta tesis, para el modelado de secuencias, se utiliza la forma más sencilla de la gráfica $G$ dónde es una cadena simple o línea. Esto quiere decir que $G = (V = \{1,2,...m\}, E = \{(i,i+1)\})$. A este tipo de \textit{CRFs} se les conoce como \textit{linear-chain CRFs}. Como menciona \citet{lafferty2001conditional} "si la gráfica $G = (V,E)$ de $\mathbf{Y}$ es un árbol (del cual una cadena es el ejemplo más sencillo), los cliques??? son los límites y vertices. Entonces, por el teorema de los \textit{random fields} \citep{hammersley1971markov}, la distribución conjunta sobre las etiquetas de secuencias $\mathbf{Y}$ y $\mathbf{X}$ tiene la forma:
-	
+	En esta tesis, para el modelado de secuencias, se utiliza la forma más sencilla de la gráfica $G$ dónde es una cadena simple o línea. Esto quiere decir que $G = (V = \{1,2,...m\}, E = \{(i,i+1)\})$. A este tipo de \textit{CRFs} se les conoce como \textit{linear-chain CRFs}. Como menciona \citet{lafferty2001conditional} "si la gráfica $G = (V,E)$ de $\mathbf{Y}$ es un árbol (del cual una cadena es el ejemplo más sencillo), los \textit{cliques} son los límites y vertices. Entonces, por el teorema de los \textit{random fields} \citep{hammersley1971markov}, la distribución conjunta sobre las etiquetas de secuencias $\mathbf{Y}$ y $\mathbf{X}$ tiene la forma:
 	
 	% TODO: Poner tag
-	% TODO: Explicar esta ecuacion sobre que es son las lambdas, porqeu hay dos sumandos, porque el simbolo de proporcionalidad, 
+	% TODO: Explicar esta ecuacion sobre que es son las lambdas, porque hay dos sumandos, porque el símbolo de proporcionalidad, 
 	\begin{equation}
-	p{_{\theta}}(y|x) \propto \exp \bigg( \sum\limits_{e \in \mathbf{E},k} \lambda_{k}f_{k}(e,\mathbf{y}|_{e},\mathbf{x}) + \sum\limits_{v \in \mathbf{V},k}\mu_{k}g_{k}(v,\mathbf{y}|_{v},\mathbf{x}) \bigg)
+		p{_{\theta}}(y|x) \propto \exp \bigg( \sum\limits_{e \in \mathbf{E},k} \lambda_{k}f_{k}(e,\mathbf{y}|_{e},\mathbf{x}) + \sum\limits_{v \in \mathbf{V},k}\mu_{k}g_{k}(v,\mathbf{y}|_{v},\mathbf{x}) \bigg)
 	\end{equation}
 	
 	% TODO: Mencionar la ecucacion
@@ -159,23 +167,26 @@
 	
 	Los \textit{CRFs} han sido utilizados para la clasificación de regiones en una imagen, estimar el puntaje en un juego de Go, segmentar genes en una hebra de ADN y análisis sintáctico de lenguaje natural en un texto por mencionar algunas \citep{sutton2012introduction}.
 	
-	% Papers que hablen del tema de etiquetado automatico 2010 para acá
+	
+	\subsection{Trabajos sobre bajos recursos}
+	% Hablar del trabajo para Lezgi
+	Con base en el trabajo previo de \citep{moeller2018automatic} donde se utilizan técnicas de NLP y ML para tratar para el idioma Lezgi se plantea como hipótesis que dado el tamaño del corpus y la glosa que contiene 
+	se obtendrá texto correctamente glosado con una precisión de al menos 80\%.
+	
+	% Papers que hablen del tema de etiquetado automático 2010 para acá
 	
 	% Redes neuronales,
 	% Mencion de trabajo y papers actuales hacen algo similar
-	% Lezgi
 	
 	
 	\chapter{Etiquetador morfológico para el otomí (Metodología)}
 	
-	En este capitulo se describe el corpus utilizado en este trabajo, se mostrará la arquitectura propuesta para la generación automática de glosa para el idioma otomi. Adicionalmente, se explicará el diseño e implementación del \textit{pipeline} que incluye, entre otras cosas, la determinación de las \textit{feature functions}.
+	En este capitulo se describe el corpus utilizado en este trabajo, se mostrará la arquitectura propuesta para la generación automática de glosa para el idioma otomí. Adicionalmente, se explicará el diseño e implementación del \textit{pipeline} que incluye, entre otras cosas, la determinación de las \textit{feature functions}.
 	
 	%TODO: Descripcion de la estimacion de parametros y caracteristica de la funcion de perdida
+	Los \textit{CRFs} muestran claras ventajas sobre otros métodos de aprendizaje basados en gráficas. Su habilidad de tomar las virtudes de los modelos generativos y de los modelos condicionales presentan a este \textit{framework} como una opción para el contexto de los bajos recursos digitales que nos impone, como se describirá más adelante, el tamaño del corpus. En ese sentido, los \textit{CRFs} se utilizaron para predecir secuencias de etiquetas (aprendizaje estructurado) que describen las unidades morfológicas dentro de una palabra, de una variante en particular, del otomí. 
 	
-	Los CRFs muestran claras ventajas sobre otros métodos de aprendizaje basados en gráficas. Su habilidad de tomar las virtudes de los modelos generativos y de los modelos condicionales presentan a este \textit{framework} como una opción para el contexto de \textit{low resouces} que nos impone, como se describirá más adelante, el tamaño del corpus.
-	
-	
-	% Particularidades del corpus (Analisis cualitativo y cuantitativo)
+	% Particularidades del corpus (Análisis cualitativo y cuantitativo)
 	\section{Corpus: otomí de Toluca}
 	
 	% Siempre ir de lo general a lo particular
@@ -184,10 +195,10 @@
 	La clasificación lingüística introduce al otomí dentro de las lenguas otomianas, las cuales a su vez pertenecen a la rama otopame de la familia otomangue \citep{barrientos2004otomies}. Cada variante muestra particularidades fonológicas, morfológicas, sintácticas y léxicas. En el tratamiento de textos por medio de técnicas de \textit{NLP} se requiere que estos estén normalizados y homogéneos. Lo anterior propicia la obtención del mejor desempeño posible en los diversos métodos de aprendizaje automático.
 	
 	% Otomi en general, Familia y rama
-	En este trabajo se utilizó un corpus en otomí que, además, cumple la característica de estar glosado. Se trabaja con la variante del otomí de Toluca de la región de San Andrés Cuexcontitlan.
+	Se utilizó un corpus en otomí que, además, cumple la característica de estar glosado. Se trabaja con la variante del otomí de Toluca de la región de San Andrés Cuexcontitlan.
 	
 	% De donde vienen los textos, quien lo glosa y quien lo recolecta
-	Esta tesis recogío un corpus basado en el trabajo de \citet{lastra1992otomi} titulado \emph{El otomí de Toluca} y que a su vez fue  etiquetado y glosado manualmente por el lingüista Víctor Germán Mijangos de la Cruz\footnote{TODO: Liga del repo}. Este corpus es un subconjunto del corpus paralelo español-otomi que se encuentra en la plataforma web Tsunkua\footnote{https://tsunkua.elotl.mx/} TODO: ¿Como se cita?. El subconjunto del corpus utilizado en la sección experimental está descrito en la tabla \ref{table_corpus_length:1} y en la tabla \ref{table_corpus_text:1}. 
+	Esta tesis recogió un corpus basado en el trabajo de \citet{lastra1992otomi} titulado \emph{El otomí de Toluca} y que a su vez fue etiquetado y glosado manualmente por el lingüista Víctor Germán Mijangos de la Cruz\footnote{TODO: Liga del repo}. Este corpus es un subconjunto del corpus paralelo español-otomi que se encuentra en la plataforma web Tsunkua\footnote{https://tsunkua.elotl.mx/} TODO: ¿Como se cita?. El subconjunto del corpus utilizado en la sección experimental está descrito en la tabla \ref{table_corpus_length:1}, donde se encuentran las etiquetas POS del corpus, y en la tabla \ref{table_corpus_text:1}, donde se puede ver la glosa que está presente en el corpus. 
 	
 	% Describir las tablas en el texto
 	% Tokens y tipos de Palabras
@@ -233,6 +244,7 @@
 	% Citar el estandar de etiquetas https://www.eva.mpg.de/lingua/pdf/Glossing-Rules.pdf
 	
 	% Mencionar que hay etiquetas en si mismas pero quitarlas de la tabla
+	Dentro de las etiquetas POS encontramos etiquetas en si mismas como \textsf{buena}.\textsf{vista}, \textsf{nada.más}, \textsf{zapata} que no están incluidas en la tabla pero que se presentan en el copus ya que ... \diego[]{Duda aqui}
 	
 	\begin{table}
 		\centering
@@ -241,44 +253,40 @@
 			v & obl & det & cnj & dem \\ 
 			unkwn & n & neg & p.loc & prt \\
 			conj.adv & dim & gen & cond & it \\
-			lim & aff & loc & pascuala & toluca \\
-			chente & dec & conj & chalma & mexico \\
-			tapanco & cord & san & cnj.adv & regular/v \\
-			adv & juan & andrés & buena.vista & nada.más \\
-			zapata & calvario & bautisterio & adj & cristo \\
-			emilio & pato & luis & mextepec & \\
+			lim & aff & loc & dec & conj  \\
+			cord & san & cnj.adv & regular/v & adv \\
+			adj & & & & \\
 			\hline
 		\end{tabular}
 		\caption{POS} 
 		\label{table_pos_types}
 	\end{table}
 	
-	
 	% Mencionar que hay etiquetas en si mismas pero quitarlas de la tabla
 	
 	\begin{table}
 		\centering
-		\begin{tabular}{| c | c | c | c | c | c | c |}
+		\begin{tabular}{| c | c | c | c | c |}
 			\hline
-			stem & det & 3.cpl & psd & lim & prag & 3.icp \\
-			det.pl & 1.icp & 3.pot & ctrf & 1.pot & pl.exc & 1.cpl \\
-			dem & 1.pss & dim & pl & 1.obj & ila & 2.icp \\
-			1.prf & 3.cnt & 3.obj & loc & mod & 1.cnt & 3.pls \\
-			muy & prt & it & dual.exc & 3.prf & 3.icp.irr & 3.pss \\
-			2.pss & 1.enf & med & dual & p.loc & 2.cnt & 2 \\
-			3.imp & int & neg & 1.icp.irr & 1.cpl.irr & 2.obj & pues \\
-			que & aum & 1.pls & y & 2.cpl & toluca & 2.prf \\
-			aqui & gen & hasta & com & 2.pot & adj & cuando \\
-			cond & como & 3.cpl.irr & 1.sg & encl & por.que & solo \\
-			agujerear/v & mientras & 3.sg & uno & 3.pss.pl & spt & mexico \\
-			1.irr & mucho & 2.enf & conj.adv & pueblo & animal.de.dios & caus \\
-			tiempo & con & lugar/v & chico & eh & para & comp \\
-			prf & dónde & dist & mov & pascuala & 3.irr & loco \\
-			coraje & si & det.dem & dcl & nom & chente & vez \\
-			rapido & maria & 2.icp.irr & tal.vez & mujer/v & dios & lig \\
+			stem & det & 3.cpl & psd & lim \\
+			prag & 3.icp & lig & det.pl & 1.icp \\
+			3.pot & ctrf & 1.pot & pl.exc & 1.cpl \\
+			dem & 1.pss & dim & pl & 1.obj \\
+			ila & 2.icp & 1.prf & 3.cnt & 3.obj \\
+			loc & mod & 1.cnt & 3.pls & prt \\
+			it & dual.exc & 3.prf & 3.icp.irr & 3.pss \\
+			2.pss & 1.enf & med & dual & p.loc \\
+			2.cnt & 2 & 3.imp & int & neg \\
+			1.icp.irr & 1.cpl.irr & 2.obj & aum & 1.pls \\
+			2.cpl & 2.prf & gen & com & 2.pot\\
+			adj & cond  & 3.cpl.irr & 1.sg & encl \\
+			3.sg & 3.pss.pl & spt & 1.irr & 2.enf \\
+			conj.adv & caus & con & chico & eh \\
+			comp & prf & dist mov & 3.irr & det.dem\\
+			dcl & nom & 2.icp.irr & & \\
 			\hline
 		\end{tabular}
-		\caption{Glosa} \vic{Explicar qué significa cada etiqueta}
+		\caption{Glosa} \Vic{Explicar qué significa cada etiqueta}
 		\label{table_gloss_types}
 	\end{table}
 	
@@ -347,7 +355,7 @@
 	
 	\section{Arquitectura}
 	
-	% Definir el metodo en funcion del marco teorico
+	% Definir el método en función del marco teórico
 	% Diagrama de la arquitectura
 	% ¿Que es X y Y?
 	% Feature functions
@@ -367,30 +375,26 @@
 	% Preprocesamiento del corpus
 	% 
 	
-	Para esta tesis proponemos una arquitectura de aprendizaje
-	estructurado  supervisado utilizando un método gráfico, Conditional
-	Random Field (CRF), que permitirá la predicción de secuencias que describen
-	las unidades morfológicas (glosa) dentro de una palabra en otomí
+	Para esta tesis proponemos una arquitectura de aprendizaje estructurado débilmente supervisado utilizando el método gráfico \textit{CRF} que permitirá la predicción de secuencias que describen las unidades morfológicas (glosa) dentro de una palabra en otomí. Ya que el resultado esperado es la generación de etiquetas que, en principio, dependen unas de otras, un método basado en gráficas como los \textit{CRF} es el adecuado.
 	
-	Se utilizaron CRFs para predecir secuencias de glosa, que será la salida $Y$
-	dadas las observaciones $X$ que son el texto previamente glosado. Puntualmente,
-	se utiliza el modelo gráfico 1st-order Markov CRF with dyad features.
-	Adicionalmente, es utilizado el algoritmo de aprendizaje de Limited-memory
-	Broyden-Fletcher-Goldfarb-Shanno (L-BFGS) como se menciono en TODO.
+	Los \textit{CRFs} predicen las secuencias de glosa, que será la salida $Y$ dadas las observaciones $X$ (texto previamente glosado). Puntualmente, se utiliza el modelo \textbf{1st-order Markov CRF with dyad features}. Adicionalmente, es utilizado el algoritmo de aprendizaje de \textbf{Limited-memory Broyden-Fletcher-Goldfarb-Shanno (L-BFGS)} como se mencionó en la sección \ref{sec:marco}.
 	
-	% TODO: Debe tener un lugar en el estado del arte
+	El objetivo de esta arquitectura es realizar un correcto etiquetado automático de glosa para la lengua otomí, en particular la variante del otomí de Toluca, utilizando técnicas de aprendizaje estructurado débilmente supervisado. Se definieron de aprender un conjunto de \textit{feature functions} que describen TODO el contexto y brindan información útil para la fase de entrenamiento.
 	\ximena{Tener bien claro cuál es nuestra hipótesis, separarnos un poco del trabajo de lezgi}
-	Con base en el trabajo previo para del idioma Lezgi \citep{moeller2018automatic} se plantea como hipótesis que dado el tamaño del corpus y la glosa que contiene
-	se obtendrá texto correctamente glosado con una precisión de al menos 80\%. El objetivo de esta arquitectura con CRF realizar un etiquetador automatico  que bajo ciertas condiciones etiquete glosa automaticamente. 
-	Ya que el resultado esperado es la generación de etiquetas que, en principio,
-	dependen unas de otras un método basado en grafos como los CRF puede ser
-	adecuado. Se definieron de aprender un conjunto de feature functions que
-	describen TODO el contexto y brindan información útil para la fase de
-	entrenamiento.
+	El \textit{pipeline} de aprendizaje semi-supervisado para la generación de glosa para
+	el otomí de Toluca se describe en las secciones siguientes.
 	
-	El modelo de aprendizaje semi-supervisado, para la generación de glosa para
-	el otomí se describe a continuación:
+	\section{\textit{Pipeline}}
 	
+	\subsection{Obtención y preprocesamiento del corpus}
+	
+	Se obtiene el corpus de un archivo de texto plano. Cada renglón de este archivo es una oración en otomí con glosa. Además, se tiene una etiqueta \textit{POS} por cada palabra. Las frases están estructuradas en forma de listas que contienen otras listas validas para el lenguaje \code{Python}. La glosa esta presente por cada fragmento de las posibles palabras en otomí. Ejemplificando, la frase \textbf{"piximähtratá gí"} se representa en el corpus como se muestra en el ejemplo \ref{exmp:frase_glosada};
+	
+	\begin{exmp} \label{exmp:frase_glosada}
+		\code{[[["pi",\"it"], ["xi","3.prf"], ["mähtratá","stem"], ["gí","1.obj"], "v"]]}
+	\end{exmp}
+	
+	Entonces, la estructura de las listas, por renglón, tiene la estructura \code{[[[letras, glosa], [letras, glosa], ..., POS],...]}.
 	% TODO: HACER ESTA PARTE POR PUNTOS MAS BREVES Y CADA PUNTO HACERLO SECCION Y PROFUNDIZAR
 	
 	\begin{itemize}
@@ -415,13 +419,13 @@
 	\end{itemize}
 	
 	
-	% TODO: Resumen al final (pasos de todo lo que se hizo)
-	
 	\subsection{Feature functions}
 	
 	\subsection{Hardware utilizado}
 	
-	En la fase de experimentación fue utilizado el paquete \textsf{python-crfsuite} que es un \textit{binding} de la implementación de \citet{CRFsuite} para CRFs para lenguaje de programación \textit{Python} en su versión \textit{3.7}. La fase de experimentación corrió en una maquina con un procesador \textsf{Intel i7-7700HQ @ 3.800GHz} con \textsf{16 GB} de memoria principal. En promedio una corrida de entrenamiento y evaluación \textit{K-folds} con \textit{k=10} tomó 52 minutos.
+	En la fase de experimentación fue utilizado el paquete \textsf{python-crfsuite} que es un \textit{binding} de la implementación de TODO:CITA para CRFs para lenguaje de programación \textit{Python} en su versión \textit{3.7}. La fase de experimentación corrió en una maquina con un procesador \textsf{Intel i7-7700HQ @ 3.800GHz} con \textsf{16 GB} de memoria principal. En promedio una corrida de entrenamiento y evaluación \textit{K-folds} con \textit{k=10} tomó 52 minutos.
+	
+	% TODO: Resumen al final (pasos de todo lo que se hizo)
 	
 	\chapter{Experimentación y Resultados}
 	
