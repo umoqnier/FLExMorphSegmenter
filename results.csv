@@ -1,30 +1,9 @@
-model_name,dataset-train,dataset-test,test-split,train-size,test-size,time,iterations,L1,L2,accuracy,evaluation,k,description
-tsu_lezgi_base_50_0.1_0.001.crfsuite,lezgi,,0.2,64,16,0.02[m],50,0.1,0.001,0.9316,hold_out,0,Experimento de Lezgi con el CLI actual
-tsu_tsunkua_base_50_0.1_0.001.crfsuite,corpus_otomi_original,corpus_otomi_original,0.2,1364,341,3.18[m],50,0.1,0.001,0.9616,hold_out,0,Base de parametros para Lezgi con el corpus en otomi
-tsu_test_size_30%_50_0.1_0.001.crfsuite,corpus_otomi_original,corpus_otomi_original,0.3,1193,512,2.37[m],50,0.1,0.001,0.9647,hold_out,0,MOdificacion al conjunto de test al 30%
-tsu_test_size_25%_50_0.1_0.001.crfsuite,corpus_otomi_original,corpus_otomi_original,0.25,1278,427,2.94[m],50,0.1,0.001,0.9648,hold_out,0,MOdificacion al conjunto de test al 25%
-tsu_hard_test_50_0.1_0.001.crfsuite,corpus_otomi_original,corpus_hard,0.2,1364,422,2.99[m],50,0.1,0.001,0.9501,hold_out,0,Integrando test retadores
-tsu_hard_test_split_30%_50_0.1_0.001.crfsuite,corpus_otomi_original,corpus_hard,0.3,1193,593,2.4[m],50,0.1,0.001,0.9556,hold_out,0,Integrando test retadores y un 30% de test
-tsu_l1_zero_50_0_0.001.crfsuite,corpus_otomi_original,corpus_hard,0.2,1364,422,0.0[m],50,0,0.001,0.976,hold_out,0,parametro L1 en cero
-tsu_l1_l2_zero_50_0_0.crfsuite,corpus_otomi_original,corpus_hard,0.2,1364,422,2.91[m],50,0,0,0.9572,hold_out,0,parametros L1 y L2 en cero y corpus retador
-tsu_l2_zero_50_0.1_0.crfsuite,corpus_otomi_original,corpus_hard,0.2,1364,422,3.45[m],50,0.1,0,0.9771,hold_out,0,parametros L1 y L2 en cero y corpus retador
-tsu_original_l1_zero_50_0_0.001.crfsuite,corpus_otomi_original,corpus_otomi_original,0.2,1364,341,2.98[m],50,0,0.001,0.9576,hold_out,0,parametros L1 en cero
-tsu_original_l1_l2_zero_50_0_0.crfsuite,corpus_otomi_original,corpus_otomi_original,0.2,1364,341,3.18[m],50,0,0,0.9671,hold_out,0,parametros L1 y L2 en cero
-tsu_original_l2_zero_50_0.1_0.crfsuite,corpus_otomi_original,corpus_otomi_original,0.2,1364,341,3.29[m],50,0.1,0,0.9701,hold_out,0,parametro L2 en cero
-tsu_base_k_fold_50_0.1_0.001_k_10.crfsuite,corpus_otomi_original,N/A,N/A,1608,178,40.23[m],50,0.1,0.001,0.9664,k_fold,10,Base de parametros con evaluación k fold
-tsu_base_k_fold_5_50_0.1_0.001_k_5.crfsuite,corpus_otomi_original+corpus_hard,N/A,N/A,1429,357,16.94[m],50,0.1,0.001,0.9653,k_fold,5,Base de parametros con evaluación k fold k = 5
-tsu_l1_l2_zero_k_fold_10_50_0_0_k_10.crfsuite,corpus_otomi_original+corpus_hard,N/A,N/A,1608,178,45.94[m],50,0,0,0.9666,k_fold,10,Parametros l1 y l2 en cero con evaluación k fold k = 10
-tsu_baseline_50_0.1_0.001.crfsuite,corpus_otomi_original,corpus_otomi_original,0.2,1364,341,12.07[m],50,0.1,0.001,0.882,hold_out,0,Simulación de HMM con feature functions reducidas
-tsu_baseline_test_30%_50_0.1_0.001.crfsuite,corpus_otomi_original,corpus_otomi_original,0.3,1193,512,3.05[m],50,0.1,0.001,0.8615,hold_out,0,Simulación de HMM con feature functions reducidas. Test al 30%
-tsu_baseline_zero_l1_test_30%_50_0_0.001.crfsuite,corpus_otomi_original,corpus_otomi_original,0.3,1193,512,2.62[m],50,0,0.001,0.8714,hold_out,0,Simulación de HMM con feature functions reducidas. Quitando L1 y test al 30%
-tsu_baseline_zero_l2_test_30%_50_0.1_0.crfsuite,corpus_otomi_original,corpus_otomi_original,0.3,1193,512,2.89[m],50,0.1,0,0.8693,hold_out,0,Simulación de HMM con feature functions reducidas. Quitando L2 y test al 30%
-tsu_baseline_zero_l1_l2_test_30%_50_0_0.crfsuite,corpus_otomi_original,corpus_otomi_original,0.3,1193,512,3.01[m],50,0,0,0.8657,hold_out,0,Simulación de HMM con feature functions reducidas. Quitando L1  L2 y test al 30% 
-tsu_baseline_hard_test_30%_50_0.1_0.001.crfsuite,corpus_otomi_original,corpus_hard,0.3,1193,593,3.34[m],50,0.1,0.001,0.8696,hold_out,0,Simulación de HMM con feature functions reducidas. Corpus retador
-tsu_baseline_hard_zero_l1_test_30%_50_0_0.001.crfsuite,corpus_otomi_original,corpus_hard,0.3,1193,593,2.81[m],50,0,0.001,0.8626,hold_out,0,Simulación de HMM con feature functions reducidas. Corpus retador. Quitando L1
-tsu_baseline_hard_zero_l1_l2_test_30%_50_0_0.crfsuite,corpus_otomi_original,corpus_hard,0.3,1193,593,2.54[m],50,0,0,0.8546,hold_out,0,Simulación de HMM con feature functions reducidas. Corpus retador. Quitando L1 y L2
-tsu_baseline_hard_k_fold_50_0.1_0.001_k_5.crfsuite,corpus_otomi_original+corpus_hard,N/A,N/A,1429,357,18.76[m],50,0.1,0.001,0.8774,k_fold,5,Simulación de HMM con feature functions reducidas. K Fold validation
-tsu_baseline_k_fold_50_0.1_0.001_k_10.crfsuite,corpus_otomi_original+corpus_hard,N/A,N/A,1608,178,45.99[m],50,0.1,0.001,0.8759,k_fold,10,Simulación de HMM con feature functions reducidas. K Fold validation
-,,,,,,,,,:,,,,
-tsu_baseline_k_fold_zero_L1_50_0_0.001_k_10.crfsuite,corpus_otomi_original+corpus_hard,N/A,N/A,1608,178,51.57[m],50,0,0.001,0.8664,k_fold,10,Simulación de HMM con feature functions reducidas. K Fold validation y quitando L1
-tsu_baseline_k_fold_zero_L2_50_0.1_0_k_10.crfsuite,corpus_otomi_original+corpus_hard,N/A,N/A,1608,178,69.05[m],50,0.1,0,0.8745,k_fold,10,Simulación de HMM con feature functions reducidas. K Fold validation y quitando L2
-tsu_baseline_k_fold_zero_L1_L2_50_0_0_k_10.crfsuite,corpus_otomi_original+corpus_hard,N/A,N/A,1608,178,41.32[m],50,0,0,0.87,k_fold,10,Simulación de HMM con feature functions reducidas. K Fold validation y quitando L1 L2
+model_name,dataset-train,train-size,test-size,time,iterations,L1,L2,accuracy,evaluation,k,description,dataset-test,test-split
+linearCRF_featured_50_0.1_0.001_k_10.crfsuite,corpus_otomi_mod+corpus_hard,1608,178,42.91[m],50,0.1,0.001,0.9509,k_fold,10,"CRFs con parametros de regularización L1+L2. Kfold K=10 y maximo de iteraciones en 50. Todas las features functions activas.",N/A,N/A
+linearCRF_l1_zero_50_0_0.001_k_10.crfsuite,corpus_otomi_mod+corpus_hard,1608,178,41.03[m],50,0,0.001,0.948,k_fold,10,"CRFs con parametros de regularización L1+L2. Kfold K=10 y maximo de iteraciones en 50. Todas las features functions activas.",N/A,N/A
+linearCRF_l2_zero_50_0.1_0_k_10.crfsuite,corpus_otomi_mod+corpus_hard,1608,178,41.86[m],50,0.1,0,0.9516,k_fold,10,"CRFs sin L2. Kfold K=10 y maximo de iteraciones en 50. Todas las features functions activas.",N/A,N/A
+linearCRF_l1_l2_zero_50_0_0_k_10.crfsuite,corpus_otomi_mod+corpus_hard,1608,178,39.46[m],50,0,0,0.9499,k_fold,10,"CRFs sin parametros de regularización L1+L2. Kfold K=10 y maximo de iteraciones en 50. Todas las features functions activas.",N/A,N/A
+baseline_HMMLike_zero_50_0_0_k_10.crfsuite,corpus_otomi_mod+corpus_hard,1608,178,40.44[m],50,0,0,0.8762,k_fold,10,"Baseline sin parametros de regularización L1-L2. K=10 y maximo de iteraciones en 50",N/A,N/A
+HMMLike_regularization_50_0.1_0.001_k_10.crfsuite,corpus_otomi_mod+corpus_hard,1608,178,42.98[m],50,0.1,0.001,0.8791,k_fold,10,"Simulacion HMM (features reducidas) con parametros de regularización L1+L2 y mex iteration 50.",N/A,N/A
+HMMLike_l1_zero_50_0_0.001_k_10.crfsuite,corpus_otomi_mod+corpus_hard,1608,178,43.9[m],50,0,0.001,0.8745,k_fold,10,"Simulacion HMM (features reducidas) l1=0 l2=0.001",N/A,N/A
+HMMLike_l2_zero_50_0.1_0_k_10.crfsuite,corpus_otomi_mod+corpus_hard,1608,178,43.71[m],50,0.1,0,0.8818,k_fold,10,"Simulacion HMM (features reducidas) l1=0.1 l2=0",N/A,N/A
