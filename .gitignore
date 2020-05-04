@@ -3,6 +3,8 @@
 __pycache__/
 venv/
 corpora/
+models/legacy/
+logs/legacy/
 env/
 *.txt
 latex/*.aux
