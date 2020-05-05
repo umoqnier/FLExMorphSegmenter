@@ -25,7 +25,7 @@ def get_corpus(file_name, path='corpora/'):
     :return: Lista donde cada elemento es un renglon el corpus
     :rtype: list
     """
-    if 'original' in file_name:
+    if 'mod' in file_name:
         with open(path + file_name, encoding='utf-8', mode='r') as f:
             plain_text = f.read()
         raw_data = plain_text.split('\n')
@@ -149,9 +149,9 @@ def model_trainer(train_data, models_path, hyper, verbose, k=0):
             'max_iterations': hyper['max-iter']  # early stopping
         })
     if k:
-        compositive_name = f"tsu_{hyper['name']}_{hyper['max-iter']}_{hyper['L1']}_{hyper['L2']}_k_{k}.crfsuite"
+        compositive_name = f"{hyper['name']}_{hyper['max-iter']}_{hyper['L1']}_{hyper['L2']}_k_{k}.crfsuite"
     else:
-        compositive_name = f"tsu_{hyper['name']}_{hyper['max-iter']}_{hyper['L1']}_{hyper['L2']}.crfsuite"
+        compositive_name = f"{hyper['name']}_{hyper['max-iter']}_{hyper['L1']}_{hyper['L2']}.crfsuite"
     # The program saves the trained model to a file:
     if not os.path.isfile(models_path + compositive_name):
         print(f"Entrenando nuevo modelo '{compositive_name}'")
@@ -369,32 +369,33 @@ def extractFeatures(sent):
             letter = word[j][0]
             # gathering previous letters
             lettersequence += letter
-            # ignore     digits
+            # ignore digits
             if not letter.isdigit():
                 features = [
                     'bias',
                     'letterLowercase=' + letter.lower(),
                 ]
-                # position of word in sentence and pos tags sequence
-                if i > 0:
+                # Position of word in sentence
+                if i == senlen -1:
+                    features.append("EOS")
+                else:
+                    features.append("BOS")
+
+                # Pos tag sequence (Don't get pos tag if sentence is 1 word long)
+                if i > 0 and senlen > 1:
                     features.append('prevpostag=' + sent[i-1][0][1])
                     if i != senlen-1:
                         features.append('nxtpostag=' + sent[i+1][0][1])
-                    else:
-                        features.append('EOS')
-                else:
-                    features.append('BOS')
-                    #Don't get pos tag if sentence is 1 word long
-                    if i != senlen-1:
-                        features.append('nxtpostag=' + sent[i+1][0][1])
-                # position of letter in word
+
+                # Position of letter in word
                 if j == 0:
                     features.append('BOW')
                 elif j == wordlen-1:
                     features.append('EOW')
                 else:
                     features.append('letterposition=-%s' % str(wordlen-1-j))
-                # letter sequences before letter
+
+                # Letter sequences before letter
                 if j >= 4:
                     features.append('prev4letters=' + lettersequence[j-4:j].lower() + '>')
                 if j >= 3:
@@ -403,21 +404,21 @@ def extractFeatures(sent):
                     features.append('prev2letters=' + lettersequence[j-2:j].lower() + '>')
                 if j >= 1:
                     features.append('prevletter=' + lettersequence[j-1:j].lower() + '>')
+
                 # letter sequences after letter
                 if j <= wordlen-2:
                     nxtlets = word[j+1][0]
                     features.append('nxtletter=<' + nxtlets.lower())
-                    #print('\nnextletter:', nxtlet)
                 if j <= wordlen-3:
                     nxtlets += word[j+2][0]
                     features.append('nxt2letters=<' + nxtlets.lower())
-                    #print('next2let:', nxt2let)
                 if j <= wordlen-4:
                     nxtlets += word[j+3][0]
                     features.append('nxt3letters=<' + nxtlets.lower())
                 if j <= wordlen-5:
                     nxtlets += word[j+4][0]
                     features.append('nxt4letters=<' + nxtlets.lower())
+
             # Add encoding for pysrfsuite
             featurelist.append([f.encode('utf-8') for f in features])
     return featurelist

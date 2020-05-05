@@ -78,7 +78,7 @@ def cli(corpora_path, models_path, model_name, debug, verbose, test_size,
         hard_corpus = get_corpus('corpus_hard', corpora_path)
         corpus = WordsToLetter(corpus)
         hard_corpus = WordsToLetter(hard_corpus)
-        dataset = np.array(corpus + hard_corpus
+        dataset = np.array(corpus + hard_corpus)
         print("*"*10)
         print("K FOLDS VALIDATION")
         print("*"*10)
