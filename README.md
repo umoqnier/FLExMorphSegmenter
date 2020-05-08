@@ -61,7 +61,7 @@ Options:
     "description": "Eliminación de la penalización L1. Todo el corpus es de entrenamiento teniendo un corpus solo para evaluación"
 }
 ```
-* Las banderas entes mencionadas son opcionales y en caso de existir sobre
+* Las banderas antes mencionadas son opcionales y en caso de existir sobre
 escriben los parametros que esten en el archivo `.json`
 * Si se habilita el modo verboso `-v` se mostrará la información completa de
 cada iteración en entrenamiento y reportes del rendimiento del modelo
@@ -73,6 +73,21 @@ nombre de los modelos sigue la siguiente estructura
 * `tsu_<nombre>_<max-iteraciones>_<L1>_<L2>.crfsuite`
 * **Estos y otros parametros son configurables via `hyperparams.json`**
 
+# Notebooks
+
+* Creación de notebooks de jupyter para extracción de información del corpus
+	* Tipos y tokens
+	* Distribución de etiquetas
+	* Conteo de palabras
+	* Tamaño del corpus
+	* Longitud de palabras promedio
+	* Distribución de frecuencias basadas en la longitud de las palabras
+
+* Distribución de etiquetas
+* Conteo de palabras
+* Tamaño del corpus
+* Longitud de palabras promedio
+* Distribución de frecuencias basadas en la longitud de las palabras
 # Plan de trabajo
 
 * [x] Revisar los reportes que imprime el programa y como esta evaluando
@@ -91,7 +106,7 @@ nombre de los modelos sigue la siguiente estructura
 * [x] Correr adaptación de lezgi con el CLI
 * [x] Correr K folds con K = 10
 * [x] Correr con parametros de penalización = 0
-* [ ] Obtener el vocabulario de etiquétas
+* [X] Obtener el vocabulario de etiquétas
 
 ## Modificación de *feature functions*
 
@@ -103,16 +118,17 @@ nombre de los modelos sigue la siguiente estructura
 
 * Feature functions solo con la letra anterior
   * Sin regularización L1 y L2
+	* Máximo de iteraciones 50
   * Simulando HMM
-  * Nombre del modelo: *`tsu_baseline_zero_l1_l2_test_30%_50_0_0.crfsuite`*
+  * Nombre del modelo: *`tsu_baseline_HMMLike_zero_50_0_0_[1-10].crfsuite`*
 
 ### Esperimentos finales
 
 * Trabajar con todas las feature functions
   * K fold = 10
   * [x] L1 = 0.1 y L2 = 0.001 *`tsu_base_k_fold_50_0.1_0.001_k_10.crfsuite`*
-  * [x] L1 = 0 *``*
-  * [x] L2 = 0 *``*
+  * [x] L1 = 0 
+  * [x] L2 = 0
   * [x] L1 = 0 y L2 = 0 *`tsu_l1_l2_zero_k_fold_10_50_0_0_k_10.crfsuite`*
 * Trabajar con todas las las feature functions excepto POS
   * K fold = 10
@@ -123,7 +139,7 @@ nombre de los modelos sigue la siguiente estructura
 
 ## Graficas
 
-* Graficar la funcion de perdida
+* Gráficar la función de perdida
   * Guardar la información y recuperar la de los modelos previos
 
 ## Manejo de Datos para evaluación
@@ -150,35 +166,6 @@ nombre de los modelos sigue la siguiente estructura
 		* SVM
 		* Red Neuronal seq2seq
 
-# Escritura
-
-## Metodología - Revision de la literatura
-
-1. Dominar CRF
-    * Saber que son y como se definen
-        * feature functions
-        * como se defina la funcion de probabilidad
-    * Que parametros de optimizacion aceptan
-        * Metodo de optimizacion
-        * Regularizacion L1 y L2
-        * Buscar más si tiene
-2. Hablar de otomi
-    * Tipo de lengua
-    * Donde se habla
-    * Importancia de tratarlo
-
-## Estado del arte
-
-1. Articulos que usan CRF para lenguas de bajos recursos
-    * Griko
-    * Lezgi
-
-## Descripcion de los experimentos
-
-* Interpretar las medidas de evaluacion
-* Explicar por que con la modificacion de ciertos parametros aumenta o
-disminuye
-
 ## Depuración del corpus
 
 * Para eliminar líneas repetidas en el corpus `$ sort -u corpus > corpus_uniq`
@@ -196,25 +183,4 @@ letras en otomí:
 * e̱ -> ε
 * i̱ -> ι
 
-# Trabajando con el base line
-
-## Baseline
-Sin regularización L1 y L2 y feature functions solo con la letra anterior (simulando HMM).
-Nombre del modelo: *`tsu_baseline_zero_l1_l2_test_30%_50_0_0.crfsuite`*
-
-* Trabajar con todas las feature functions
-  * K fold = 10
-  * L1 = 0
-  * L2 = 0
-  * L1 = 0 y L2 = 0
-* Trabajar con todas las las feature functions excepto POS
-  * K fold = 10
-  * L1 = 0
-  * L2 = 0
-  * L1 = 0 y L2 = 0
-
 ## Agregar más feature functions??
-
-## Graficas
-
-* Graficar la funcion de perdida
