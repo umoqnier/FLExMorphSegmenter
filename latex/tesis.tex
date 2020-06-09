@@ -17,6 +17,9 @@
 \usepackage{soul}  % Tachar caracteres
 \usepackage{tipa} % Caracteres IPA
 \usepackage{smartdiagram}
+\usepackage{color, colortbl}
+
+\definecolor{Yellow}{rgb}{1, 0.78, 0.26}
 
 \newcommand{\note}[4][]{\todo[author=#2,color=#3,size=\scriptsize,fancyline,caption={},#1]{#4}} % default
 
@@ -419,7 +422,7 @@ Sin  embargo, el aprendizaje estructurado y, en concreto, los \textit{CRFs} prom
 % Experimentos quitando features functions
 % Diagram de donde se encuentran estos elementos en la arquitectura
 % Como se calculan lambdas y mu
-% Variacion de hiperparametros
+% Variacion de hiperparámetros
 % Descripcion de que variaciones se hicieron
 % Hablar de L1 y L2 con ciertas combinaciones
 % Mostrar el base line y compararlo
@@ -452,11 +455,12 @@ En general, para el glosado se realiza manualmente. Esta tarea requiere del expe
 
 Parte de la definición de la estructura de la lengua se encuentra codificada en el conjunto de \textit{feature functions}. Estas funciones describen características de la lengua considerando, detalladamente, el contexto, la posición y etiquetas gramaticales que brindan información útil para la fase de entrenamiento.
 
-Puntualmente, se utiliza un modelo del tipo \textbf{Markov CRF de primer orden con \textit{features} de estado y de transición}. Adicionalmente, fue utilizado el algoritmo de aprendizaje \textbf{Limited-memory Broyden-Fletcher-Goldfarb-Shanno (L-BFGS)}. El algoritmo busca maximizar el logaritmo de probabilidad. Para mejorar el rendimiento son utilizados y modificados un conjunto hiperparametros.
+Puntualmente, se utiliza un modelo del tipo \textbf{Markov CRF de primer orden con \textit{features} de estado y de transición}. Adicionalmente, fue utilizado el algoritmo de aprendizaje \textbf{Limited-memory Broyden-Fletcher-Goldfarb-Shanno (L-BFGS)}. El algoritmo busca maximizar el logaritmo de probabilidad. Para mejorar el rendimiento son utilizados y modificados un conjunto hiperparámetros.
 
-Estos hiperparametros son  los coeficientes de regularización L1 y L2 necesarios para evitar posible \textit{overfitting}, el número máximo de iteraciones, el número máximo de memorias utilizadas para aproximar la matriz hessiana inversa, epsilon que determina la condición de convergencia, el número de iteraciones para probar el umbral de detención,  delta que define el umbral de detención de cada iteración, el método de búsqueda de línea usado por el algoritmo L-BFGS y el número máximo de intentos para el algoritmo de línea.
+Estos hiperparámetros son los coeficientes de regularización L1 y L2 necesarios para evitar posible \textit{overfitting}, el número máximo de iteraciones, el número máximo de memorias utilizadas para aproximar la matriz hessiana inversa, epsilon que determina la condición de convergencia, el número de iteraciones para probar el umbral de detención,  delta que define el umbral de detención de cada iteración, el método de búsqueda de línea usado por el algoritmo L-BFGS y el número máximo de intentos para el algoritmo de línea.
 \Vic{Señalar los hiperparámetros que se utilizaromn en L-BFGS}
 El modelo y el algoritmo de aprendizaje fueron tratados a detalle en la sección \ref{sec:marco}.
+\Diego{Descripcion categorizada de los hiperparámetros}
 
 La arquitectura propuesta abarca desde la obtención del corpus etiquetado, pasando por el preprocesamiento del mismo, llegando a la creación de las \textit{feature functions}, seguido de la separación de los datos en conjuntos de entrenamiento y pruebas, continuando con la fase de entrenamiento y construcción del modelo de aprendizaje, terminando en la etapa de pruebas compuesta por la generación de etiquetas y posterior comparación con la glosa real. Las subsecciones que componen esta arquitectura son \textbf{codificación y preprocesamiento}, \textbf{implementación de los CRFs} y \textbf{feature functions}. En el siguiente capítulo se abordaran las etapas de generación de glosa y pruebas.
 
@@ -521,7 +525,7 @@ Los \textit{CRFs} recibieron como entrada las \textit{feature functions}, repres
 La extracción de estas características es importante porque capturar fenómenos lingüísticos necesarios para que la estructura de la lengua se pueda plasmar en el modelo de aprendizaje. Estas características están capturando, entres otras cosas, el contexto de la palabra y es importante para predecir la morfología. Para construir las \textit{feature functions} se necesita el corpus glosado y etiquetado a nivel de letra. Se extrajeron las siguientes características para cada letra en el corpus:
 
 \Vic{Pasar a formato de description}
-\begin{description}
+\begin{description} \label{feature_functions_descr}
     \item[Bias:] Esta característica captura la proporción de una etiqueta dada en el conjunto de entrenamiento. El modelo aprende los pesos asociados con las etiquetas como si las etiquetas se generaran independientemente de una distribución de probabilidad dada. Ayuda a tomar en cuenta que algunas etiquetas son poco usuales y otras muy usuales.
     
     \item[\textsf{letterLowercase}:] Toma la letra y la convierte a minúsculas. Es importante para la creación del modelo tener en cuenta la letra que se esta viendo en un momento determinado para las predicciones posteriores. 
@@ -539,108 +543,69 @@ La extracción de estas características es importante porque capturar fenómeno
     \item[\textsf{prev<n>letters} y \textsf{nxt<n>letters}:] La recuperación de ventanas de contexto son convenientes para del otomí ya que se trata de una lengua aglutinante dónde, en general, las palabras son largas. En particular, la longitud promedio de las palabras en el corpus es de 4.89\footnote{Promedio de la distribución de palabras basada en  en tokens. Para una distribución por tipos se obtuvo 7.2}. Esta característica da la pauta para que la observación del contexto en un determinado momento sea relevante para la construcción del modelo.
     
     \textsf{prev<n>letters} toma las $n$ letras previas y \textsf{nxt<n>letters} toma las $n$ letras siguientes, si existen en ambos casos. La variable $n$ determina el nombre de la \textit{feature} que indica el tamaño de la ventana a partir de la letra que se esta viendo en ese momento y va desde el número uno, caso dónde no se incluye número en el nombre, hasta el número cuatro. Por ejemplo, \textsf{prev4letters} toma las cuatro letras previas y \textsf{nxtletter} toma la letra siguiente.
-    
-    
-\end{description}
-
-\Diego{Pasar al entorno de descripcion}
-
-
 \Diego{Separar next y prev}
 \Diego{utilizar prevkletter y describir que es k}
+\end{description}
+\Diego{Pasar al entorno de descripcion}
+
 
 Las características mencionadas son información relevante para poder construir un modelo más preciso dadas las estructuras de la lengua. Dichas características pueden o no estar presentes dependiendo de la letra que se esté viendo en ese momento. Por ejemplo, si es la primer letra de una palabra la que se observa no estarán presentes las características \textsf{prevletter}, \textsf{prev2letters} o \textsf{EOW} por mencionar algunas. Características como \textsf{letterLowercase} o \textsf{bias} siempre estuvieron presentes.
 
 La construcción de las \textit{feature functions} dependió del experimento en turno. Por ejemplo, en algunos casos fueron modificadas reduciéndolas ignorando las etiquetas que brindaban información gramatical o fueron construidas para solo observar la letra actual y la anterior simulando un \textit{Hidden Markov Model (HMM)} utilizando \textit{CRFs}.
 
 
-% Hiperparametros
+% hiperparámetros
 \subsection{Implementación de CRFs y entrenamiento}
 
-\textit{CRFs} es un termino general para una familia de métodos de aprendizaje basados en gráficas. En concreto, para la generación de secuencias de etiquetas utilizamos \textit{linear-chain CRF}. Este método requiere de un algoritmo de optimización. Como ya mencionamos previamente utilizamos el \textit{L-BFGS}. Este algoritmo mejora los pesos de las funciones muy lentamente al comienzo de un proceso de entrenamiento, pero al final converge rápidamente en los pesos óptimos de las funciones.
+El termino \textit{CRFs} se refiere a una familia de métodos de aprendizaje basados en gráficas. En concreto, para la generación de secuencias de etiquetas utilizamos \textit{linear-chain CRF}. Este método requiere de un algoritmo de optimización. Como ya mencionamos previamente utilizamos el \textit{L-BFGS}. Este algoritmo mejora los pesos de las funciones muy lentamente al comienzo de un proceso de entrenamiento, pero al final converge rápidamente en los pesos óptimos de las funciones.
 
-El entrenamiento consistió en la búsqueda de un modelo que maximiza el logaritmo de verosimilitud con el método de aprendizaje \textit{L-BFGS}. Es necesario entonces definir los parámetros del algoritmo de maximización. Utilizamos \textit{Elastic Net} con los valores de regularización, necesarios para evitar problemas como el \textit{overfitting}, L1 + L2 y un máximo de iteraciones para la fase de entrenamiento.
+El entrenamiento consistió en la búsqueda de un modelo que maximiza el logaritmo de verosimilitud con el método de aprendizaje \textit{L-BFGS}. Es necesario entonces definir los parámetros del algoritmo de maximización. Los hiperparámetros modificados fueron \textit{Elastic Net} con los valores de regularización L1 + L2. También, fue configurado el número máximo de iteraciones para el algortimo pero fue fijado en 50 para todos los modelos. El resto de hiperparámetros se dejaron con un valor \textit{default}. En la tabla \ref{tab:hyper_default_values} se muestran los valores que no se modificaron para los hiperparámetros.
 
-Se configuraron diferentes entornos de experimentación para los cuales se construyeron \textit{feature functions} con mas o menos características y se definieron ciertos hiperparámetros. Una vez definidos los hiperparámetos se ejecutó la fase de entrenamiento. A continuación se listan las diferentes configuraciones implementadas en esta tesis:
+\begin{table}[]
+    \centering
+    \begin{tabular}{| c | c |}\hline
+        \textbf{Hiperparámetro} & Valor \\\hline
+        \textsf{max\_iterarions} & 50 \\
+        \textsf{num\_memories} & 6 \\
+        \textsf{epsilon} & \num{1e-5} \\
+        \textsf{stop} & 10 \\
+        \textsf{delta} & \num{1e-5} \\
+        \textsf{linesearch} & ''MoreThuente'' \\
+        \textsf{max\_linesearch} & 20 \\\hline
+    \end{tabular}
+    \caption{Valores de los hiperparámetros}
+    \label{tab:hyper_default_values}
+\end{table}
+\Diego{Mencionar los hiperparámetros seteados por defecto}
 
-\subsubsection{Modelos}
+Además de los hiperparámetros se configuraron diferentes entornos de experimentación dónde se construyeron \textit{feature functions} con mas o menos información. En concreto, en un entorno se utilizaron todas las \textit{features} disponibles, como se menciono en \ref{feature_functions_descr}, en un segundo entorno se modificaron las \textit{features} para ignorar las etiquetas \textit{POS} y en el último entorno se redujeron las \textit{features} al mínimo, recuperando solo la letra actual y la letra anterior, con lo que se simulaba un \textit{HMM}. A continuación se listan las diferentes configuraciones implementadas en esta tesis.
 
-\Diego{Mencionar los hiperparametros seteados por defecto}
-\Diego{Descripcion categorizada de los hiperparametros}
+% Modelos
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{| c | c | c | c | c |}\hline
+        \textbf{Modelo} & \textbf{L1} & \textbf{L2} & \textbf{Tiempo} & \textbf{Precisión}\\ \hline
+        \textsf{linearCRF\_l2\_zero} & 0.1 & 0 & 41.86 [m] & 0.9516\\
+        \textsf{linearCRF\_featured} & 0.1 & \num{1e-3} & 42.91 [m] & 0.9509\\
+        \textsf{linearCRF\_l1\_l2\_zero} & 0 & 0 & 39.46 [m] & 0.9499\\
+        \textsf{POS\_Less} & 0.1 & \num{1e-3} & 37.91 [m] & 0.9499\\
+        \textsf{linearCRF\_l1\_zero} & 0 & \num{1e-3} & 41.03 [m] & 0.9480\\
+        \textsf{POS\_Less\_l1\_zero} & 0 & \num{1e-3} & 40.25 [m] & 0.9473\\
+        \textsf{POS\_Less\_l1\_l2\_zero} & 0 & 0 & 36.67 [m] & 0.9452\\
+        \textsf{HMMLike\_l2\_zero} & 0.1 & 0 & 43.71 [m] & 0.8818\\
+        \textsf{HMMLike\_regularization} & 0.1 & \num{1e-3} & 42.98 [m] & 0.8791\\\rowcolor{Yellow}
+        \textsf{baseline\_HMMLike\_zero} & 0 & 0 & 40.44 [m] & 0.8762\\
+        \textsf{HMMLike\_l1\_zero} & 0 & \num{1e-3} & 43.90 [m] & 0.8745\\\hline
+    \end{tabular}
+    \caption{Modelos de aprendizaje}
+    \label{tab:baseline-params}
+\end{table}
+
 \Diego{El mas alto, mas bajo, el POS y el baseline}
 \Diego{Grafica de la funcion de costo}
 \Diego{Todo en una sola tabla}
 
-\begin{table}[ht]
-    \centering
-    \begin{tabular}{c | c | c}
-         & Parámetros & Valores \\ \hline
-        \multirow{10}{12em}{\textsf{baseline\_HMMLike\_zero}} & L1 & 0 \\
-        & L2 & 0\\ 
-        & max\_iterarions & 50 \\
-        & num\_memories & 6\\
-        & epsilon & \num{1e-5}\\
-        & stop & 10\\
-        & delta & \num{1e-5}\\
-        & linesearch & \textit{MoreThuente}\\
-        & max\_linesearch & 20\\
-        & k-fold  & 10 \\
-    \end{tabular}
-    \caption{Modelo \textsf{baseline\_HMMLike\_zero}}
-    \label{tab:baseline-params}
-\end{table} 
-
-\Diego{¿Es pertinente agregar el tiempo de aprendizaje?}
-
-\Diego{Conviene poner los hiperparametros que no se modificaron en ningun caso como los predeterminados}
-
-
-\subsection{Modelo \textsf{linearCRF\_featured}}
-
-\begin{table}[h]
-    \centering
-    \begin{tabular}{c | c | c}
-         & Parámetros & Valores \\ \hline
-        \multirow{4}{9em}{\textsf{linearCRF\_featured}} & L1 & 0.1 \\ 
-        & L2 & 0.001 \\ 
-        & max\_iterarions & 50 \\ 
-        & k-fold  & 10 \\ 
-    \end{tabular}
-    \caption{Modelo \textsf{linearCRF\_featured}}
-    \label{tab:linearCRF-params}
-\end{table}
-
-\subsection{Modelo \textsf{POS\_Less\_l1\_l2\_zero}}
-
-\begin{table}[h]
-    \centering
-    \begin{tabular}{c | c | c}
-         & Parámetros & Valores \\ \hline
-        \multirow{4}{10em}{\textsf{POS\_Less\_l1\_l2\_zero}} & L1 & 0 \\
-        & L2 & 0\\ 
-        & max\_iterarions & 50 \\ 
-        & k-fold  & 10 \\ 
-    \end{tabular}
-    \caption{Modelo \textsf{POS\_Less\_l1\_l2\_zero}}
-    \label{tab:poss-less-params}
-\end{table}
-
-\subsection{Modelo \textsf{HMMLike\_regularization}}
-
-\begin{table}[h]
-    \centering
-    \begin{tabular}{c | c | c}
-         & Parámetros & Valores \\ \hline
-        \multirow{4}{11em}{\textsf{{HMMLike\_regularization}}} & L1 & 0.1 \\
-        & L2 & 0.001\\ 
-        & max\_iterarions & 50 \\ 
-        & k-fold  & 10 \\ 
-    \end{tabular}
-    \caption{Modelo \textsf{HMMLike\_regularization}}
-    \label{tab:poss-less-params}
-\end{table}
-
-\Diego{¿Poner todos los modelos de experimentacion? Son 11}
 
 % Testing
 Terminada la fase de entrenamiento y construido el modelo de aprendizaje se puso a prueba con el conjunto destinado a este propósito y que fue previamente obtenido. Similar a la fase de entrenamiento las entradas fueron las \textit{feature functions} y la \textit{Bio Labels} asociada a cada \textit{feature function}. Utilizando el modelo de aprendizaje se etiquetó cada letra con base en la estructura de la lengua codificada en las \textit{feature functions}. Las etiquetas generadas fueron comparadas con las reales y con ello se obtuvo la exactitud del modelo. 
