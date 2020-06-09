@@ -183,4 +183,11 @@ letras en otomí:
 * e̱ -> ε
 * i̱ -> ι
 
-## Agregar más feature functions??
+## *Pipeline*
+
+1. Obtención del copus glosado
+2. Preprocesamiento del texto
+3. Creación de las *feature functions*
+4. Separación en conjunto de entrenamiento y pruebas
+5. Fase de entrenamiento y construcción del modelo
+6. Generación de etiquetas y pruebas de rendimiento
