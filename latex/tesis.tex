@@ -48,8 +48,9 @@
 
 \author{Diego Alberto Barriga Martínez}
 \title{Etiquetador automático de la morfología del otomí usando predicción estructurada}
-\tableofcontents
 \maketitle
+\tableofcontents
+
 
 % TODO: Pasar todo lo del protocolo aquí
 % Utilzar el tiempo pasado 
@@ -196,7 +197,7 @@ se obtendrá texto correctamente glosado con una precisión de al menos 80\%.
 % Metoodologia 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Etiquetador morfológico para el otomí (Metodología)}
+\chapter{Etiquetador morfológico para el otomí (Metodología)} \label{chap:metodology}
 
 El objetivo de este capítulo es la presentación de la metodología utilizada en esta tesis. La metodología está constituida por un corpus etiquetado, del cual se incluye una descripción detallada, y la arquitectura para la generación de glosa para el idioma otomí. La arquitectura incluye, entre otras cosas, la codificación y preprocesamiento del corpus, el diseño e implementación del los \textit{CRFs} y la determinación de las \textit{feature functions}.
 
@@ -559,7 +560,7 @@ La construcción de las \textit{feature functions} dependió del experimento en 
 
 El termino \textit{CRFs} se refiere a una familia de métodos de aprendizaje basados en gráficas. En concreto, para la generación de secuencias de etiquetas utilizamos \textit{linear-chain CRF}. Este método requiere de un algoritmo de optimización. Como ya mencionamos previamente utilizamos el \textit{L-BFGS}. Este algoritmo mejora los pesos de las funciones muy lentamente al comienzo de un proceso de entrenamiento, pero al final converge rápidamente en los pesos óptimos de las funciones.
 
-El entrenamiento consistió en la búsqueda de un modelo que maximiza el logaritmo de verosimilitud con el método de aprendizaje \textit{L-BFGS}. Es necesario entonces definir los parámetros del algoritmo de maximización. Los hiperparámetros modificados fueron \textit{Elastic Net} con los valores de regularización L1 + L2. También, fue configurado el número máximo de iteraciones para el algortimo pero fue fijado en 50 para todos los modelos. El resto de hiperparámetros se dejaron con un valor \textit{default}. En la tabla \ref{tab:hyper_default_values} se muestran los valores que no se modificaron para los hiperparámetros.
+El entrenamiento consistió en la búsqueda de un modelo que maximiza el logaritmo de verosimilitud con el método de aprendizaje \textit{L-BFGS}. Es necesario entonces definir los parámetros del algoritmo de maximización. Los hiperparámetros modificados fueron los de \textit{Elastic Net} con valores de regularización L1 + L2. También, fue configurado el número máximo de iteraciones para el algoritmo pero fue fijado en 50 para todos los modelos. El resto de hiperparámetros se dejaron con un valor predeterminado. En la tabla \ref{tab:hyper_default_values} se muestran los valores que no se modificaron para los hiperparámetros.
 
 \begin{table}[]
     \centering
@@ -578,7 +579,7 @@ El entrenamiento consistió en la búsqueda de un modelo que maximiza el logarit
 \end{table}
 \Diego{Mencionar los hiperparámetros seteados por defecto}
 
-Además de los hiperparámetros se configuraron diferentes entornos de experimentación dónde se construyeron \textit{feature functions} con mas o menos información. En concreto, en un entorno se utilizaron todas las \textit{features} disponibles, como se menciono en \ref{feature_functions_descr}, en un segundo entorno se modificaron las \textit{features} para ignorar las etiquetas \textit{POS} y en el último entorno se redujeron las \textit{features} al mínimo, recuperando solo la letra actual y la letra anterior, con lo que se simulaba un \textit{HMM}. A continuación se listan las diferentes configuraciones implementadas en esta tesis.
+Además de los hiperparámetros se configuraron diferentes entornos de experimentación dónde se construyeron \textit{feature functions} con mas o menos información. En la tabla \ref{tab:models-config} se listan las diferentes configuraciones implementadas en esta tesis.
 
 % Modelos
 
@@ -599,11 +600,10 @@ Además de los hiperparámetros se configuraron diferentes entornos de experimen
         \textsf{HMMLike\_l1\_zero} & 0 & \num{1e-3} & 43.90 [m] & 0.8745\\\hline
     \end{tabular}
     \caption{Modelos de aprendizaje}
-    \label{tab:baseline-params}
+    \label{tab:models-config}
 \end{table}
 
 \Diego{El mas alto, mas bajo, el POS y el baseline}
-\Diego{Grafica de la funcion de costo}
 \Diego{Todo en una sola tabla}
 
 
@@ -618,12 +618,10 @@ En la fase de experimentación fue utilizado el paquete \textsf{python-crfsuite}
 Recapitulando.... 
 % TODO: Resumen al final (pasos de todo lo que se hizo) como puntos o un diagrama
 
-
 \chapter{Resultados}
-
-% Pasar a resultados
-Consideramos exitosa la predicción si se logra maximizar la correcta clasificación de las secuencias de salida. Para determinar si la predicción fue exitosa se utilizaron técnicas típicas de \textit{ML} como \textit{K-folds} que consiste en tomar \textit{K} fragmentos de los datos de entrada y utilizarlos para probar el modelo. Además de reportar la precisión se obtuvo el \textit{recall} y \textit{F-score}.
 % Solo reportar
+
+En este capítulo se detallará el desempeño de los modelos que fueron mencionados en el capítulo \ref{chap:metodology} y se profundizará en los resultados obtenidos. Además, se examinará el método de evaluación utilizado para los modelos generados.
 
 % Mostrar la comparación a profundidad del baseline con todos los experimentos
 % Demostrar que lo que propusimos fue mejor
@@ -634,19 +632,95 @@ Consideramos exitosa la predicción si se logra maximizar la correcta clasificac
     % De lo mas básico (baseline) y ver como lo mejoramos con las feature functions
     % El conocimiento lingüístico ayuda a mejorar
 
-\section{Corpus de evaluación}
-
 \section{Evaluación}
 
-\Diego{Poner grafica de la funcion de perdida y comentar}
-% Aquí se habla del K fold y de como se introdujo el corpus retador.
+Propusimos diferentes entornos de experimentación en dónde fueron modificadas las \textit{feature functions} y los parámetros de regularización \textit{Elastic Net} L1 + L2. En concreto, se presentaron tres entornos de evaluación; en el primer entorno se utilizaron todas las \textit{features} disponibles, como se menciono en \ref{feature_functions_descr}; en un segundo entorno se modificaron las \textit{features} para ignorar las etiquetas \textit{POS} y por último se redujeron las \textit{features} al mínimo, recuperando solo la letra actual y la letra anterior, con lo que se simulaba un \textit{Hidden Markov Model (HMM)}.
+
+En ese sentido, para evaluar el desempeño de los modelos construidos por el algoritmo, presentes en la tabla \ref{tab:models-config}, seleccionamos como base el entorno dónde se simula un \textit{HMM} que corresponde con el modelo \textsf{baseline\_HMMLike\_zero}. 
+
+% Pasar a resultados
+Para determinar la precisión utilizamos una técnicas típica de \textit{ML} llamada \textit{cross-validation K-folds} que consiste en tomar \textit{K} fragmentos aleatorios del conjunto de entrenamiento y utilizarlos como conjunto de pruebas para evaluar el modelo. Consideramos exitosa la predicción si se logra maximizar la correcta clasificación de las secuencias de salida. Además de reportar la precisión se obtuvo el \textit{recall} y \textit{F-score}.
+
+Para todas las etapas de pruebas utilizamos $K = 10$. Ergo, para cada modelo, el corpus de evaluación fue obtenido de una sección diferente del corpus de entrenamiento en diez ocasiones, una por cada $K$, se tomó la precisión de cada iteración entre el modelo  obtenido con el corpus de entrenamiento y el conjunto de pruebas y se promediaron las diez precisiones obtenidas para una precisión global que es la que reportamos.
+% Aquí se habla del K fold 
+
+En la tabla \ref{tab:models-full-featured} se muestran los modelos dónde se recuperaron todas las \textit{features} disponibles
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{| c | c | c | c |}\hline
+    \textbf{Modelo} & \textbf{Precisión} & $L_1$ & $L_2$\\\hline
+    \textsf{linearCRF\_l2\_zero} & 0.9516 & 0.1 & 0\\
+    \textsf{linearCRF\_featured} & 0.9509 & 0.1 & 0.001\\
+    \textsf{linearCRF\_l1\_l2\_zero} & 0.9499 & 0 & 0\\
+    \textsf{linearCRF\_l1\_zero} & 0.948 & 0 & 0.001\\\hline
+    \end{tabular}
+    \caption{Modelos con todas las \textit{features} disponibles}
+    \label{tab:models-full-featured}
+\end{table}
+
+En la tabla \ref{tab:models-pos-less} se encuentran los modelos que pertenecen al entorno de experimentación donde fueron ignoradas las etiquetas \textit{POS}
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{| c | c | c | c |}\hline
+    \textbf{Modelo} & \textbf{Precisión} & $L_1$ & $L_2$\\\hline
+    \textsf{POS\_Less} & 0.9499 & 0.1 & \num{1e-3}\\
+    \textsf{POS\_Less\_l1\_zero} & 0.9473 & 0 & \num{1e-3}\\
+    \textsf{POS\_Less\_l1\_l2\_zero} & 0.9452 & 0 & 0\\\hline
+    \end{tabular}
+    \caption{Modelos donde se ignoran las etiquetas \textit{POS}}
+    \label{tab:models-pos-less}
+\end{table}
+
+En la tabla \ref{tab:models-hmmlike} se aprecian los modelos generados en el entorno de experimentación con las \textit{feature functions} reducidas al mínimo, simulando \textit{HMMs}.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{| c | c | c | c |}\hline
+    \textbf{Modelo} & \textbf{Precisión} & $L_1$ & $L_2$\\\hline
+    \textsf{HMMLike\_l2\_zero} & 0.8818 & 0.1 & 0\\
+    \textsf{HMMLike\_regularization} & 0.8791 & 0.1 & \num{1e-3}\\
+    \textsf{baseline\_HMMLike\_zero} & 0.8762 & 0 & 0\\
+    \textsf{HMMLike\_l1\_zero} & 0.8745 & 0 & \num{1e-3}\\\hline
+    \end{tabular}
+    \caption{Modelos que simulan \textit{HMMs}}
+    \label{tab:models-hmmlike}
+\end{table}
+
+Por último, la tabla \ref{tab:models-comparation} se muestra la comparación del modelo base con los modelos con mejor precisión en los entornos de experimentación.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{| c | c |}\hline
+        \textbf{Modelo} & \textbf{Precisión} \\\hline
+        \textbf{\textsf{linearCRF\_l2\_zero}} & \textbf{0.9516}\\ 
+        \textsf{POS\_Less} & 0.8762\\ 
+        \textsf{baseline\_HMMLike\_zero} & 0.8762\\ \hline
+    \end{tabular}
+    \caption{Comparación de modelos en diferentes entornos de pruebas}
+    \label{tab:models-comparation}
+\end{table}
 
 \section{Análisis de resultados}
 
-% Cual salio mejor
-% cual salio pero
+Comparando los diferentes entornos de entrenamiento y generación de modelos, observamos que, dado el escaso tamaño del corpus de entrenamiento, al recuperar mayor información en la construcción de las \textit{feature functions} y con métodos basados en gráficas como los \textit{CRFs} se obtiene un desempeño mayor en comparación con los entornos dónde las \textit{feature functions} tenían información mínima simulando métodos tradicionales de generación de etiquetas como los \textit{HMMs}.
+
+% Hablar de HMM
+% cual salio peor
+
+% Hablar de POSLess
+
+
 % logramos pasar el base line?
 % que features fueron determiantes?
+% Cual salio mejor
+Con base en la arquitectura propuesta observamos que el modelo que mejor precisión tiene es justamente el \textbf{\textsf{linearCRF\_l2\_zero}} (Ver tabla \ref{tab:models-comparation}), dónde se codifica toda la información disponible de la lengua en las \textit{feature functions}, que se mencionan en \ref{feature_functions_descr}. Además, los hiperparametros \textit{Elastic Net} del algoritmo de aprendizaje, configurados en $L_1 = 0.1$ y $L_2 = 0$, resultan relevantes dado que son lo únicos que varían respecto a los otros modelos del mismo entorno de experimentación (Ver tabla \ref{tab:models-full-featured}). 
+
+Vale la pena mencionar que, a pesar de la variación de hiperparametros, la precisión de la familia de modelos \textsf{linearCRF}, presentes en la tabla \ref{tab:models-full-featured}, presentan una variación en la precisión poco representativa (menos de $0.001$ de precisión entre modelos). Entonces, parece ser que la información codificada en las \textit{feature functions} son las que determinan, en gran medida, el desempeños de los \textit{CRFs} para la correcta generación de \textit{BIO Labels} (glosa) para el idioma otomí. 
+
+
+\Diego{Poner grafica de la función de perdida y comentar}
 
 
 \chapter{Conclusiones}
