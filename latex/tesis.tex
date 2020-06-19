@@ -51,10 +51,6 @@
 \maketitle
 \tableofcontents
 
-
-% TODO: Pasar todo lo del protocolo aquí
-% Utilzar el tiempo pasado 
-
 \chapter{Introducción}
 
 % capítulo corto con el objetivo, hipótesis y tocar los temas del marco teorico de forma muy superficial. Se definen en el marco teorico
@@ -76,7 +72,6 @@ En concreto existen \textbf{nueve} variantes del otomí y cabe recalcar que dich
 
 \section{Problemática}
 
-% TODO: Cambiar las citas a bibtex
 El NLP es un área de la computación que permite reconocer, procesar e interpretar el lenguaje humano dentro de un sistema computacional. El objetivo de esta área es hacer que las computadoras realicen tareas que involucran el lenguaje humano. Algunas tareas generales consisten en permitir la comunicación humano-máquina, o simplemente hacer un exitoso procesamiento de texto o voz humanos \citep{jurafsky2008speech}. Ejemplos de aplicación actuales son los traductores automáticos, asistentes personales que reconocen voz, motores de búsquedas en Internet, análisis de sentimientos en textos,  síntesis de voz, etiquetado de textos y muchas más aplicaciones.
 
 % Voy de lo mas general a lo particular
@@ -459,9 +454,9 @@ Parte de la definición de la estructura de la lengua se encuentra codificada en
 Puntualmente, se utiliza un modelo del tipo \textbf{Markov CRF de primer orden con \textit{features} de estado y de transición}. Adicionalmente, fue utilizado el algoritmo de aprendizaje \textbf{Limited-memory Broyden-Fletcher-Goldfarb-Shanno (L-BFGS)}. El algoritmo busca maximizar el logaritmo de probabilidad. Para mejorar el rendimiento son utilizados y modificados un conjunto hiperparámetros.
 
 Estos hiperparámetros son los coeficientes de regularización L1 y L2 necesarios para evitar posible \textit{overfitting}, el número máximo de iteraciones, el número máximo de memorias utilizadas para aproximar la matriz hessiana inversa, epsilon que determina la condición de convergencia, el número de iteraciones para probar el umbral de detención,  delta que define el umbral de detención de cada iteración, el método de búsqueda de línea usado por el algoritmo L-BFGS y el número máximo de intentos para el algoritmo de línea.
-\Vic{Señalar los hiperparámetros que se utilizaromn en L-BFGS}
+\Vic{Señalar los hiperparámetros que se utilizaron en L-BFGS}
 El modelo y el algoritmo de aprendizaje fueron tratados a detalle en la sección \ref{sec:marco}.
-\Diego{Descripcion categorizada de los hiperparámetros}
+\Diego{Descripción categorizada de los hiperparámetros}
 
 La arquitectura propuesta abarca desde la obtención del corpus etiquetado, pasando por el preprocesamiento del mismo, llegando a la creación de las \textit{feature functions}, seguido de la separación de los datos en conjuntos de entrenamiento y pruebas, continuando con la fase de entrenamiento y construcción del modelo de aprendizaje, terminando en la etapa de pruebas compuesta por la generación de etiquetas y posterior comparación con la glosa real. Las subsecciones que componen esta arquitectura son \textbf{codificación y preprocesamiento}, \textbf{implementación de los CRFs} y \textbf{feature functions}. En el siguiente capítulo se abordaran las etapas de generación de glosa y pruebas.
 
@@ -495,7 +490,7 @@ Ya que el otomí presenta una amplia variedad de vocales, como se puede ver en l
     [`tsogí', `stem'], `v']]}
 \end{exmp}
 \Vic{En este caso, el ejemplo quedaría mejor más cerca de la referencia}
-\Diego{Correccion del margen}
+\Diego{Corrección del margen}
 
 Entonces, la estructura de las listas, por renglón, tiene la estructura \code{[[[letras, glosa], [letras, glosa], ..., POS],...]}. Una vez que se obtuvo el corpus de entrenamiento se le aplicó preprocesamiento. El preprocesamiento consistió en asociar, a cada letra de cada palabra, dos elementos; la etiqueta \textit{POS} y una \textit{Bio Label} correspondiente a esa letra.
 
@@ -621,7 +616,7 @@ Recapitulando....
 \chapter{Resultados}
 % Solo reportar
 
-En este capítulo se detallará el desempeño de los modelos que fueron mencionados en el capítulo \ref{chap:metodology} y se profundizará en los resultados obtenidos. Además, se examinará el método de evaluación utilizado para los modelos generados.
+En este capítulo se examinará el método de evaluación utilizado para la construcción de los modelos de aprendizaje. Además, se detallará el desempeño de los modelos que fueron mencionados en el capítulo \ref{chap:metodology} y se profundizará en los resultados obtenidos en los diferentes entornos de experimentación. 
 
 % Mostrar la comparación a profundidad del baseline con todos los experimentos
 % Demostrar que lo que propusimos fue mejor
@@ -634,15 +629,18 @@ En este capítulo se detallará el desempeño de los modelos que fueron menciona
 
 \section{Evaluación}
 
-Propusimos diferentes entornos de experimentación en dónde fueron modificadas las \textit{feature functions} y los parámetros de regularización \textit{Elastic Net} L1 + L2. En concreto, se presentaron tres entornos de evaluación; en el primer entorno se utilizaron todas las \textit{features} disponibles, como se menciono en \ref{feature_functions_descr}; en un segundo entorno se modificaron las \textit{features} para ignorar las etiquetas \textit{POS} y por último se redujeron las \textit{features} al mínimo, recuperando solo la letra actual y la letra anterior, con lo que se simulaba un \textit{Hidden Markov Model (HMM)}.
+Propusimos diferentes entornos de experimentación dónde fueron modificadas las \textit{feature functions} y los parámetros de regularización \textit{Elastic Net} L1 + L2. En concreto, se presentaron tres entornos de evaluación; en el primero se redujeron las \textit{features} al mínimo, utilizando la información de la letra actual en la palabra y la letra anterior relativa a la letra actual, con lo que se simulaba un \textit{Hidden Markov Model (HMM)}; en el segundo, se modificaron las \textit{features} para ignorar las etiquetas \textit{POS}, y en el último, se utilizaron todas las \textit{features} disponibles, que se mencionaron en la sección \ref{feature_functions_descr}.
 
-En ese sentido, para evaluar el desempeño de los modelos construidos por el algoritmo, presentes en la tabla \ref{tab:models-config}, seleccionamos como base el entorno dónde se simula un \textit{HMM} que corresponde con el modelo \textsf{baseline\_HMMLike\_zero}. 
+En ese sentido, para evaluar el desempeño de los modelos construidos, presentes en la tabla \ref{tab:models-config}, seleccionamos como base el entorno dónde se simula un \textit{HMM} que corresponde con el modelo \textsf{baseline\_HMMLike\_zero}. 
 
 % Pasar a resultados
-Para determinar la precisión utilizamos una técnicas típica de \textit{ML} llamada \textit{cross-validation K-folds} que consiste en tomar \textit{K} fragmentos aleatorios del conjunto de entrenamiento y utilizarlos como conjunto de pruebas para evaluar el modelo. Consideramos exitosa la predicción si se logra maximizar la correcta clasificación de las secuencias de salida. Además de reportar la precisión se obtuvo el \textit{recall} y \textit{F-score}.
+Para determinar la precisión utilizamos una técnicas típica de \textit{ML} llamada \textit{cross-validation K-folds} que consiste en tomar \textit{K} fragmentos aleatorios del conjunto de entrenamiento y utilizarlos como conjunto de pruebas para evaluar el modelo. Consideramos exitosa la predicción si se logra maximizar la correcta clasificación de las secuencias de salida. La determinación del corpus de evaluación se explica a continuación.
 
-Para todas las etapas de pruebas utilizamos $K = 10$. Ergo, para cada modelo, el corpus de evaluación fue obtenido de una sección diferente del corpus de entrenamiento en diez ocasiones, una por cada $K$, se tomó la precisión de cada iteración entre el modelo  obtenido con el corpus de entrenamiento y el conjunto de pruebas y se promediaron las diez precisiones obtenidas para una precisión global que es la que reportamos.
+Para cada modelo, se sacaron $K$ fragmentos del conjunto de entrenamiento. Cada fragmento fue utilizado como conjunto de evaluación por lo que el entrenamiento-evaluación se realizó $K$ veces por modelo. Para todas las etapas de entrenamiento-evaluación utilizamos $K = 10$. Por cada modelo se obtuvieron $K$ precisiones, una por cada conjunto de entrenamiento-evaluación, por lo que fueron promediadas para tener una precisión general por modelo que es la que reportamos.
+
 % Aquí se habla del K fold 
+
+A continuación mencionamos los modelos resultantes de cada una de las tres etapas de experimentación propuestas en este trabajo.
 
 En la tabla \ref{tab:models-full-featured} se muestran los modelos dónde se recuperaron todas las \textit{features} disponibles
 
@@ -688,39 +686,37 @@ En la tabla \ref{tab:models-hmmlike} se aprecian los modelos generados en el ent
     \label{tab:models-hmmlike}
 \end{table}
 
-Por último, la tabla \ref{tab:models-comparation} se muestra la comparación del modelo base con los modelos con mejor precisión en los entornos de experimentación.
-
-\begin{table}[ht]
-    \centering
-    \begin{tabular}{| c | c |}\hline
-        \textbf{Modelo} & \textbf{Precisión} \\\hline
-        \textbf{\textsf{linearCRF\_l2\_zero}} & \textbf{0.9516}\\ 
-        \textsf{POS\_Less} & 0.8762\\ 
-        \textsf{baseline\_HMMLike\_zero} & 0.8762\\ \hline
-    \end{tabular}
-    \caption{Comparación de modelos en diferentes entornos de pruebas}
-    \label{tab:models-comparation}
-\end{table}
-
 \section{Análisis de resultados}
 
 Comparando los diferentes entornos de entrenamiento y generación de modelos, observamos que, dado el escaso tamaño del corpus de entrenamiento, al recuperar mayor información en la construcción de las \textit{feature functions} y con métodos basados en gráficas como los \textit{CRFs} se obtiene un desempeño mayor en comparación con los entornos dónde las \textit{feature functions} tenían información mínima simulando métodos tradicionales de generación de etiquetas como los \textit{HMMs}.
 
 % Hablar de HMM
 % cual salio peor
+En principio, el entorno de experimentación dónde simulamos \textit{HMMs} fue el que tomamos como base para poder comparar el desempeños de los \textit{CRFs}. Es importante destacar es una simulación ya que fueron útilizados los \textit{CRFs} para la construcción de estos modelos. En la tabla \ref{tab:models-hmmlike} se pueden ver los modelos construidos. Por una parte,  el modelo con la precisión más baja se encuentra en este entorno de experimentación y es \textsf{HMMLike\_l1\_zero} con $87.45\%$. Por otra parte, el modelo propuesto como base supera al modelo \textsf{HMMLike\_l1\_zero} por apenas \num{1.7e-3} puntos de precisión. Notamos que solo variando los hiperparametros $L_1$ y $L_2$ para este entorno de experimentación se obtuvo una mejora de apenas \num{5.6e-3} puntos de precisión respecto al modelo base.
 
 % Hablar de POSLess
+Continuando con el segundo entorno de experimentación, dónde se construyó el \textit{linear Chain CRF} ignorando las etiquetas \textit{POS}, la precisión mejoró de forma considerable respecto a los modelos que simulaban \textit{HMMs}. Como se puede ver en la tabla \ref{tab:models-pos-less} todos los modelos de este entorno lograron al menos una precisión del $94\%$. Observamos una mejora poco significativa con la variación de los hiperparametros $L_1$ y $L_2$. En este entorno el modelo con mayor precisión fue \textsf{POS\_Less} con $94.99\%$. 
 
+Por último, el entorno dónde se tomaron todas las \textit{features} disponibles, mencionadas en \ref{feature_functions_descr}, fue en el que se obtuvo el mejor desempeño. Los modelos generados en este entorno obtuvieron entre $94\%$ y $95\%$ de precisión. Una vez más, la variación de hiperparametros comprobó mejoras leves en los modelos. Destacamos además que la mejora con respecto al entorno de experimentación anterior es de apenas $1\%$ en los modelos con mejor desempeño. En la tabla \ref{tab:models-comparation} se muestra la comparación entre el modelo base y los modelos con mejor precisión en los otros entornos de experimentación.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{| c | c |}\hline
+        \textbf{Modelo} & \textbf{Precisión} \\\hline
+        \textbf{\textsf{linearCRF\_l2\_zero}} & \textbf{0.9516}\\ 
+        \textsf{POS\_Less} & 0.9499\\ 
+        \textsf{baseline\_HMMLike\_zero} & 0.8762\\ \hline
+    \end{tabular}
+    \caption{Comparación de modelos de diferentes entornos con mejor precisión}
+    \label{tab:models-comparation}
+\end{table}  
 
 % logramos pasar el base line?
-% que features fueron determiantes?
+% que features fueron determinantes?
 % Cual salio mejor
-Con base en la arquitectura propuesta observamos que el modelo que mejor precisión tiene es justamente el \textbf{\textsf{linearCRF\_l2\_zero}} (Ver tabla \ref{tab:models-comparation}), dónde se codifica toda la información disponible de la lengua en las \textit{feature functions}, que se mencionan en \ref{feature_functions_descr}. Además, los hiperparametros \textit{Elastic Net} del algoritmo de aprendizaje, configurados en $L_1 = 0.1$ y $L_2 = 0$, resultan relevantes dado que son lo únicos que varían respecto a los otros modelos del mismo entorno de experimentación (Ver tabla \ref{tab:models-full-featured}). 
+Con base en la arquitectura propuesta observamos que el modelo  \textbf{\textsf{linearCRF\_l2\_zero}} obtuvo la mejor precisión y que supera el modelo base propuesto \textbf{\textsf{baseline\_HMMLike\_zero}} (Ver tabla \ref{tab:models-comparation}). Del análisis a través de los entornos de experimentación podemos concluir, por un lado, que con la variación de hiperparametros en las tres familias de modelos (\textsf{linearCRF}, \textsf{POSLess}, \textsf{HMMLike}) (Ver tablas \ref{tab:models-full-featured}, \ref{tab:models-pos-less}, \ref{tab:models-hmmlike}), se obtuvo una mejora en la precisión poco representativa; por otra parte, la precisión que muestran los modelos \textsf{POSLess} y \textsf{linearCRF} es muy similar. Entonces, parece ser que la configuración de los hiperparametros \textit{Elastic Net} y las etiquetas \textit{POS}, codificadas en las \textit{feature functions}, mejoran levemente el desempeño de los modelos. Además, podemos concluir que el resto de información de la lengua, codificada también en las \textit{features functions}, son las que determinan, en gran medida, el desempeños de los \textit{CRFs} para la correcta generación de \textit{BIO Labels} (glosa) para el idioma otomí.  
 
-Vale la pena mencionar que, a pesar de la variación de hiperparametros, la precisión de la familia de modelos \textsf{linearCRF}, presentes en la tabla \ref{tab:models-full-featured}, presentan una variación en la precisión poco representativa (menos de $0.001$ de precisión entre modelos). Entonces, parece ser que la información codificada en las \textit{feature functions} son las que determinan, en gran medida, el desempeños de los \textit{CRFs} para la correcta generación de \textit{BIO Labels} (glosa) para el idioma otomí. 
-
-
-\Diego{Poner grafica de la función de perdida y comentar}
+\Diego{Poner gráfica de la función de perdida y comentar}
 
 
 \chapter{Conclusiones}
