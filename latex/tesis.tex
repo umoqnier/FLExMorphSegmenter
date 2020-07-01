@@ -51,6 +51,7 @@
 \maketitle
 \tableofcontents
 
+
 \chapter{Introducción}
 
 % capítulo corto con el objetivo, hipótesis y tocar los temas del marco teorico de forma muy superficial. Se definen en el marco teorico
@@ -368,8 +369,6 @@ En las tablas \ref{table_pos_gloss_tokens} se muestran las cuentas de los diez t
 
 Esta escasez en el corpus es consecuencia de que el idioma otomí es una lengua con bajos recursos digitales. Como menciona \citet{vasquesextraccion} estas lenguas son aquellas que tienen una cantidad limitada de recursos digitales a consecuencia de una baja densidad de hablantes, cuestiones relacionadas con la brecha digital o motivos de otra índole. Gran parte de los métodos tradicionales de \textit{NLP} tienen dificultades importantes para trabajar en entornos de bajos recursos.
 
-\Diego{Cambiar redaccion, dado que hay bajos recursos el corpus es pequeño no al reves}
-
 \begin{table}[h]
 	\centering
 	\begin{tabular}{|c | c|}\hline
@@ -403,9 +402,11 @@ Esta escasez en el corpus es consecuencia de que el idioma otomí es una lengua 
 	\label{table_pos_gloss_tokens}
 \end{table}
 
+Sin embargo, existen métodos que buscan solucionar el problema de los bajos recursos digitales. Los trabajos de \citet{moeller2018automatic} y \citet{anastasopoulos2018part} muestran como métodos de aprendizaje estructurado, en particular los \textit{CRFs}, tienen buen desempeño en estas condiciones experimentales.
 
-Sin  embargo, el aprendizaje estructurado y, en concreto, los \textit{CRFs} prometen hacer frente a estas condiciones experimentales. Por ejemplo, los \textit{CRFs}, a diferencia de otros modelos gráficos, toman las virtudes de los modelos generativos y de los modelos condicionales evitando, a su vez, el problema del \textit{bias} que \citet{lafferty2001conditional} define como  ''el momento en el cual las transiciones que salen de un estado sólo compiten entre sí, y no con todas las demás transiciones'' 
-% \Diego{Ya deben estar definidas que son las trancisiones en el marco teórico}.
+Esto puede deberse a que los \textit{CRFs}, a diferencia de otros modelos gráficos, toman las virtudes de los modelos generativos y de los modelos condicionales evitando, a su vez, el problema del \textit{bias} que \citet{lafferty2001conditional} define como  ''el momento en el cual las transiciones que salen de un estado sólo compiten entre sí, y no con todas las demás transiciones''.
+
+\Diego{Reescribir, Existen métodos que buscan solucionar esto, en concreto CRF y hacer referencia a los trabajos que trabajan en ellos. Ej: Lezgi y griko}
 
 \section{Arquitectura}
 
@@ -427,26 +428,15 @@ Sin  embargo, el aprendizaje estructurado y, en concreto, los \textit{CRFs} prom
 % ¿Cómo se hizo lo que se hizo?
 % Preprocesamiento del corpus
 
-Para esta tesis proponemos una arquitectura de aprendizaje estructurado débilmente supervisado utilizando el método gráfico \textit{Conditional Random Fields (CRF)} que permitirá la predicción de secuencias que describen las unidades morfológicas (glosa) dentro de una palabra en otomí. Ya que el resultado esperado es la generación de etiquetas \textit{BIO} que, en principio, dependen unas de otras, un método que construye el modelo de aprendizaje basandose en gráficas nos pareció adecuado.
+Para esta tesis proponemos una arquitectura de aprendizaje estructurado débilmente supervisado utilizando el método gráfico \textit{Conditional Random Fields (CRF)} que permitirá la predicción de secuencias que describen las unidades morfológicas (glosa) dentro de una palabra en otomí. Ya que el resultado esperado es la generación de etiquetas \textit{BIO} que, en principio, son secuenciales, un método que construye el modelo de aprendizaje basándose en gráficas nos pareció adecuado.
 
-Una vez obtenido el corpus, previamente glosado, realizamos una etapa de preprocesamiento del corpus, luego de esta etapa fueron creadas las \textit{feature functions}, que definimos como $X$. Tales funciones contienen información sobre la estructura de la lengua y permiten que lá máquina aprenda un modelo para etiquetar secuencias. Cabe señalar que $X$ son las entrada de los \textit{CRFs}.
+Una vez obtenido el corpus, previamente glosado, realizamos una etapa de preprocesamiento del corpus, luego de esta etapa fueron creadas las \textit{feature functions}, que definimos como $X$. Tales funciones contienen información sobre la estructura de la lengua y permiten que la máquina aprenda un modelo para etiquetar secuencias. Cabe señalar que $X$ contiene las \textit{feature functions} que son las entrada de los \textit{CRFs}.
 
-Debido al enfoque de aprendizaje automático que estamos utilizando consideramos dos conjuntos; un conjunto de entrenamiento y otro de pruebas. Los conjuntos de entrenamiento y pruebas fueron fueron obtenidos del corpus que fue previamente glosados a mano por un experto lingüista.
+% Previamente debe estar explicado que X son vectores
+Debido al enfoque de aprendizaje automático que estamos utilizando consideramos dos conjuntos; un conjunto de entrenamiento y otro de pruebas. Los conjuntos de entrenamiento y pruebas fueron obtenidos del corpus que fue previamente glosados a mano por un experto lingüista.
 
 La etapa de pruebas consistió en aplicar el modelo de aprendizaje al conjunto de evaluación. En ese sentido, aplicar el modelo se refiere a que con el modelo se generaron etiquetas \textit{BIO} para textos del conjunto de pruebas. Con las etiquetas generadas y en comparación con las etiquetas reales se obtuvieron, entre otras medidas de rendimiento, la precisión del modelo. Las secuencias de etiquetas o salidas generadas por el modelo, dadas las observaciones de $X$, fueron definidas como $Y$.
 
-\Diego{Adapatar este parrafo para que tenga coherencia}
-
-\begin{figure}
-	\centering
-	\includegraphics[width=\textwidth]{arquitectura}
-	\caption{Arquitectura de aprendizaje}
-	\label{fig:architecture}
-\end{figure}
-
-\Diego{ Diagrama}
-
-\diego{¿Es pertinente esta información aquí?}
 En general, para el glosado se realiza manualmente. Esta tarea requiere del expertiz del un lingüista y una cercana cooperación con hablantes nativos quienes reciben capacitación elemental en lingüística y software \citep{moeller2018automatic}. Estas condiciones convierten al glosado manual en una tarea altamente costosa en tiempo y recursos. El objetivo de esta arquitectura es realizar un correcto etiquetado automático de glosa para la lengua otomí, en particular la variante del otomí de Toluca, utilizando técnicas de aprendizaje estructurado débilmente supervisado. Con ello se pretende asistir a personas especializadas, como lingüistas, en el glosado manual.   
 
 Parte de la definición de la estructura de la lengua se encuentra codificada en el conjunto de \textit{feature functions}. Estas funciones describen características de la lengua considerando, detalladamente, el contexto, la posición y etiquetas gramaticales que brindan información útil para la fase de entrenamiento.
@@ -454,9 +444,7 @@ Parte de la definición de la estructura de la lengua se encuentra codificada en
 Puntualmente, se utiliza un modelo del tipo \textbf{Markov CRF de primer orden con \textit{features} de estado y de transición}. Adicionalmente, fue utilizado el algoritmo de aprendizaje \textbf{Limited-memory Broyden-Fletcher-Goldfarb-Shanno (L-BFGS)}. El algoritmo busca maximizar el logaritmo de probabilidad. Para mejorar el rendimiento son utilizados y modificados un conjunto hiperparámetros.
 
 Estos hiperparámetros son los coeficientes de regularización L1 y L2 necesarios para evitar posible \textit{overfitting}, el número máximo de iteraciones, el número máximo de memorias utilizadas para aproximar la matriz hessiana inversa, epsilon que determina la condición de convergencia, el número de iteraciones para probar el umbral de detención,  delta que define el umbral de detención de cada iteración, el método de búsqueda de línea usado por el algoritmo L-BFGS y el número máximo de intentos para el algoritmo de línea.
-\Vic{Señalar los hiperparámetros que se utilizaron en L-BFGS}
 El modelo y el algoritmo de aprendizaje fueron tratados a detalle en la sección \ref{sec:marco}.
-\Diego{Descripción categorizada de los hiperparámetros}
 
 La arquitectura propuesta abarca desde la obtención del corpus etiquetado, pasando por el preprocesamiento del mismo, llegando a la creación de las \textit{feature functions}, seguido de la separación de los datos en conjuntos de entrenamiento y pruebas, continuando con la fase de entrenamiento y construcción del modelo de aprendizaje, terminando en la etapa de pruebas compuesta por la generación de etiquetas y posterior comparación con la glosa real. Las subsecciones que componen esta arquitectura son \textbf{codificación y preprocesamiento}, \textbf{implementación de los CRFs} y \textbf{feature functions}. En el siguiente capítulo se abordaran las etapas de generación de glosa y pruebas.
 
@@ -468,9 +456,16 @@ Se obtuvo el corpus de un archivo de texto plano. Cada renglón de este archivo 
 
 La glosa esta presente por cada fragmento de las posibles palabras en otomí. Ejemplificando, la frase \textit{hi tótsogí} (`No lo he dejado') se representa en el corpus como se muestra en el ejemplo \ref{exmp:frase_glosada}.
 
+\begin{exmp} \label{exmp:frase_glosada}
+    \code{[[[`hi', `stem'], `neg'],
+    [[`tó', `1.prf'],
+    [`tsogí', `stem'], `v']]}
+\end{exmp}
+\Diego{Corrección del margen}
+
 Por último, la lengua otomí tiene una vasta variedad interna lo cual implica diferentes ortografías dependiendo de la región. Tomar en cuenta esta variación ortográfica es de suma importancia para el preprocesamiento. Como menciona \cite{elotl2019otomiprepro} todas las lenguas otomíes son tonales y distinguen entre vocales orales y vocales nasales, existen fonemas que pueden presentarse en unas variantes, mientras que en otras están ausentes. En general, las vocales orales incluyen a las mismas vocales que también se presentan en el español: a, e, i, o, u; pero su inventario de vocales orales no se limita a estas cinco.
 
-\begin{table}[]
+\begin{table}[ht]
     \centering
     \begin{tabular}{|c c c c c c|}\hline
         IPA & \textipa{1} & \textipa{E} & \textipa{O} & \textipa{2} & \textipa{9} \\ \hline
@@ -480,17 +475,8 @@ Por último, la lengua otomí tiene una vasta variedad interna lo cual implica d
     \caption{Representación de cada vocal en IPA (alfabeto fonético internacional)}
     \label{tab:vocales_otomi}
 \end{table}{}
-\diego{Quitar los autores y dejar la ortografia práctica. Incluir la tabla de equivalencias}
 
 Ya que el otomí presenta una amplia variedad de vocales, como se puede ver en la tabla, su representación digital puede suponer un reto por la falta de normalización o por la codificación. En nuestro caso, cuando se codificaban algunas vocales para ser representadas como cadenas eran separadas por el lenguaje de programación ocasionando un etiquetando de caracteres que por si solos no tiene sentido. Entonces, fue necesario modificar algunas de las vocales del otomí. Las equivalencias de tales modificaciones pueden observarse en la tabla \ref{tab:vocales_otomi}
-
-\begin{exmp} \label{exmp:frase_glosada}
-    \code{[[[`hi', `stem'], `neg'],
-    [[`tó', `1.prf'],
-    [`tsogí', `stem'], `v']]}
-\end{exmp}
-\Vic{En este caso, el ejemplo quedaría mejor más cerca de la referencia}
-\Diego{Corrección del margen}
 
 Entonces, la estructura de las listas, por renglón, tiene la estructura \code{[[[letras, glosa], [letras, glosa], ..., POS],...]}. Una vez que se obtuvo el corpus de entrenamiento se le aplicó preprocesamiento. El preprocesamiento consistió en asociar, a cada letra de cada palabra, dos elementos; la etiqueta \textit{POS} y una \textit{Bio Label} correspondiente a esa letra.
 
@@ -505,7 +491,7 @@ Retomando el ejemplo \ref{exmp:frase_glosada} y después de aplicar el preproces
           ['g', 'v', 'I-stem'],
           ['í', 'v', 'I-stem']]]}
 \end{exmp}{}
-\Diego{Correccion del margen}
+\Diego{Corrección del margen}
 
 Con las palabras etiquetadas a nivel de letra se obtuvo un conjunto de entrenamiento y un conjunto de pruebas. Por una parte, el conjunto de entrenamiento permitió la observación de ejemplos y la posterior generación de un modelo de aprendizaje. Por otro lado, con el conjunto de pruebas obtuvimos la precisión del modelos etiquetando frases no vistas. Es importante destacar que estos dos conjuntos estuvieron completamente separados ya que mezclar el conjunto de entrenamiento y de pruebas pudo habernos llevado a una precisión erronea y sesgada.
 
@@ -520,7 +506,6 @@ Los \textit{CRFs} recibieron como entrada las \textit{feature functions}, repres
 
 La extracción de estas características es importante porque capturar fenómenos lingüísticos necesarios para que la estructura de la lengua se pueda plasmar en el modelo de aprendizaje. Estas características están capturando, entres otras cosas, el contexto de la palabra y es importante para predecir la morfología. Para construir las \textit{feature functions} se necesita el corpus glosado y etiquetado a nivel de letra. Se extrajeron las siguientes características para cada letra en el corpus:
 
-\Vic{Pasar a formato de description}
 \begin{description} \label{feature_functions_descr}
     \item[Bias:] Esta característica captura la proporción de una etiqueta dada en el conjunto de entrenamiento. El modelo aprende los pesos asociados con las etiquetas como si las etiquetas se generaran independientemente de una distribución de probabilidad dada. Ayuda a tomar en cuenta que algunas etiquetas son poco usuales y otras muy usuales.
     
@@ -539,10 +524,8 @@ La extracción de estas características es importante porque capturar fenómeno
     \item[\textsf{prev<n>letters} y \textsf{nxt<n>letters}:] La recuperación de ventanas de contexto son convenientes para del otomí ya que se trata de una lengua aglutinante dónde, en general, las palabras son largas. En particular, la longitud promedio de las palabras en el corpus es de 4.89\footnote{Promedio de la distribución de palabras basada en  en tokens. Para una distribución por tipos se obtuvo 7.2}. Esta característica da la pauta para que la observación del contexto en un determinado momento sea relevante para la construcción del modelo.
     
     \textsf{prev<n>letters} toma las $n$ letras previas y \textsf{nxt<n>letters} toma las $n$ letras siguientes, si existen en ambos casos. La variable $n$ determina el nombre de la \textit{feature} que indica el tamaño de la ventana a partir de la letra que se esta viendo en ese momento y va desde el número uno, caso dónde no se incluye número en el nombre, hasta el número cuatro. Por ejemplo, \textsf{prev4letters} toma las cuatro letras previas y \textsf{nxtletter} toma la letra siguiente.
-\Diego{Separar next y prev}
-\Diego{utilizar prevkletter y describir que es k}
+
 \end{description}
-\Diego{Pasar al entorno de descripcion}
 
 
 Las características mencionadas son información relevante para poder construir un modelo más preciso dadas las estructuras de la lengua. Dichas características pueden o no estar presentes dependiendo de la letra que se esté viendo en ese momento. Por ejemplo, si es la primer letra de una palabra la que se observa no estarán presentes las características \textsf{prevletter}, \textsf{prev2letters} o \textsf{EOW} por mencionar algunas. Características como \textsf{letterLowercase} o \textsf{bias} siempre estuvieron presentes.
@@ -555,7 +538,7 @@ La construcción de las \textit{feature functions} dependió del experimento en 
 
 El termino \textit{CRFs} se refiere a una familia de métodos de aprendizaje basados en gráficas. En concreto, para la generación de secuencias de etiquetas utilizamos \textit{linear-chain CRF}. Este método requiere de un algoritmo de optimización. Como ya mencionamos previamente utilizamos el \textit{L-BFGS}. Este algoritmo mejora los pesos de las funciones muy lentamente al comienzo de un proceso de entrenamiento, pero al final converge rápidamente en los pesos óptimos de las funciones.
 
-El entrenamiento consistió en la búsqueda de un modelo que maximiza el logaritmo de verosimilitud con el método de aprendizaje \textit{L-BFGS}. Es necesario entonces definir los parámetros del algoritmo de maximización. Los hiperparámetros modificados fueron los de \textit{Elastic Net} con valores de regularización L1 + L2. También, fue configurado el número máximo de iteraciones para el algoritmo pero fue fijado en 50 para todos los modelos. El resto de hiperparámetros se dejaron con un valor predeterminado. En la tabla \ref{tab:hyper_default_values} se muestran los valores que no se modificaron para los hiperparámetros.
+El entrenamiento consistió en la búsqueda de un modelo que maximiza el logaritmo de verosimilitud con el método de aprendizaje \textit{L-BFGS}. Es necesario entonces definir los parámetros del algoritmo de maximización. Los hiperparámetros modificados fueron los de \textit{Elastic Net} con valores de regularización L1 + L2. También, fue configurado el número máximo de iteraciones para el algoritmo pero fue fijado en $50$ para todos los modelos. El resto de hiperparámetros se dejaron con un valor predeterminado. En la tabla \ref{tab:hyper_default_values} se muestran los valores que no se modificaron para los hiperparámetros.
 
 \begin{table}[]
     \centering
@@ -566,7 +549,7 @@ El entrenamiento consistió en la búsqueda de un modelo que maximiza el logarit
         \textsf{epsilon} & \num{1e-5} \\
         \textsf{stop} & 10 \\
         \textsf{delta} & \num{1e-5} \\
-        \textsf{linesearch} & ''MoreThuente'' \\
+        \textsf{linesearch} & ``MoreThuente'' \\
         \textsf{max\_linesearch} & 20 \\\hline
     \end{tabular}
     \caption{Valores de los hiperparámetros}
@@ -581,37 +564,44 @@ Además de los hiperparámetros se configuraron diferentes entornos de experimen
 \begin{table}[ht]
     \centering
     \begin{tabular}{| c | c | c | c | c |}\hline
-        \textbf{Modelo} & \textbf{L1} & \textbf{L2} & \textbf{Tiempo} & \textbf{Precisión}\\ \hline
-        \textsf{linearCRF\_l2\_zero} & 0.1 & 0 & 41.86 [m] & 0.9516\\
-        \textsf{linearCRF\_featured} & 0.1 & \num{1e-3} & 42.91 [m] & 0.9509\\
-        \textsf{linearCRF\_l1\_l2\_zero} & 0 & 0 & 39.46 [m] & 0.9499\\
-        \textsf{POS\_Less} & 0.1 & \num{1e-3} & 37.91 [m] & 0.9499\\
-        \textsf{linearCRF\_l1\_zero} & 0 & \num{1e-3} & 41.03 [m] & 0.9480\\
-        \textsf{POS\_Less\_l1\_zero} & 0 & \num{1e-3} & 40.25 [m] & 0.9473\\
-        \textsf{POS\_Less\_l1\_l2\_zero} & 0 & 0 & 36.67 [m] & 0.9452\\
-        \textsf{HMMLike\_l2\_zero} & 0.1 & 0 & 43.71 [m] & 0.8818\\
-        \textsf{HMMLike\_regularization} & 0.1 & \num{1e-3} & 42.98 [m] & 0.8791\\\rowcolor{Yellow}
-        \textsf{baseline\_HMMLike\_zero} & 0 & 0 & 40.44 [m] & 0.8762\\
-        \textsf{HMMLike\_l1\_zero} & 0 & \num{1e-3} & 43.90 [m] & 0.8745\\\hline
+        \textbf{Modelo} & \textbf{L1} & \textbf{L2} & \textbf{Features}\\ \hline
+        \textsf{linearCRF\_l2\_zero} & 0.1 & 0 & Todas las disponibles\\
+        \textsf{linearCRF\_featured} & 0.1 & \num{1e-3} & Todas las disponibles\\
+        \textsf{linearCRF\_l1\_l2\_zero} & 0 & 0 & Todas las disponibles\\
+        \textsf{POS\_Less} & 0.1 & \num{1e-3} & Sin etiquetas \textit{POS}\\
+        \textsf{linearCRF\_l1\_zero} & 0 & \num{1e-3} & Todas las disponibles\\
+        \textsf{POS\_Less\_l1\_zero} & 0 & \num{1e-3} & Sin etiquetas \textit{POS}\\
+        \textsf{POS\_Less\_l1\_l2\_zero} & 0 & 0 & Sin etiquetas \textit{POS}\\
+        \textsf{HMMLike\_l2\_zero} & 0.1 & 0 & Mínimas\\
+        \textsf{HMMLike\_regularization} & 0.1 & \num{1e-3} & Mínimas\\\rowcolor{Yellow}
+        \textsf{baseline\_HMMLike\_zero} & 0 & 0 & Mínimas\\
+        \textsf{HMMLike\_l1\_zero} & 0 & \num{1e-3} & Mínimas\\\hline
     \end{tabular}
     \caption{Modelos de aprendizaje}
     \label{tab:models-config}
 \end{table}
 
-\Diego{El mas alto, mas bajo, el POS y el baseline}
-\Diego{Todo en una sola tabla}
-
+\Diego{Agregar las features usadas y quitar tiempo y precisión}
 
 % Testing
 Terminada la fase de entrenamiento y construido el modelo de aprendizaje se puso a prueba con el conjunto destinado a este propósito y que fue previamente obtenido. Similar a la fase de entrenamiento las entradas fueron las \textit{feature functions} y la \textit{Bio Labels} asociada a cada \textit{feature function}. Utilizando el modelo de aprendizaje se etiquetó cada letra con base en la estructura de la lengua codificada en las \textit{feature functions}. Las etiquetas generadas fueron comparadas con las reales y con ello se obtuvo la exactitud del modelo. 
+
+Recapitulando, se obtuvo un corpus en otomí previamente glosado por un experto lingüista, después, en la etapa de codificación estructuramos la información de la lengua y en el preprocesamiento se crearon las \textit{feature functions} que serán las entradas de los \textit{CRFs}, continuamos con la fase de entrenamiento, creación del modelo de aprendizaje. Por último, se ejecuto la fase de evaluación comparando las \textit{BIO-Labels} generadas por el modelo y las reales presentes en el conjunto de pruebas recuperando la precisión del modelo. La arquitectura final se puede observar en la figura \ref{fig:architecture}.
+\Diego{Resumen al final (pasos de todo lo que se hizo) como puntos o un diagrama}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{arquitectura}
+	\caption{Arquitectura de aprendizaje}
+	\label{fig:architecture}
+\end{figure}
+
+\Diego{Corregir diagrama de arquitectura}
 
 \subsubsection{Hardware utilizado}
 
 En la fase de experimentación fue utilizado el paquete \textsf{python-crfsuite} que es un \textit{binding} de la implementación de \citet{CRFsuite} para CRFs para lenguaje de programación \textit{Python} en su versión \textit{3.7}. La fase de experimentación corrió en una maquina con un procesador \textsf{Intel i7-7700HQ @ 3.800GHz} con \textsf{16 GB} de memoria principal. En promedio una corrida de entrenamiento y evaluación \textit{K-folds} con \textit{k=10} tomó 52 minutos.
 
-
-Recapitulando.... 
-% TODO: Resumen al final (pasos de todo lo que se hizo) como puntos o un diagrama
 
 \chapter{Resultados}
 % Solo reportar
@@ -647,25 +637,26 @@ En la tabla \ref{tab:models-full-featured} se muestran los modelos dónde se rec
 \begin{table}[ht]
     \centering
     \begin{tabular}{| c | c | c | c |}\hline
-    \textbf{Modelo} & \textbf{Precisión} & $L_1$ & $L_2$\\\hline
-    \textsf{linearCRF\_l2\_zero} & 0.9516 & 0.1 & 0\\
-    \textsf{linearCRF\_featured} & 0.9509 & 0.1 & 0.001\\
-    \textsf{linearCRF\_l1\_l2\_zero} & 0.9499 & 0 & 0\\
-    \textsf{linearCRF\_l1\_zero} & 0.948 & 0 & 0.001\\\hline
+    \textbf{Modelo} & \textbf{Tiempo (minutos)} & \textbf{Precisión}\\\hline
+    \textbf{\textsf{linearCRF\_l2\_zero}} & \textbf{41.86} & \textbf{0.9516}\\
+    \textsf{linearCRF\_featured} & 42.91 & 0.9509\\
+    \textsf{linearCRF\_l1\_l2\_zero} & 39.46 & 0.9499\\
+    \textsf{linearCRF\_l1\_zero} & 41.03 & 0.948\\\hline
     \end{tabular}
     \caption{Modelos con todas las \textit{features} disponibles}
     \label{tab:models-full-featured}
 \end{table}
+\Diego{Quitar L1 y L2 y poner tiempo en todas las graficas}
 
 En la tabla \ref{tab:models-pos-less} se encuentran los modelos que pertenecen al entorno de experimentación donde fueron ignoradas las etiquetas \textit{POS}
 
 \begin{table}[ht]
     \centering
     \begin{tabular}{| c | c | c | c |}\hline
-    \textbf{Modelo} & \textbf{Precisión} & $L_1$ & $L_2$\\\hline
-    \textsf{POS\_Less} & 0.9499 & 0.1 & \num{1e-3}\\
-    \textsf{POS\_Less\_l1\_zero} & 0.9473 & 0 & \num{1e-3}\\
-    \textsf{POS\_Less\_l1\_l2\_zero} & 0.9452 & 0 & 0\\\hline
+    \textbf{Modelo} & \textbf{Tiempo (minutos)} & \textbf{Precisión}\\\hline
+    \textsf{POS\_Less} & 37.91 & 0.9499\\
+    \textsf{POS\_Less\_l1\_zero} & 40.25 & 0.9473\\
+    \textsf{POS\_Less\_l1\_l2\_zero} & 36.67 & 0.9452\\\hline
     \end{tabular}
     \caption{Modelos donde se ignoran las etiquetas \textit{POS}}
     \label{tab:models-pos-less}
@@ -676,11 +667,11 @@ En la tabla \ref{tab:models-hmmlike} se aprecian los modelos generados en el ent
 \begin{table}[ht]
     \centering
     \begin{tabular}{| c | c | c | c |}\hline
-    \textbf{Modelo} & \textbf{Precisión} & $L_1$ & $L_2$\\\hline
-    \textsf{HMMLike\_l2\_zero} & 0.8818 & 0.1 & 0\\
-    \textsf{HMMLike\_regularization} & 0.8791 & 0.1 & \num{1e-3}\\
-    \textsf{baseline\_HMMLike\_zero} & 0.8762 & 0 & 0\\
-    \textsf{HMMLike\_l1\_zero} & 0.8745 & 0 & \num{1e-3}\\\hline
+    \textbf{Modelo} & \textbf{Tiempo (minutos)} & \textbf{Precisión}\\\hline
+    \textsf{HMMLike\_l2\_zero} & 43.71 & 0.8818\\
+    \textsf{HMMLike\_regularization} & 42.98 & 0.8791\\\rowcolor{Yellow}
+    \textsf{baseline\_HMMLike\_zero} & 40.44 & 0.8762\\
+    \textsf{HMMLike\_l1\_zero} & 43.9 & 0.8745\\\hline
     \end{tabular}
     \caption{Modelos que simulan \textit{HMMs}}
     \label{tab:models-hmmlike}
@@ -692,7 +683,7 @@ Comparando los diferentes entornos de entrenamiento y generación de modelos, ob
 
 % Hablar de HMM
 % cual salio peor
-En principio, el entorno de experimentación dónde simulamos \textit{HMMs} fue el que tomamos como base para poder comparar el desempeños de los \textit{CRFs}. Es importante destacar es una simulación ya que fueron útilizados los \textit{CRFs} para la construcción de estos modelos. En la tabla \ref{tab:models-hmmlike} se pueden ver los modelos construidos. Por una parte,  el modelo con la precisión más baja se encuentra en este entorno de experimentación y es \textsf{HMMLike\_l1\_zero} con $87.45\%$. Por otra parte, el modelo propuesto como base supera al modelo \textsf{HMMLike\_l1\_zero} por apenas \num{1.7e-3} puntos de precisión. Notamos que solo variando los hiperparametros $L_1$ y $L_2$ para este entorno de experimentación se obtuvo una mejora de apenas \num{5.6e-3} puntos de precisión respecto al modelo base.
+En principio, el entorno de experimentación dónde simulamos \textit{HMMs} fue el que tomamos como base para poder comparar el desempeños de los \textit{CRFs}. Es importante destacar es una simulación ya que fueron utilizados los \textit{CRFs} para la construcción de estos modelos. En la tabla \ref{tab:models-hmmlike} se pueden ver los modelos construidos. Por una parte,  el modelo con la precisión más baja se encuentra en este entorno de experimentación y es \textsf{HMMLike\_l1\_zero} con $87.45\%$. Por otra parte, el modelo propuesto como base supera al modelo \textsf{HMMLike\_l1\_zero} por apenas \num{1.7e-3} puntos de precisión. Notamos que solo variando los hiperparametros $L_1$ y $L_2$ para este entorno de experimentación se obtuvo una mejora de apenas \num{5.6e-3} puntos de precisión respecto al modelo base.
 
 % Hablar de POSLess
 Continuando con el segundo entorno de experimentación, dónde se construyó el \textit{linear Chain CRF} ignorando las etiquetas \textit{POS}, la precisión mejoró de forma considerable respecto a los modelos que simulaban \textit{HMMs}. Como se puede ver en la tabla \ref{tab:models-pos-less} todos los modelos de este entorno lograron al menos una precisión del $94\%$. Observamos una mejora poco significativa con la variación de los hiperparametros $L_1$ y $L_2$. En este entorno el modelo con mayor precisión fue \textsf{POS\_Less} con $94.99\%$. 
@@ -716,8 +707,11 @@ Por último, el entorno dónde se tomaron todas las \textit{features} disponible
 % Cual salio mejor
 Con base en la arquitectura propuesta observamos que el modelo  \textbf{\textsf{linearCRF\_l2\_zero}} obtuvo la mejor precisión y que supera el modelo base propuesto \textbf{\textsf{baseline\_HMMLike\_zero}} (Ver tabla \ref{tab:models-comparation}). Del análisis a través de los entornos de experimentación podemos concluir, por un lado, que con la variación de hiperparametros en las tres familias de modelos (\textsf{linearCRF}, \textsf{POSLess}, \textsf{HMMLike}) (Ver tablas \ref{tab:models-full-featured}, \ref{tab:models-pos-less}, \ref{tab:models-hmmlike}), se obtuvo una mejora en la precisión poco representativa; por otra parte, la precisión que muestran los modelos \textsf{POSLess} y \textsf{linearCRF} es muy similar. Entonces, parece ser que la configuración de los hiperparametros \textit{Elastic Net} y las etiquetas \textit{POS}, codificadas en las \textit{feature functions}, mejoran levemente el desempeño de los modelos. Además, podemos concluir que el resto de información de la lengua, codificada también en las \textit{features functions}, son las que determinan, en gran medida, el desempeños de los \textit{CRFs} para la correcta generación de \textit{BIO Labels} (glosa) para el idioma otomí.  
 
-\Diego{Poner gráfica de la función de perdida y comentar}
+\Diego{Poner gráfica de la función de perdida y comentar. Tomar la primera o la ultima de las 10 por modelo}
 
+\Diego{Mencionar las tablas de eficiencia por etiqueta: Cuales son las etiquetas que mas se equivocan de los modelos de la tabla 4.4. Uno o dos párrafos mas}
+
+\Diego{Ejemplos con los modelos de tabla 4.4}
 
 \chapter{Conclusiones}
 
