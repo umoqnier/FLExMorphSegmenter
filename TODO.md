@@ -2,28 +2,30 @@
 
 ## Texto
 
-* [] Introducción
-* [] Marco teórico
-* [] Metodología
-* [] Resultados
-	* [] Análisis
-		* [] Mencionar la eficiencia por etiqueta de la tabla 4.4
-		* [] Ejemplos de etiquetados de los modelos de la tabla 4.4
-	* [] Graficas de la funcion de perdida de los modelos de la tabla 4.4 de k=1 y k=10
-		* Cometar la gráfica
-* [] Conclusiones
+* [ ] Introducción
+* [ ] Marco teórico
+* [ ] Metodología
+* [ ] Resultados
+	* [ ] Análisis
+		* [ ] Mencionar la eficiencia por etiqueta de la tabla 4.4
+		* [ ] Ejemplos de etiquetados de los modelos de la tabla 4.4
+	* [ ] Gráficas de la función de perdida de los modelos de la tabla 4.4 de k=1 y k=10
+		* Comentar la gráfica
+* [ ] Conclusiones
 
 ## Notebooks
 
-* [] Creación de notebooks de jupyter para extracción de información del corpus
-	* [] Ordenar los notebooks
+* [ ] Creación de notebooks de jupyter para extracción de información del corpus
+	* [x] Ordenar los notebooks
+		* Adecuar funcionamiento
 	* Tipos y tokens
 	* Distribución de etiquetas
 	* Conteo de palabras
 	* Tamaño del corpus
 	* Longitud de palabras promedio
 	* Distribución de frecuencias basadas en la longitud de las palabras
-* [] Ejemplos de etiquetado
+* [ ] Ejemplos de etiquetado
+* [x] Función de perdida
 
 ## Graficas
 
@@ -58,8 +60,8 @@
 	* [x] Parametros que funcionaron el Lezgi probados en el otomí
 	* [-] Otros métodos
 		* [x] HMM (Simulado con CRFs)
-		* [] SVM
-		* [] Red Neuronal seq2seq
+		* [ ] SVM
+		* [ ] Red Neuronal seq2seq
 
 ### Esperimentos finales
 
