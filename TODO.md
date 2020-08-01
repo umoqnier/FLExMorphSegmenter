@@ -25,7 +25,14 @@
 	* Longitud de palabras promedio
 	* Distribución de frecuencias basadas en la longitud de las palabras
 * [ ] Ejemplos de etiquetado
+	* Pararle a Vic las frases de los mejores ejemplos de glosado
 * [x] Función de perdida
+
+## Lectura
+
+* Precision, Accuracy, recall, f score
+* HMM vs CRF
+
 
 ## Graficas
 
