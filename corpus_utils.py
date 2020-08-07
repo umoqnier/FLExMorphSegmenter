@@ -94,3 +94,47 @@ def tokens_to_table(data, limit=0):
     for key, count in counts:
         table += f"{key} & {count} \\\\\n"
     return table
+
+
+def oto_glosser(words_list, tags, pos_tags=[]):
+    """Funcion que glosa dadas las etiquetas
+    
+    Esta funcion se encarga de etiquetar una lista de palabras en
+    otomi dadas las etiquetas en formato BIO-Label. El etiquetado
+    se realiza con la siguiente estructura para cada palabra: 
+    
+    [[<chunk-word>, <tag>], [<chunk-word>, <tag>], ..., <POS tag>]
+    """
+    phrase_len, word_len, i = 0, 0, 0
+    chunk = ''
+    glossed_words, glossed_phrase = [], []
+    letters = ''.join(word_list)
+    for tag, letter in zip(tags, letters):
+        if tag.startswith("B"):
+            if chunk:
+                glossed_words.append([chunk, current_tag[2:]])
+            if len(word_list[i]) == word_len:                
+                # Adding POS tag
+                #TODO: Adecuarla para que reciba una lista de etiquetas POS
+                glossed_words.append(pos_tags[i][-1])
+                # Forming phrase structure
+                glossed_phrase.append(glossed_words)
+                # Next word
+                i += 1
+                # New word
+                word_len = 0
+                # New glossed word structure
+                glossed_words = []
+            chunk = letter
+            phrase_len += 1
+            word_len += 1
+            current_tag = tag
+        elif tag.startswith("I"):
+            chunk += letter
+            phrase_len += 1
+            word_len += 1
+            if len(letters) == phrase_len:
+                glossed_words.append([chunk, current_tag[2:]])
+                glossed_words.append(pos_tags[i][-1])
+                glossed_phrase.append(glossed_words)
+    return glossed_phrase
