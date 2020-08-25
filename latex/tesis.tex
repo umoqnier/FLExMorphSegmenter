@@ -8,7 +8,6 @@
 \usepackage{amsmath} % Notación
 \usepackage{amssymb}
 \usepackage{amsthm}  % Definiciones
-\usepackage{longtable}
 \usepackage{siunitx}
 \usepackage{todonotes}   % insert [disable] to disable all notes
 \usepackage[T1]{fontenc} % Required for accented characters
@@ -18,6 +17,9 @@
 \usepackage{tipa} % Caracteres IPA
 \usepackage{smartdiagram}
 \usepackage{color, colortbl}
+\usepackage{gb4e} % Glosa
+\noautomath  % Solve problems with render pdf
+% https://tex.stackexchange.com/questions/325621/gb4e-package-causing-capacity-errors
 
 \definecolor{Yellow}{rgb}{1, 0.78, 0.26}
 
@@ -216,13 +218,13 @@ Se recogió un corpus basado en el trabajo de \citet{lastra1992otomi} titulado \
 % Numero de etiquetas diferentes
 \begin{table}
 	\centering
-	\begin{tabular}{c | c}
+	\begin{tabular}{| c | c |}\hline
 		\textbf{Categoría} & \textbf{Cuenta} \\ \hline
 		Tokens (POS) & 8578\\
 		Tipos (POS) & 44\\
 		Tokens (Glosa) & 14477\\
 		Tipos (Glosa) & 112\\
-		\textbf{Total de oraciones etiquetadas} & 1786 \\ 
+		\textbf{Total de oraciones etiquetadas} & \textbf{1786} \\ \hline
 	\end{tabular}
 	\caption{Tamaño del corpus}
 	\label{table:corpus_length:1}
@@ -234,11 +236,11 @@ Los textos que componen el corpus fueron construidos a partir de las aportacione
 
 \begin{table}
 	\centering
-	\begin{tabular}{ c | c }
+	\begin{tabular}{| c | c |}\hline
 		\textbf{Textos} & \textbf{Número} \\ \hline
 		Narrativos & 32 \\
 		Dialogados & 4  \\
-		\textbf{Total de textos}  & 36 \\
+		\textbf{Total de textos}  & \textbf{36} \\\hline
 	\end{tabular}
 	\caption{Textos del corpus}
 	\label{table:corpus_text:1}
@@ -329,7 +331,7 @@ El significado para cada etiqueta de glosa se muestra en la tabla \ref{table:glo
 
 \begin{table}
 	\centering
-	\begin{tabular}{ c  c | c  c }
+	\begin{tabular}{| c  c | c  c |} \hline
 		\textbf{Glosa} & \textbf{Significado} & \textbf{Glosa} & \textbf{Significado}\\\hline
 		stem & base & ctrf & contrafactual \\
         cpl & completivo & dem & demostrativo \\
@@ -404,9 +406,7 @@ Esta escasez en el corpus es consecuencia de que el idioma otomí es una lengua 
 
 Sin embargo, existen métodos que buscan solucionar el problema de los bajos recursos digitales. Los trabajos de \citet{moeller2018automatic} y \citet{anastasopoulos2018part} muestran como métodos de aprendizaje estructurado, en particular los \textit{CRFs}, tienen buen desempeño en estas condiciones experimentales.
 
-Esto puede deberse a que los \textit{CRFs}, a diferencia de otros modelos gráficos, toman las virtudes de los modelos generativos y de los modelos condicionales evitando, a su vez, el problema del \textit{bias} que \citet{lafferty2001conditional} define como  ''el momento en el cual las transiciones que salen de un estado sólo compiten entre sí, y no con todas las demás transiciones''.
-
-\Diego{Reescribir, Existen métodos que buscan solucionar esto, en concreto CRF y hacer referencia a los trabajos que trabajan en ellos. Ej: Lezgi y griko}
+Esto puede deberse a que los \textit{CRFs}, a diferencia de otros modelos gráficos, toman las virtudes de los modelos generativos y de los modelos condicionales evitando, a su vez, el problema del \textit{bias} que \citet{lafferty2001conditional} define como ``el momento en el cual las transiciones que salen de un estado sólo compiten entre sí, y no con todas las demás transiciones''.
 
 \section{Arquitectura}
 
@@ -435,7 +435,7 @@ Una vez obtenido el corpus, previamente glosado, realizamos una etapa de preproc
 % Previamente debe estar explicado que X son vectores
 Debido al enfoque de aprendizaje automático que estamos utilizando consideramos dos conjuntos; un conjunto de entrenamiento y otro de pruebas. Los conjuntos de entrenamiento y pruebas fueron obtenidos del corpus que fue previamente glosados a mano por un experto lingüista.
 
-La etapa de pruebas consistió en aplicar el modelo de aprendizaje al conjunto de evaluación. En ese sentido, aplicar el modelo se refiere a que con el modelo se generaron etiquetas \textit{BIO} para textos del conjunto de pruebas. Con las etiquetas generadas y en comparación con las etiquetas reales se obtuvieron, entre otras medidas de rendimiento, la precisión del modelo. Las secuencias de etiquetas o salidas generadas por el modelo, dadas las observaciones de $X$, fueron definidas como $Y$.
+La etapa de pruebas consistió en aplicar el modelo de aprendizaje al conjunto de evaluación. En ese sentido, aplicar el modelo se refiere a que con el modelo se generaron etiquetas \textit{BIO} para textos del conjunto de pruebas. Con las etiquetas generadas y en comparación con las etiquetas reales se obtuvieron, entre otras medidas de rendimiento, el \textit{accuarcy} del modelo. Las secuencias de etiquetas o salidas generadas por el modelo, dadas las observaciones de $X$, fueron definidas como $Y$.
 
 En general, para el glosado se realiza manualmente. Esta tarea requiere del expertiz del un lingüista y una cercana cooperación con hablantes nativos quienes reciben capacitación elemental en lingüística y software \citep{moeller2018automatic}. Estas condiciones convierten al glosado manual en una tarea altamente costosa en tiempo y recursos. El objetivo de esta arquitectura es realizar un correcto etiquetado automático de glosa para la lengua otomí, en particular la variante del otomí de Toluca, utilizando técnicas de aprendizaje estructurado débilmente supervisado. Con ello se pretende asistir a personas especializadas, como lingüistas, en el glosado manual.   
 
@@ -457,11 +457,10 @@ Se obtuvo el corpus de un archivo de texto plano. Cada renglón de este archivo 
 La glosa esta presente por cada fragmento de las posibles palabras en otomí. Ejemplificando, la frase \textit{hi tótsogí} (`No lo he dejado') se representa en el corpus como se muestra en el ejemplo \ref{exmp:frase_glosada}.
 
 \begin{exmp} \label{exmp:frase_glosada}
-    \code{[[[`hi', `stem'], `neg'],
+    \textsf{[[[`hi', `stem'], `neg'],
     [[`tó', `1.prf'],
     [`tsogí', `stem'], `v']]}
 \end{exmp}
-\Diego{Corrección del margen}
 
 Por último, la lengua otomí tiene una vasta variedad interna lo cual implica diferentes ortografías dependiendo de la región. Tomar en cuenta esta variación ortográfica es de suma importancia para el preprocesamiento. Como menciona \cite{elotl2019otomiprepro} todas las lenguas otomíes son tonales y distinguen entre vocales orales y vocales nasales, existen fonemas que pueden presentarse en unas variantes, mientras que en otras están ausentes. En general, las vocales orales incluyen a las mismas vocales que también se presentan en el español: a, e, i, o, u; pero su inventario de vocales orales no se limita a estas cinco.
 
@@ -483,17 +482,16 @@ Entonces, la estructura de las listas, por renglón, tiene la estructura \code{[
 Retomando el ejemplo \ref{exmp:frase_glosada} y después de aplicar el preprocesamiento el resultado sería el que se muestra en el ejemplo \ref{exmp:frase_preproc}. Cabe señalar que las \textit{Bio Labels} asignadas dependieron de la posición de la letra como se explico en la sección \ref{sec:marco}.
 
 \begin{exmp} \label{exmp:frase_preproc}
-    \code{[[['h', 'neg', 'B-stem'], ['i', 'neg', 'I-stem']], [['t', 'v', 'B-1.prf'],
+    \textsf{[[['h', 'neg', 'B-stem'], ['i', 'neg', 'I-stem']], [['t', 'v', 'B-1.prf'],
           ['ó', 'v', 'I-1.prf'],
           ['t', 'v', 'B-stem'],
           ['s', 'v', 'I-stem'],
           ['o', 'v', 'I-stem'],
           ['g', 'v', 'I-stem'],
           ['í', 'v', 'I-stem']]]}
-\end{exmp}{}
-\Diego{Corrección del margen}
+\end{exmp}
 
-Con las palabras etiquetadas a nivel de letra se obtuvo un conjunto de entrenamiento y un conjunto de pruebas. Por una parte, el conjunto de entrenamiento permitió la observación de ejemplos y la posterior generación de un modelo de aprendizaje. Por otro lado, con el conjunto de pruebas obtuvimos la precisión del modelos etiquetando frases no vistas. Es importante destacar que estos dos conjuntos estuvieron completamente separados ya que mezclar el conjunto de entrenamiento y de pruebas pudo habernos llevado a una precisión erronea y sesgada.
+Con las palabras etiquetadas a nivel de letra se obtuvo un conjunto de entrenamiento y un conjunto de pruebas. Por una parte, el conjunto de entrenamiento permitió la observación de ejemplos y la posterior generación de un modelo de aprendizaje. Por otro lado, con el conjunto de pruebas obtuvimos el \textit{accuracy} del modelos etiquetando frases no vistas. Es importante destacar que estos dos conjuntos estuvieron completamente separados ya que mezclar el conjunto de entrenamiento y de pruebas pudo habernos llevado a resultados erroneos y sesgados.
 
 Previo al entrenamiento se construyeron las \textit{feature functions} con el conjunto de entrenamiento. En ese sentido, por cada letra etiquetada de las palabras en otomí se tuvo una \textit{feature function} y por cada \textit{feature function} se tiene una \textit{Bio Label} asociada. La construcción de estas funciones será descrita a profundidad en la subsección \ref{subsec:feature}.
 
@@ -546,16 +544,15 @@ El entrenamiento consistió en la búsqueda de un modelo que maximiza el logarit
         \textbf{Hiperparámetro} & Valor \\\hline
         \textsf{max\_iterarions} & 50 \\
         \textsf{num\_memories} & 6 \\
-        \textsf{epsilon} & \num{1e-5} \\
+        \textsf{epsilon} & $1*10^{-5}$ \\
         \textsf{stop} & 10 \\
-        \textsf{delta} & \num{1e-5} \\
+        \textsf{delta} & $1*10^{-5}$ \\
         \textsf{linesearch} & ``MoreThuente'' \\
         \textsf{max\_linesearch} & 20 \\\hline
     \end{tabular}
     \caption{Valores de los hiperparámetros}
     \label{tab:hyper_default_values}
 \end{table}
-\Diego{Mencionar los hiperparámetros seteados por defecto}
 
 Además de los hiperparámetros se configuraron diferentes entornos de experimentación dónde se construyeron \textit{feature functions} con mas o menos información. En la tabla \ref{tab:models-config} se listan las diferentes configuraciones implementadas en esta tesis.
 
@@ -566,37 +563,32 @@ Además de los hiperparámetros se configuraron diferentes entornos de experimen
     \begin{tabular}{| c | c | c | c | c |}\hline
         \textbf{Modelo} & \textbf{L1} & \textbf{L2} & \textbf{Features}\\ \hline
         \textsf{linearCRF\_l2\_zero} & 0.1 & 0 & Todas las disponibles\\
-        \textsf{linearCRF\_featured} & 0.1 & \num{1e-3} & Todas las disponibles\\
+        \textsf{linearCRF\_featured} & 0.1 & $1*10^{-3}$ & Todas las disponibles\\
         \textsf{linearCRF\_l1\_l2\_zero} & 0 & 0 & Todas las disponibles\\
-        \textsf{POS\_Less} & 0.1 & \num{1e-3} & Sin etiquetas \textit{POS}\\
-        \textsf{linearCRF\_l1\_zero} & 0 & \num{1e-3} & Todas las disponibles\\
-        \textsf{POS\_Less\_l1\_zero} & 0 & \num{1e-3} & Sin etiquetas \textit{POS}\\
+        \textsf{POS\_Less} & 0.1 & $1*10^{-3}$ & Sin etiquetas \textit{POS}\\
+        \textsf{linearCRF\_l1\_zero} & 0 & $1*10^{-3}$ & Todas las disponibles\\
+        \textsf{POS\_Less\_l1\_zero} & 0 & $1*10^{-3}$ & Sin etiquetas \textit{POS}\\
         \textsf{POS\_Less\_l1\_l2\_zero} & 0 & 0 & Sin etiquetas \textit{POS}\\
         \textsf{HMMLike\_l2\_zero} & 0.1 & 0 & Mínimas\\
-        \textsf{HMMLike\_regularization} & 0.1 & \num{1e-3} & Mínimas\\\rowcolor{Yellow}
+        \textsf{HMMLike\_regularization} & 0.1 & $1*10^{-3}$ & Mínimas\\\rowcolor{Yellow}
         \textsf{baseline\_HMMLike\_zero} & 0 & 0 & Mínimas\\
-        \textsf{HMMLike\_l1\_zero} & 0 & \num{1e-3} & Mínimas\\\hline
+        \textsf{HMMLike\_l1\_zero} & 0 & $1*10^{-3}$ & Mínimas\\\hline
     \end{tabular}
     \caption{Modelos de aprendizaje}
     \label{tab:models-config}
 \end{table}
 
-\Diego{Agregar las features usadas y quitar tiempo y precisión}
-
 % Testing
 Terminada la fase de entrenamiento y construido el modelo de aprendizaje se puso a prueba con el conjunto destinado a este propósito y que fue previamente obtenido. Similar a la fase de entrenamiento las entradas fueron las \textit{feature functions} y la \textit{Bio Labels} asociada a cada \textit{feature function}. Utilizando el modelo de aprendizaje se etiquetó cada letra con base en la estructura de la lengua codificada en las \textit{feature functions}. Las etiquetas generadas fueron comparadas con las reales y con ello se obtuvo la exactitud del modelo. 
 
-Recapitulando, se obtuvo un corpus en otomí previamente glosado por un experto lingüista, después, en la etapa de codificación estructuramos la información de la lengua y en el preprocesamiento se crearon las \textit{feature functions} que serán las entradas de los \textit{CRFs}, continuamos con la fase de entrenamiento, creación del modelo de aprendizaje. Por último, se ejecuto la fase de evaluación comparando las \textit{BIO-Labels} generadas por el modelo y las reales presentes en el conjunto de pruebas recuperando la precisión del modelo. La arquitectura final se puede observar en la figura \ref{fig:architecture}.
-\Diego{Resumen al final (pasos de todo lo que se hizo) como puntos o un diagrama}
+Recapitulando, se obtuvo un corpus en otomí previamente glosado por un experto lingüista, después, en la etapa de codificación estructuramos la información de la lengua y en el preprocesamiento se crearon las \textit{feature functions} que serán las entradas de los \textit{CRFs}, continuamos con la fase de entrenamiento, creación del modelo de aprendizaje. Por último, se ejecuto la fase de evaluación comparando las \textit{BIO-Labels} generadas por el modelo y las reales presentes en el conjunto de pruebas recuperando el \textit{accuracy} del modelo. La arquitectura final se puede observar en la figura \ref{fig:architecture}.
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=\textwidth]{arquitectura}
+	\includegraphics[width=\textwidth]{img/arquitectura}
 	\caption{Arquitectura de aprendizaje}
 	\label{fig:architecture}
 \end{figure}
-
-\Diego{Corregir diagrama de arquitectura}
 
 \subsubsection{Hardware utilizado}
 
@@ -621,57 +613,76 @@ En este capítulo se examinará el método de evaluación utilizado para la cons
 
 Propusimos diferentes entornos de experimentación dónde fueron modificadas las \textit{feature functions} y los parámetros de regularización \textit{Elastic Net} L1 + L2. En concreto, se presentaron tres entornos de evaluación; en el primero se redujeron las \textit{features} al mínimo, utilizando la información de la letra actual en la palabra y la letra anterior relativa a la letra actual, con lo que se simulaba un \textit{Hidden Markov Model (HMM)}; en el segundo, se modificaron las \textit{features} para ignorar las etiquetas \textit{POS}, y en el último, se utilizaron todas las \textit{features} disponibles, que se mencionaron en la sección \ref{feature_functions_descr}.
 
-En ese sentido, para evaluar el desempeño de los modelos construidos, presentes en la tabla \ref{tab:models-config}, seleccionamos como base el entorno dónde se simula un \textit{HMM} que corresponde con el modelo \textsf{baseline\_HMMLike\_zero}. 
+Para comparar el desempeño entre los modelos construidos, presentes en la tabla \ref{tab:models-config}, seleccionamos como base el entorno dónde se simula un \textit{HMM} que corresponde con el modelo \textsf{baseline\_HMMLike\_zero}.
 
 % Pasar a resultados
-Para determinar la precisión utilizamos una técnicas típica de \textit{ML} llamada \textit{cross-validation K-folds} que consiste en tomar \textit{K} fragmentos aleatorios del conjunto de entrenamiento y utilizarlos como conjunto de pruebas para evaluar el modelo. Consideramos exitosa la predicción si se logra maximizar la correcta clasificación de las secuencias de salida. La determinación del corpus de evaluación se explica a continuación.
+Para saber que tan buenas son las predicciones de un modelo generado es necesario validar su desempeño. La forma mas sencilla de realizar esta validación es partir el corpus en dos conjuntos; el primer conjunto será destinado al entrenamiento del modelo y el segundo conjunto, independiente del conjunto de entrenamiento, tendrá el propósito de evaluar el desempeño del modelo. Realizar esta partición equivale a dividir aleatoriamente nuestro corpus en dos partes. Está técnica de validación es conocida como \textit{Hold Out}.
 
-Para cada modelo, se sacaron $K$ fragmentos del conjunto de entrenamiento. Cada fragmento fue utilizado como conjunto de evaluación por lo que el entrenamiento-evaluación se realizó $K$ veces por modelo. Para todas las etapas de entrenamiento-evaluación utilizamos $K = 10$. Por cada modelo se obtuvieron $K$ precisiones, una por cada conjunto de entrenamiento-evaluación, por lo que fueron promediadas para tener una precisión general por modelo que es la que reportamos.
+Sin embargo, este método de validación supone inconvenientes. Por un lado, es obligatorio sacrificar una parte del corpus para la realización de pruebas y, por otro lado, el desempeño del modelos podría mostrar valores muy optimistas o muy pesimistas dependiendo solo de cómo se realiza la partición del corpus.
 
-% Aquí se habla del K fold 
+% Aquí se habla del K fold
+Un método de validación más adecuado para nuestros entornos de experimentación es el de \textit{K-fold cross-validation}. Esta técnica está diseñada para medir el desempeño sin sacrificar muchos datos. 
 
-A continuación mencionamos los modelos resultantes de cada una de las tres etapas de experimentación propuestas en este trabajo.
+En \textit{K-fold} el corpus es dividido en $K$ subconjuntos (\textit{folds}) a diferencia de \textit{Hold Out} donde se divide solo en dos partes. Se toma un subconjunto para pruebas y el resto es usado para la etapa de entrenamiento. El modelo es entrenado y después se obtiene el \textit{accuracy} utilizando el subconjunto de pruebas antes mencionado. El \textit{accuracy} es obtenido como se muestra en la ecuación \ref{eq:accuracy}.
 
-En la tabla \ref{tab:models-full-featured} se muestran los modelos dónde se recuperaron todas las \textit{features} disponibles
+\begin{equation}\label{eq:accuracy}
+    accuracy = \frac{VP + VN}{VP + VN + FP + FN}
+\end{equation}
+
+dónde \textit{VP} es Verdadero Positivo, \textit{VN} es Verdadero Negativo, \textit{FP} es Falso Positivo y \textit{FN} es Falso Negativo.
+
+El proceso se repite $K$ veces hasta que cada subconjunto fue utilizado en la etapa de pruebas. Finalmente, se promedian los $K$ \textit{accuracy} obtenidos en cada prueba para tener el \textit{accuracy} general del modelo que es el que reportamos. En la figura \ref{fig:k-fold} se muestra una representación gráfica del método de evaluación con $K = 5$. Para todas las etapas de entrenamiento-evaluación utilizamos $K = 10$.
+
+Consideramos exitosa la predicción si se logra maximizar la correcta clasificación de las etiquetas de salida.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[scale=0.8]{img/kfold.png}
+    \caption{Representación gráfica de \textit{K-fold cross-validation}}
+    \label{fig:k-fold}
+\end{figure}
+
+A continuación mostramos los modelos resultantes de cada etapa de experimentación propuestas en este trabajo.
+
+En la tabla \ref{tab:models-full-featured} se muestran los modelos dónde se recuperaron todas las \textit{features} disponibles. A este entorno de experimentación lo llamaremos \textit{LinearCRF}.\footnote{Tiempos de entrenamiento (minutos): linearCRF\_l2\_zero=41.86, linearCRF\_featured=42.91, linearCRF\_l1\_l2\_zero=39.46, linearCRF\_l1\_zero=41.03}
 
 \begin{table}[ht]
     \centering
     \begin{tabular}{| c | c | c | c |}\hline
-    \textbf{Modelo} & \textbf{Tiempo (minutos)} & \textbf{Precisión}\\\hline
-    \textbf{\textsf{linearCRF\_l2\_zero}} & \textbf{41.86} & \textbf{0.9516}\\
-    \textsf{linearCRF\_featured} & 42.91 & 0.9509\\
-    \textsf{linearCRF\_l1\_l2\_zero} & 39.46 & 0.9499\\
-    \textsf{linearCRF\_l1\_zero} & 41.03 & 0.948\\\hline
+    \textbf{Modelo} & \textbf{Accuracy}\\\hline
+    \textbf{\textsf{linearCRF\_l2\_zero}} & \textbf{0.9516}\\
+    \textsf{linearCRF\_featured} & 0.9509\\
+    \textsf{linearCRF\_l1\_l2\_zero} & 0.9499\\
+    \textsf{linearCRF\_l1\_zero} & 0.948\\\hline
     \end{tabular}
     \caption{Modelos con todas las \textit{features} disponibles}
     \label{tab:models-full-featured}
 \end{table}
-\Diego{Quitar L1 y L2 y poner tiempo en todas las graficas}
 
-En la tabla \ref{tab:models-pos-less} se encuentran los modelos que pertenecen al entorno de experimentación donde fueron ignoradas las etiquetas \textit{POS}
+En la tabla \ref{tab:models-pos-less} se encuentran los modelos que pertenecen al entorno de experimentación donde fueron ignoradas las etiquetas \textit{POS}. Este entorno de experimentación lo llamaremos \textit{POSLess}.\footnote{Tiempos de entrenamiento (minutos): POS\_Less=37.91, POS\_Less\_l1\_zero=40.25, POS\_Less\_l1\_l2\_zero=36.67}
 
 \begin{table}[ht]
     \centering
     \begin{tabular}{| c | c | c | c |}\hline
-    \textbf{Modelo} & \textbf{Tiempo (minutos)} & \textbf{Precisión}\\\hline
-    \textsf{POS\_Less} & 37.91 & 0.9499\\
-    \textsf{POS\_Less\_l1\_zero} & 40.25 & 0.9473\\
-    \textsf{POS\_Less\_l1\_l2\_zero} & 36.67 & 0.9452\\\hline
+    \textbf{Modelo} & \textbf{Accuracy}\\\hline
+    \textbf{\textsf{POS\_Less}} & \textbf{0.9499}\\
+    \textsf{POS\_Less\_l1\_zero} & 0.9473\\
+    \textsf{POS\_Less\_l1\_l2\_zero} & 0.9452\\\hline
     \end{tabular}
     \caption{Modelos donde se ignoran las etiquetas \textit{POS}}
     \label{tab:models-pos-less}
 \end{table}
 
-En la tabla \ref{tab:models-hmmlike} se aprecian los modelos generados en el entorno de experimentación con las \textit{feature functions} reducidas al mínimo, simulando \textit{HMMs}.
+En la tabla \ref{tab:models-hmmlike} se aprecian los modelos generados en el entorno de experimentación con las \textit{feature functions} reducidas al mínimo, simulando \textit{HMMs}. Este entrono de experimentación será llamado \textit{HMMLike}.\footnote{Tiempos de entrenamiento (minutos): HMMLike\_l2\_zero=43.71, HMMLike\_regularization=42.98, baseline\_HMMLike\_zero=40.44, HMMLike\_l1\_zero=43.9 }
 
 \begin{table}[ht]
     \centering
     \begin{tabular}{| c | c | c | c |}\hline
-    \textbf{Modelo} & \textbf{Tiempo (minutos)} & \textbf{Precisión}\\\hline
-    \textsf{HMMLike\_l2\_zero} & 43.71 & 0.8818\\
-    \textsf{HMMLike\_regularization} & 42.98 & 0.8791\\\rowcolor{Yellow}
-    \textsf{baseline\_HMMLike\_zero} & 40.44 & 0.8762\\
-    \textsf{HMMLike\_l1\_zero} & 43.9 & 0.8745\\\hline
+    \textbf{Modelo} & \textbf{Accuracy}\\\hline
+    \textbf{\textsf{HMMLike\_l2\_zero}} & \textbf{0.8818}\\
+    \textsf{HMMLike\_regularization} & 0.8791\\
+    \textsf{baseline\_HMMLike\_zero} & 0.8762\\
+    \textsf{HMMLike\_l1\_zero} & 0.8745\\\hline
     \end{tabular}
     \caption{Modelos que simulan \textit{HMMs}}
     \label{tab:models-hmmlike}
@@ -679,41 +690,222 @@ En la tabla \ref{tab:models-hmmlike} se aprecian los modelos generados en el ent
 
 \section{Análisis de resultados}
 
-Comparando los diferentes entornos de entrenamiento y generación de modelos, observamos que, dado el escaso tamaño del corpus de entrenamiento, al recuperar mayor información en la construcción de las \textit{feature functions} y con métodos basados en gráficas como los \textit{CRFs} se obtiene un desempeño mayor en comparación con los entornos dónde las \textit{feature functions} tenían información mínima simulando métodos tradicionales de generación de etiquetas como los \textit{HMMs}.
-
 % Hablar de HMM
 % cual salio peor
-En principio, el entorno de experimentación dónde simulamos \textit{HMMs} fue el que tomamos como base para poder comparar el desempeños de los \textit{CRFs}. Es importante destacar es una simulación ya que fueron utilizados los \textit{CRFs} para la construcción de estos modelos. En la tabla \ref{tab:models-hmmlike} se pueden ver los modelos construidos. Por una parte,  el modelo con la precisión más baja se encuentra en este entorno de experimentación y es \textsf{HMMLike\_l1\_zero} con $87.45\%$. Por otra parte, el modelo propuesto como base supera al modelo \textsf{HMMLike\_l1\_zero} por apenas \num{1.7e-3} puntos de precisión. Notamos que solo variando los hiperparametros $L_1$ y $L_2$ para este entorno de experimentación se obtuvo una mejora de apenas \num{5.6e-3} puntos de precisión respecto al modelo base.
+En principio, el entorno de experimentación dónde simulamos \textit{HMMs} y en concreto el modelo \textsf{baseline\_HMMLike\_zero} fue el que tomamos como base para poder comparar el desempeños de los \textit{CRFs}. En la tabla \ref{tab:models-hmmlike} se pueden ver los modelos construidos en este entorno.
+
+Es importante destacar que este entorno de mínima información simula el método de generación de etiquetas \textit{HMM} pero no es, en sentido estricto, un \textit{HMM}\footnote{Una diferencia entre los \textit{HMM} simulados con el modelo gráfico \textit{CRF} y los \textit{HMM} tradicionales radica en que los \textit{CRFs} son grafos no dirigido. Además, los \textit{HMM} son modelos generativo, mientras que los \textit{CRFs} son modelos discriminativos}
+\diego{referencia} ya que fueron utilizados los \textit{CRFs} para su construcción.
+
+El modelo con el \textit{accuracy} más bajo se encuentra en este entorno de experimentación y es \textsf{HMMLike\_l1\_zero} con un $87.45\%$ de \textit{accuracy}. Por otra parte, el modelo propuesto como base supera en al modelo \textsf{HMMLike\_l1\_zero} por apenas $1.7*10^{-3}$ unidades. Notamos que variando los hiperparametros $L_1$ y $L_2$ para este entorno de experimentación se obtuvo una mejora de apenas $5.6*10^{-3}$ respecto al modelo base. 
 
 % Hablar de POSLess
-Continuando con el segundo entorno de experimentación, dónde se construyó el \textit{linear Chain CRF} ignorando las etiquetas \textit{POS}, la precisión mejoró de forma considerable respecto a los modelos que simulaban \textit{HMMs}. Como se puede ver en la tabla \ref{tab:models-pos-less} todos los modelos de este entorno lograron al menos una precisión del $94\%$. Observamos una mejora poco significativa con la variación de los hiperparametros $L_1$ y $L_2$. En este entorno el modelo con mayor precisión fue \textsf{POS\_Less} con $94.99\%$. 
+Continuando con el segundo entorno de experimentación, dónde se construyó el \textit{linear Chain CRF} ignorando las etiquetas \textit{POS}, el \textit{accuracy} mejoró de forma considerable respecto a los modelos que simulaban \textit{HMMs}. Como se puede ver en la tabla \ref{tab:models-pos-less} todos los modelos de este entorno lograron al menos un \textit{accuracy} del $94\%$. Observamos una mejora poco significativa con la variación de los hiperparametros $L_1$ y $L_2$. En este entorno el modelo con mayor \textit{accuracy} fue \textsf{POS\_Less} con $94.99\%$. 
 
-Por último, el entorno dónde se tomaron todas las \textit{features} disponibles, mencionadas en \ref{feature_functions_descr}, fue en el que se obtuvo el mejor desempeño. Los modelos generados en este entorno obtuvieron entre $94\%$ y $95\%$ de precisión. Una vez más, la variación de hiperparametros comprobó mejoras leves en los modelos. Destacamos además que la mejora con respecto al entorno de experimentación anterior es de apenas $1\%$ en los modelos con mejor desempeño. En la tabla \ref{tab:models-comparation} se muestra la comparación entre el modelo base y los modelos con mejor precisión en los otros entornos de experimentación.
+Por último, el entorno dónde se construyeron los \textit{linear Chain CRFs} tomando todas las \textit{features} disponibles, mencionadas en \ref{feature_functions_descr}, fue en el que se obtuvo el mejor desempeño. Los modelos generados en este entorno obtuvieron entre $94\%$ y $95\%$ de \textit{accuracy}. Una vez más, la variación de hiperparametros de regularización comprobó mejoras leves en los modelos. Destacamos además que la mejora con respecto al entorno de experimentación \textit{POSLess} es de apenas $1\%$ en los modelos con mejor desempeño del entorno \textit{linearCRF}. En la tabla \ref{tab:models-comparation} se muestra la comparación entre el modelo base y los modelos con mejor \textit{accuracy} en los otros entornos de experimentación.
 
 \begin{table}[ht]
     \centering
     \begin{tabular}{| c | c |}\hline
-        \textbf{Modelo} & \textbf{Precisión} \\\hline
+        \textbf{Modelo} & \textbf{Accuracy} \\\hline
         \textbf{\textsf{linearCRF\_l2\_zero}} & \textbf{0.9516}\\ 
         \textsf{POS\_Less} & 0.9499\\ 
         \textsf{baseline\_HMMLike\_zero} & 0.8762\\ \hline
     \end{tabular}
-    \caption{Comparación de modelos de diferentes entornos con mejor precisión}
+    \caption{Comparación de modelos de diferentes entornos con mejor \textit{accuracy}}
     \label{tab:models-comparation}
 \end{table}  
+
+Comparando el rendimiento de los modelos a través de los entornos de experimentación observamos lo siguiente; entornos ricos en información, codificada en las \textit{feature functions}, obtienen un desempeño mayor en comparación con los entornos dónde se disponía de información mínima.
 
 % logramos pasar el base line?
 % que features fueron determinantes?
 % Cual salio mejor
-Con base en la arquitectura propuesta observamos que el modelo  \textbf{\textsf{linearCRF\_l2\_zero}} obtuvo la mejor precisión y que supera el modelo base propuesto \textbf{\textsf{baseline\_HMMLike\_zero}} (Ver tabla \ref{tab:models-comparation}). Del análisis a través de los entornos de experimentación podemos concluir, por un lado, que con la variación de hiperparametros en las tres familias de modelos (\textsf{linearCRF}, \textsf{POSLess}, \textsf{HMMLike}) (Ver tablas \ref{tab:models-full-featured}, \ref{tab:models-pos-less}, \ref{tab:models-hmmlike}), se obtuvo una mejora en la precisión poco representativa; por otra parte, la precisión que muestran los modelos \textsf{POSLess} y \textsf{linearCRF} es muy similar. Entonces, parece ser que la configuración de los hiperparametros \textit{Elastic Net} y las etiquetas \textit{POS}, codificadas en las \textit{feature functions}, mejoran levemente el desempeño de los modelos. Además, podemos concluir que el resto de información de la lengua, codificada también en las \textit{features functions}, son las que determinan, en gran medida, el desempeños de los \textit{CRFs} para la correcta generación de \textit{BIO Labels} (glosa) para el idioma otomí.  
+Con base en la arquitectura propuesta observamos que el modelo  \textbf{\textsf{linearCRF\_l2\_zero}} obtuvo el mejor \textit{accuracy} y que supera el modelo base propuesto \textbf{\textsf{baseline\_HMMLike\_zero}} (Ver tabla \ref{tab:models-comparation}). Del análisis a través de los entornos de experimentación podemos concluir, por un lado, que con la variación de hiperparametros en las tres familias de modelos (\textsf{linearCRF}, \textsf{POS\_Less}, \textsf{HMMLike}) (Ver tablas \ref{tab:models-full-featured}, \ref{tab:models-pos-less}, \ref{tab:models-hmmlike}), se obtuvo una mejora en el \textit{accuracy} poco representativa; por otra parte, el \textit{accuracy} que muestran los modelos \textsf{POS\_Less} y \textsf{linearCRF} es muy similar.
 
-\Diego{Poner gráfica de la función de perdida y comentar. Tomar la primera o la ultima de las 10 por modelo}
+Entonces, parece ser que la configuración de los hiperparametros \textit{Elastic Net} y las etiquetas \textit{POS} (codificadas en las \textit{feature functions}) mejoran levemente el desempeño de los modelos. Además, podemos concluir que el resto de información de la lengua, codificada también en las \textit{features functions}, es la que determinan, en gran medida, el desempeño de los \textit{CRFs} para la correcta generación de \textit{BIO Labels} (glosa) para el idioma otomí.
 
-\Diego{Mencionar las tablas de eficiencia por etiqueta: Cuales son las etiquetas que mas se equivocan de los modelos de la tabla 4.4. Uno o dos párrafos mas}
+Algo destacable es que las etiquetas \textit{POS} no parecen ser tan relevante debido a que existen características morfológicas (patrones presentes en las mismas palabras) o sintácticas (secuencias de palabras) que indican la categoría de la palabra. Por ejemplo, los sustantivos en su mayoría son precedidos de `ri' o `yi' (artículos singular y plural, respectivamente). Asimismo, los verbos tienen una morfología particular y existen patrones que muestran que se trata de un verbo: prefijos flexivos, sufijos, formativos temáticos, etc.
 
-\Diego{Ejemplos con los modelos de tabla 4.4}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{img/loss_models.png}
+	\caption{Función de perdida de los modelos con mejor desempeño}
+	\label{fig:loss_models}
+\end{figure}
+
+Mostramos una comparación de la función de perdida en la figura \ref{fig:loss_models} de los modelos que se encuentran en la tabla \ref{tab:models-comparation}. En la figura se encuentran las curvas para la iteración $K = 10$ de cada modelo.
+
+En la figura \ref{fig:loss_models} vemos como el modelo \textsf{baseline\_HMMLike\_zero} comienza con una pérdida baja en comparación con los otros dos modelos pero que a medida que avanzan las iteraciones la minimización del error no es tan buena. Esto puede deberse a la cantidad de información codificada en la \textit{feature functions} de inicio.
+
+Por otro lado, las curvas de los modelos \textsf{POS\_Less} y \textsf{linearCRF\_l2\_zero} reflejan un mejor desempeño que la del modelo base. Esto reafirma el desempeño observado en la tabla \ref{tab:models-comparation} que sugiere que a mayor información codificada en las \textit{feature functions} el desempeño es mejor.
+
+La información codificada en ambos modelos es casi la misma salvo por que en los modelos \textsf{POS\_Less} se omitieron las etiquetas \textit{POS}. Ergo, las curvas de los modelos \textsf{POS\_Less} y \textsf{linearCRF\_l2\_zero} son  similares.
+
+En la tabla \ref{tab:tags-linearcrf} se observa la precisión, el \textit{recall} y el \textit{f1-score} que dan información detallada de la eficiencia del modelo \textsf{linearCRF\_l2\_zero} en el etiquetado del último \textit{fold}. Con base en dicha tabla hacemos las siguientes observaciones.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{| c | c | c | c | c |}\hline
+        \textbf{Etiqueta} & \textbf{Precisión} & \textbf{Recall} & \textbf{F1-score} & \textbf{Instancias} \\\hline
+        prt & 0.33 & 0.33 & 0.33 & 3\\
+        pl & 0.71 & 0.45 & 0.56 & 11\\
+        2.cnt & 0.75 & 1 & 0.86 & 3\\
+        lig & 0.87 & 0.9 & 0.88 & 29\\
+        3.cnt & 0.88 & 0.88 & 0.88 & 8\\
+        1.obj & 0.91 & 0.83 & 0.87 & 12\\
+        ctrf & 0.95 & 0.95 & 0.95 & 22\\
+        stem & 0.96 & 0.96 & 0.96 & 771\\
+        prag & 0.97 & 0.97 & 0.97 & 29\\
+        3.icp & 0.97 & 0.9 & 0.94 & 40\\\hline
+    \end{tabular}
+    \caption{Métricas por etiqueta del modelo \textsf{linearCRF\_l2\_zero}}
+    \label{tab:tags-linearcrf}
+\end{table}
+
+Vemos un bajo desempeño en la etiqueta \textsc{prt} (`partícula') el cual puede deberse a que la etiqueta hace referencia a cosas que no son sistemáticas, que son inusuales o raras y a que \textsc{prt} puede aparecer en cualquier contexto. Además, el bajo \textit{recall} en esta etiqueta puede deberse a que los plurales tienen variaciones en la forma. Por ejemplo algunas palabras plurales tendrán `-hí', o bien `-mí', incluso algunos pocas muestran plural `-phi'.
+
+Por otro lado, las etiquetas como \textsc{stem} (Raíz) o \textsc{ctrf} (`Contrafactual') al ser sistemáticas y muy frecuentes se ven beneficiadas por lo que tienen una \textit{precisión} y un \textit{recall} altos. 
+
+\textsc{prag} (`Pragmático') aparece en los verbos y siempre en la misma posición (al final de la palabra en la posicion del verbo) lo que hace que tambien sea fácilmente predicha por el modelo. Es interesante que este morfema es frecuente pero si se quita no aporta mucha información. Podría decirse que es una muletilla que se traduce como `pues'.
+
+Finalmente, \textsc{3.icp} (`Tercera persona incompletivo'), es un morfema de tiempo muy frecuentemente usado (su equivalencia en español sería el tiempo presente en tercera persona). Siempre aparece antes del verbo y siempre en la misma posición. Por tanto, esta etiqueta es de las mas altas en desempeño.
+
+Cabe destacar que las etiquetas \textsc{stem, prag y 3.icp}, que son las etiquetas con mayor desempeño, no necesariamente comparte la frecuencia. Mientras que \textsc{steam} es la etiqueta con mayor frecuencia \textsc{prag} y \textsc{3.icp} muestran una frecuencia considerablemente mas baja. Aún asi, las tres etiquetas son las que muestran la \textit{precisión}, \textit{recall} y \textit{f1-score} más altos.
+
+En suma, vemos que el modelo tiene dificultades para asignar las etiquetas a frases que no son comunes y que son dependientes \diego{Mas bien que son independientes del contexto ¿no?} del contexto. Contrario, las que tiene alta \textit{precisión} y \textit{recall} son sistemáticas aunque vemos que la frecuencia no es un factor determinante. Entonces, las variaciones morfológicas y las etiquetas con apariciones no sistémicas propician un bajo rendimiento en el etiquetado.
+
+En la tabla \ref{tab:tags-hmmlike} se muestran la \textit{precisión}, el \textit{recall} y el \textit{f1-score} que dan información detallada de la eficiencia del modelo \textsf{baseline\_HMMLike\_zero} en el etiquetado del último \textit{fold}. 
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{| c | c | c | c | c |}\hline
+        \textbf{Etiqueta} & \textbf{Precisión} & \textbf{Recall} & \textbf{F1-score} & \textbf{Instancias} \\\hline
+        3.imp & 0.33 & 0.33 & 0.33 & 3\\
+        med & 0.4 & 1 & 0.57 & 2\\
+        mod & 0.43 & 0.21 & 0.29 & 14\\
+        dual.exc & 0.5 & 1 & 0.67 & 1\\
+        muy & 0.5 & 0.5 & 0.5 & 4\\
+        1.prf & 0.57 & 0.8 & 0.67 & 5\\
+        2.cnt & 0.6 & 1 & 0.75 & 3\\
+        3.prf & 0.6 & 0.75 & 0.67 & 4\\
+        loc & 0.62 & 0.83 & 0.71 & 6\\
+        3.pls & 0.67 & 1 & 0.8 & 6\\
+        stem & 0.83 & 0.81 & 0.82 & 810\\\hline
+    \end{tabular}
+    \caption{Métricas por etiqueta del modelo \textsf{baseline\_HMMLike\_zero}}
+    \label{tab:tags-hmmlike}
+\end{table}
+
+Etiquetas como \textsc{dual.exc} (`Dual Exclusivo') y \textsc{med} (`Voz media') tienen un \textit{recall} alto pero una \textit{precisión} baja lo que sugiere que el modelo esta teniendo \textit{overfitting}. En particular, la etiqueta \textsc{med} puede verse afectada también porque aparece con variaciones entre `n-' y `m-'. Notamos que en general el bajo desempeño con estas etiquetas puede deberse a la baja frecuencia de instancias. 
+
+Destacamos que la \textit{precisión} de las etiquetas \textsc{stem} (raíz) es $13\%$ menor que la presente en el modelo \textsf{linearCRF\_l2\_zero} a pesar de tener una frecuencia alta con lo que reafirma que el desempeño de los modelos construidos con \textit{CRFs} se ven beneficiados más por la información de la lengua codificada en las \textit{feature functions} que por la frecuencia de las etiquetas.
+
+Finalmente, el desempeño de etiquetado de este modelo es el más bajo. Dado que tenemos un bajo número de instancias de origen podemos concluir que \textsf{baseline\_HMMLike\_zero} es mas dependiente de la frecuencia que de la estructura. Esto tiene sentido dado que la información estructural dada para la construcción del modelo (a través de las \textit{feature functions}) es mínima.
+
+A continuación mostramos ejemplos de frases etiquetadas en los entornos de experimentación \textsf{linearCRF\_l2\_zero} y \textsf{baseline\_HMMLike\_zero}
+
+\subsubsection{Ejemplos de etiquedado del modelo \textsf{linearCRF\_l2\_zero}}
+
+\begin{exe}
+    \ex \gll {b$\mu$} {m-bi-'$\mu$n-gí} {ya} {dó-ráhi-$\iota$-'wi}\\
+    {\textsc{stem}} {\textsc{med-3.icp-stem-1.obj}} {\textsc{stem}} {\textsc{1.cpl-stem}}\\
+    \trans `Cuando me pegaban pues me quitaba' \label{ejemplo:linearcrf-correcto}
+\end{exe}
+
+En el etiquetado \ref{ejemplo:linearcrf-correcto} vemos la aparición de etiquetas sistemáticas como \textsc{stem} y \texsc{3.icp}, por mencionar algunas, por lo que la frase es correctamente etiquetada.
+
+\begin{exe}
+\ex \begin{xlist}
+    \ex \gll {g-i-né}\\
+    {\textbf{\textsc{psd-3.icp}}-\textsc{stem}}\\
+    \trans `*Quería' \label{ejemplo:linearcrf-incorrecto-a}
+    \ex \gll {gi-né}\\
+    {\textsc{2.pot-stem}}\\
+    \trans `Vas a querer'\label{ejemplo:linearcrf-correcto-b}
+    \end{xlist}
+\end{exe}
+
+En el ejemplo \ref{ejemplo:linearcrf-incorrecto-a} se ve como el modelo hace una mala segmentación. Esto puede deberse por un lado a que la etiqueta \textsc{3.icp} es muy frecuente en el corpus y que dado que la etiqueta previa es \textsc{psd} el modelo se inclina por estas etiquetas frecuentes. El patrón \textsc{psd-3.icp} es muy frecuente por lo que el modelo tiende a utilizarlo causando un mal etiquetado. Por otra parte, la combinación correcta de etiquetas (\textsc{2.pot-stem}) es poco frecuente. La versión del etiquetado esperado se puede ver en el ejemplo \ref{ejemplo:linearcrf-correcto-b}
+
+Curiosamente la letra `g' por si misma no coincide con ningún patrón del tiempo pasado pero la letra `i' siguiente si corresponde a un \textsc{3.icp} por lo que el modelo esta haciendo una inferencia regresiva. Como  la letra `i' es \textsc{3.icp} la letra anterior debería ser etiquetada como \textsc{psd}.
+
+Es notorio que en múltiples casos en los que hay morfemas alrededor del verbo el modelo tiende a considerarlos parte del \textsc{stem} en lugar de separarlos. Esto quiere decir que toma morfemas que no deberían ser parte del \textsc{stem}. Tiene sentido en tanto que el \textsc{stem} no tiene una forma determinada (es una clase abierta) y puede tener cualquier combinación de letras. Un ejemplo de esto se puede ver en la glosa \ref{ejemplo:stem-erroneo}.
+
+Las características de las clases abiertas las hacen difíciles de ver por completo en el entrenamiento contrario a las clases cerradas que con clases finitas. Además, notamos que el modelo \textsf{linearCRF\_zero\_l2} se equivoca cuando no hay suficiente contexto, por ejemplo, frases cortas de una sola palabra.
+
+\begin{exe}
+\ex \begin{xlist}
+    \ex \gll {bi-nd$\mu$zú}\\
+    {\textbf{\textsc{3.cpl-stem}}}\\
+    \trans (No traducible con esta segmentación)\label{ejemplo:stem-erroneo}
+    \ex \gll {bi-nd$\mu$-zú}\\
+            {3.icp-muy-stem} \\
+        \trans 'Se asustó'
+    \end{xlist}
+\end{exe}
+
+
+\subsubsection{Ejemplo de frase etiquetada por el modelo \textsf{baseline\_HMMLike\_zero}}
+
+\begin{exe}
+    \ex \gll {bi-\'$\mu$n-gí} {y$\iota$} {mb$\muh$í} {nge} {hín} {dí-má-né} {gwa-porá} {nge} {dí-má-dáhní}\\
+    {\textsc{3.cpl-stem-1.obj}} {\textsc{det.pl}} {\textsc{stem}} {\textsc{stem}} {\textsc{stem}} {\textsc{1.icp-ctrf-stem}} {\textsc{1.icp.irr-stem}} {\textsc{stem}} {\textsc{1.icp-ctrf-stem}}\\
+    \trans `Me pegaron los patrones porque no me quería apurar, porque era flojo'\label{ejemplo:hmmlike-correcto}
+\end{exe}
+
+Ya mencionamos que el desempeño de este modelo, que simula un \textit{HMM}, depende de la frecuencia. El ejemplo \ref{ejemplo:hmmlike-correcto} muestra etiquetas y patrones muy frecuentes como \textsc{cpl} y \textsc{ctrf} que en general son también sistemáticos. A pesar de que el etiquetador pertenece al entorno con menor información y desempeño el etiquetado es correcto. Además, ayuda que, como se observo, los ejemplos largos son mejores para estos modelos de baja información.
+
+\begin{exe}
+    \ex \begin{xlist}
+        \ex \gll {má-ndé} {bi-ni}\\
+        {\textbf{\textsc{ctrf-stem}}} {\textsc{3.cpl-stem}}\\
+        \trans `*La tarde lo tuve' \label{ejemplo:hmmlike-incorrecto-a}
+        \ex \gll {mánde} {bi-ni}\\
+        {\textsc{stem}} {\textsc{3.cpl-stem}}\\
+        \trans `Ayer lo tuve' \label{ejemplo:hmmlike-incorrecto-b}
+        \end{xlist}
+\end{exe}
+
+En el ejemplo \ref{ejemplo:hmmlike-incorrecto-a} vemos como el modelo está sobre ajustado ya que el morfema `ma' está siendo asociado con la etiqueta \textsc{ctrf} dado que esta combinación es muy frecuente. Incluso el morfema `ndé' es un \textsc{stem} existente y válido pero incorrecto en este contexto. Notamos que ocurre el efecto contrario a lo que vimos en el ejemplo \ref{ejemplo:stem-erroneo}. Esto es que ya que ha visto el morfema `ma' separado con tanta frecuencia en este ejemplo también lo separa en lugar de integrarlo en uno solo y etiquetarlo como \textsc{stem}.
+
+Un error característico de este modelo es que esta sobre segmentando y encontrando morfemas que no son correctos. Confunde secuencias con patrones frecuentes y no es raro por que a este modelo se le otorgó mínima información por lo que no esta tomando tanto en cuenta el contexto de las oraciones. Con mas información esto se reduce.
+
+Por último, notamos que en este entorno de experimentación los modelos no aprenden a formar correctamente las estructuras válidas de las \textit{BIO Labels} para generar la glosa. Esto es que la primera etiqueta debe comenzar con una letra \code{`B'} (\textit{Beginning}) seguida opcionalmente de etiquetas que comienzan con la letra \code{`I'} (\textit{Inside}). Mostramos una la salida de etiquetas generadas por el modelo en el ejemplo \ref{ejemplo:estructura-glosa-errona}.
+
+\begin{exe}
+    \ex \gll {i} {b} {i} {t} {h} {ó} {p} {a} {n} {$\iota$} {r} {$\iota$} {c} {h} {á} {i}\\
+    {\textbf{\textsc{I-it}}} {\textsc{B-3.cpl}} {\textsc{I-3.cpl}} {\textbf{\textsc{B-ila}}} {\textbf{\textsc{I-ila}}} {\textbf{\textsc{I-ila}}} {\textsc{B-stem}} {\textsc{I-stem}} {\textbf{\textsc{B-stem}}} {\textbf{\textsc{I-stem}}} {\textsc{B-det}} {\textsc{I-det}} {\textsc{B-stem}} {\textsc{I-stem}} {\textsc{I-stem}}  {\textsc{I-stem}}\\\label{ejemplo:estructura-glosa-errona}
+\end{exe}
+
+Como podemos ver la primera etiqueta comienza con una letra \code{`I'} cuando debería ser una \code{`B'}. En concreto la salida con las \textit{BIO  Labels} bien formadas sería la que se ve en el ejemplo \ref{ejemplo:estructura-glosa-correcta}.
+
+\begin{exe}
+    \ex \gll {i} {b} {i} {t} {h} {ó} {p} {a} {n} {$\iota$} {r} {$\iota$} {c} {h} {á} {i}\\
+    {\textsc{B-stem}} {\textsc{B-3.cpl}} {\textsc{I-3.cpl}} {\textsc{B-stem}} {\textsc{I-stem}} {\textsc{I-stem}} {\textsc{B-stem}} {\textsc{I-stem}} {\textsc{B-det}} {\textsc{I-det}} {\textsc{B-det}} {\textsc{I-det}} {\textsc{I-det}} {\textsc{B-stem}} {\textsc{I-stem}} {\textsc{I-stem}}\\\label{ejemplo:estructura-glosa-correcta}
+\end{exe}
+
+Con las \textit{BIO Labels} que se muestran en el ejemplo \ref{ejemplo:estructura-glosa-correcta} se tendría la glosa que se muestra en el ejemplo \ref{ejemplo:frase-glosada}.
+
+\begin{exe}
+    \ex \gll {i} {bi-thó} {pa} {n$\iota$} {r$\iota$} {chái}\\
+    {\textsc{stem}} {\textsc{3.cpl-stem}} {\textsc{stem}} {\textsc{det}} {\textsc{det}} {\textsc{stem}}\\
+    \trans `TODO'\label{ejemplo:frase-glosada}
+\end{exe}
+
 
 \chapter{Conclusiones}
+
+La información lingüística codificada en las fuature functions es muy importante para mejorar el desempeño del etiquetador
+
+Sin embargo, las etiquetas pos no son restrictivas 
+\Ximena{el hecho de no necesitar las pos es bueno para las lenguas minorizadas pues no siempre hay etiquetadores automáticos para estas lenguas}
+
+Cuando se le quita información al modelo en las \textit{feature functions} la frecuencia de las instancias tiene mayor pero. Por lo tanto, para bajos recursos, donde las frecuencias de las instancias son bajas, es necesario dar un contexto más amplio y agregar información lingüística mas detallada.
+
+\section{Trabajo Futuro}
+
+Poner en un ambiente de transferencia y probar si los modelos que entrene pueden aplicarse a otras variantes de otomí con un zero show learning
 
 \bibliography{tesis}
 	
