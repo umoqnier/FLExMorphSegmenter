@@ -1,5 +1,6 @@
+import csv
 import matplotlib.pyplot as plt
-from utils import WordsToLetter, extractFeatures
+from utils import WordsToLetter, extractFeatures, extractLabels, extractTokens
 
 
 def obtener_palabras(corpora):
@@ -96,7 +97,7 @@ def tokens_to_table(data, limit=0):
     return table
 
 
-def oto_glosser(words_list, tags, pos_tags=[]):
+def oto_glosser(word_list, tags, pos_tags=[]):
     """Funcion que glosa dadas las etiquetas
     
     Esta funcion se encarga de etiquetar una lista de palabras en
@@ -112,7 +113,12 @@ def oto_glosser(words_list, tags, pos_tags=[]):
     for tag, letter in zip(tags, letters):
         if tag.startswith("B"):
             if chunk:
-                glossed_words.append([chunk, current_tag[2:]])
+                try:
+                    glossed_words.append([chunk, current_tag[2:]])
+                except UnboundLocalError:
+                    # TODO: Tratar caso cuando glosa predicha es incorrecta
+                    # EJ. Inicia con I-tag y no con B-tag
+                    return ["ERROR"]
             if len(word_list[i]) == word_len:                
                 # Adding POS tag
                 #TODO: Adecuarla para que reciba una lista de etiquetas POS
@@ -138,3 +144,34 @@ def oto_glosser(words_list, tags, pos_tags=[]):
                 glossed_words.append(pos_tags[i][-1])
                 glossed_phrase.append(glossed_words)
     return glossed_phrase
+
+
+def words_report(data, letter_corpus, feature_functions_maker, tagger, num_examples=5):
+    data = sorted(data, key=lambda t: t[3])
+    top = data[:num_examples]
+    for i, info in enumerate(top):
+        # TODO: Imprimir texto glosado
+        print("-"*50)
+        index = info[2]
+        palabras = info[0]
+        example = letter_corpus[index]
+        features = feature_functions_maker(example)
+        prediction_tags = tagger.tag(features)
+        real_tags = extractLabels(example, 1)
+        print(f"Ejemplo {i+1} de {num_examples} | Frase: \"{' '.join(palabras)}\" | Accuracy: {info[3]}")
+        print("Letra | Predicción | Real | eq?")
+        for prediction, real, letter in zip(prediction_tags, real_tags, extractTokens(example)):
+            print(f"{letter} | {prediction} | {real} | {True if prediction == real else False}")
+
+            
+def gloss_to_csv(phrases, corpus, file_name):
+    path = f'ejemplos-csv/{file_name}.csv'
+    with open(path, "w") as csvfile:
+        header = ["frase", "glosa predicha", "glosa real", "eq?",
+                  'accuracy-score']
+        writer = csv.writer(csvfile)
+        writer.writerow(header)
+        for phrase in phrases:
+            writer.writerow([" ".join(phrase[0]), str(phrase[1]),
+                             corpus[phrase[2]], phrase[1] == corpus[phrase[2]],
+                             phrase[3]])
