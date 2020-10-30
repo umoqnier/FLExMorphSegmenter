@@ -46,6 +46,7 @@
 \graphicspath{{./img/}}
 
 \begin{document}
+
 \bibliographystyle{acl_natbib}  % Cargando estilo de bibliografia
 
 \author{Diego Alberto Barriga Martínez}
@@ -96,36 +97,120 @@ Diseñar e implementar un etiquetador morfológico para el otomí basado en téc
 
 Se espera obtener un modelo que produzca glosa para el otomí, generada automáticamente, con base en el entrenamiento con pocos ejemplos previamente etiquetados. Al obtener una buena exactitud en la predicción automática de glosa se apoyaría a los anotadores humanos a reducir trabajo repetitivo y exhaustivo. Además, se espera obtener avances de una metodología adaptable a un mayor número de lenguas mexicanas. Sería deseable que esta metodología experimental pueda ser replícale en otras lenguas habladas en México.
 
-\chapter{Avances en etiquetadores automáticos}
+% Marco teórico
+\chapter{Avances en etiquetadores automáticos}\label{sec:marco}
 
 % Mencionar los bajos recursos
 
-\section{Marco teórico}\label{sec:marco}
+En este capítulo se trataran conceptos fundamentales del \textit{Natural Language Processing (NLP)}, haciendo énfasis en los etiquetadores, y conceptos del \textit{ Machine Learning (ML)} con enfoque en los métodos de aprendizaje basados en gráficas. Para las últimas sub-secciones se abordará elementos de los \textit{CRFs} que serán de utilidad para la comprensión de la arquitectura propuesta en este trabajo.
 
 % Se tiene que explicar los conceptos de low resouces 
-
-% Etiquetadores a diferentes niveles lingüísticos
-% Etiquetadores a nivel morfológico
 % modelos gráficos
-% Que es un etiquetador
-% Bio Labels
-% Que es la morfología 
-% que es la glosa
+
 % Low resources
 % Algoritmo L&BFGS
     % L1/L2
 
-% NLP
 \subsection{Natural Language Processing (NLP)}
-% Introduccion
 
-\subsection{Etiquetadores}
+% Introduccion
+Dentro de las ciencias de la computación existe una subrama llamada Inteligencia Artificial (IA). Para este trabajo podemos decir que la IA\footnote{Es preciso señalar que la definición de los objetivos y alcances de la IA es un tema del que aún no hay consenso dada la amplitud del área, la ambigüedad de conceptos como inteligencia y los diversos enfoques existentes como los centrados en el comportamiento o en el pensamiento.} se enfoca en la construcción de sistemas o agentes que perciben su entorno, operan de forma autónoma, se adaptan al cambio y crean o persiguen objetivos para obtener el mejor resultado, y cuando hay incertidumbre, el mejor resultado esperado \citep{russell2010artificial}.
+
+% Introducir elementos del llengguaje ¿Lengguaje Humano?
+% Definición del NLP
+Dentro de la IA existe una disciplina llamada \textit{NLP} que busca hacer que las computadoras puedan entender el lenguaje natural en sus distintos niveles lingüísticos \diego{CITAR a VIC} \footnote{1. fonético y fonológico, 2. morfológico, 3. morfosintáctico, 4. sintáctico, 5. semántico}. En ese sentido, dependiendo de la aplicación o tarea a resolver las técnicas de NLP se enfocan en uno o varios niveles lingüísticos. Puede ser desde contar las palabras de un texto hasta hacer análisis de sentimientos donde se requiere que la computadora tenga un entendimiento semántico del lenguaje.
+
+% Las citas
+En otras palabras, el \textit{NLP} se encarga del procesamiento de los fenómenos del lenguaje natural a través del tratamiento y análisis de textos o voz permitiendo que las computadoras realicen tareas que involucren elementos propios del lenguaje natural \citep{jurafsky2008speech}.
+
+% Enfatizar la multidisciplina
+Entonces, el reto es que una computadora logre llevar a cabo tareas que impliquen hacer frente a fenómenos del lenguaje humano. Como el lenguaje es complejo, hacerle frente requiere la intervención de múltiples disciplinas lo que hacen al \textit{NLP} un área multidisciplinaria. Ciencias de la computación, psicología, ingeniería, matemáticas, filosofía, ciencias cognitivas y lingüística, por mencionar algunas, son áreas del conocimiento relevantes. 
+
+% Hacer énfasis en cuestiones lingüísticas.
+\diego{Agregar la interdiciplina del NLP: convergencia con otras áreas e incluir la linguistica}
+La lingüística en combinación con las ciencias de la computación cobran un papel importante para el \textit{NLP} ya que de estas dos surge la \textbf{lingüística computacional}. Esta subrama combina los quehaceres de la lingüística con métodos y recursos computacionales ampliando las capacidades para el manejo de grandes cantidades de información que produce el lenguaje natural y que, en mayor o menor medida, están disponibles en la web. En la figura \ref{fig:compu_linguistics} se observa a la lingüística computacional como intersección de otras sub-áreas de la lingüística.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[scale=0.5]{computational_linguistics}
+	\caption{Estructura de la ciencia lingüística \citep{bolshakov2004computational}}
+	\label{fig:compu_linguistics}
+\end{figure}
+
+Las tareas del \textit{NLP} implican que una computadora capture el conocimiento lingüístico utilizando modelos formales como máquinas de estados, modelos basados en reglas, sistemas apoyados de lógica formal y modelos probabilísticos. Con la utilización de estos modelos la computadora aborda fenómenos problemáticos del lenguaje como la ambigüedad por poner un ejemplo.
+
+% Brevísima revisión histórica
+Uno de lo trabajos fundacionales pueden atribuirse a \citet{chomsky1956three}, dónde considera por primera vez a los autómatas finitos como una forma de caracterizar una gramática, y define un lenguaje finito como un lenguaje generado por una gramática finita (finite-state grammar). Estos primeros avances y los de otros fueron enfocados en la generación manual de reglas lingüísticas que intentaban modelar el lenguaje humano.
+
+% Difeerencias entre el planteamiento de canal ruidos y un encoder decoder de ML
+% LA cantidad de datos es MUY distinta
+Por otra parte, un segundo enfoque fue desarrollándose de forma paralela donde se considera el desarrollo de algoritmos probabilísticos para el procesamiento del lenguaje y el habla basados en la teoría de la información propuesta por \citet{shannon1948mathematical}. En estos modelos se recogen conceptos como canal ruidoso y decodificación para la transmisión del lenguaje a través de un medio. Se introduce el concepto de entropía como forma de medir la capacidad de un canal para transmitir información, o la información contenida por un lenguaje \citep{jurafsky2008speech}.
+
+Recientemente el NLP ha tendido fuertemente hacia los métodos probabilísticos que se apoyan de técnicas y métodos de \textit{ML} en gran medida potenciados por la explosiva cantidad de información disponible en la web y al incremento exponencial del poder computacional. Más adelante se abundará más sobre el \textit{ML}.
+
+% Mencionar los diferentes modulos o tareas que abarcan la diciplina. 
+En el \textit{NLP} hay algunas tareas comunes como la traducción automática, síntesis y reconocimiento automático de voz, clasificación de documentos y etiquetado automático de textos. El etiquetado automático es la tarea en la que se centra este trabajo. 
+
+% Etiquetadores a nivel morfológico
+La tarea de etiquetar consiste en asignar etiquetas o categorías a las partes de un texto, sean estas palabras, partes de palabras o frases completas. Estas etiquetas brindan información lingüística a los elementos del texto y son de utilidad par comprensión de las estructuras lingüísticas. En concreto, en este trabajo se realizará el etiquetado automático de textos en otomí a nivel morfológico. Más adelante se dedicará una sección para el análisis de esta tarea.
+
+% Cierre con aplicaciones actuales
+A pesar del gran reto que representa que una computadora logre un ``entendimiento'' aceptable del lenguaje y sus fenómenos los avances de esta disciplina pueden verse en múltiples aplicaciones tales como traductores automáticos\footnote{https://deepl.com/}, reconocedores de voz\footnote{https://github.com/mozilla/DeepSpeech/} y buscadores\footnote{https://duckduckgo.com/} por mencionar algunos. Es preciso señalar que entenderemos al lenguaje natural como aquel que se manifiesta a través de sonidos producidos por los humanos o en textos escritos y que forman palabras, oraciones o discursos.
 
 % Machine learning
 \subsection{Machine Learning (ML)}
 
-\subsection{Modelos gráficos}
+\diego{Reformular all}
 
+% Sirve cuando no es posible tener explicitamente el algoritmo o pasos para resolver una tarea
+% Por ejemplo, si quisiéramos un detector de spam...
+% La generalizacion es el problema y las reglas no son suficientes
+% Busca emular el aprendizaje: Abarcar las partes cognitivas no de forma profunda
+
+
+El \textit{Machine Learning (ML)} es otra de las subrama de la IA. Consiste en un conjunto de métodos con los que se busca que una computadora automatice tareas a partir de la observación de datos o de la interacción con el ambiente.  Estas tareas tienen la peculiaridad de no tener una solución o forma de automatización bien definida dada su complejidad. Para solucionar alguna de estas tareas de forma satisfactoria se construyen modelos que mejoran una medida de desempeño aprendiendo desde cierta experiencia (datos o ambiente).
+
+Para la construcción de dichos modelos se utiliza un meta-programa que es conocido como \textbf{algoritmo de aprendizaje}. Estos algoritmos modifican una serie de parámetros que modelarán el comportamiento del programa resultado. Una vez que se tengan ciertos parámetros fijos obtendremos un \textbf{modelo de aprendizaje}. Esta serie de programas que resultan de la manipulación de parámetros es llamado familia de modelos \citep{zhang2020dive}.
+
+Determinar que método de aprendizaje es el adecuado para ciertas tareas dependerá en gran medida de la naturaleza del problema definida por el conjunto de datos (\textit{dataset}) que entraran al método (\textit{inputs}) y los resultados que se esperan obtener a la salida (\textit{outputs}). 
+
+Una característica importante del \textit{dataset} es el tamaño. Comúnmente entre más grande es el \textit{dataset} mejores son los resultados del algoritmo. Pero se tiene que tener una muestra representativa que permita generalizar adecuadamente. En general, se busca transformar los datos de entrada en una representación numérica para que sean más manejables para la computadora. \diego{Mencionar el mapeo de la realidad a los numeros. ¿Porque se usa esta representacion?} Esta representación numérica es llamada vector de características.
+
+% Haer un diagrama del modelo de aprendizaje
+% Funcion de evaluacion: Dice que tanto generaliza la maquina
+% Funcion objetivo: Funcion que minimizamos o maximizamos. Ayuda a estimar los pesos de la red o a estimar el arbol
+
+Para poder medir si hubo alguna mejora en el desempeño se utiliza una notación matemática formal llamada \textbf{funciones objetivo}. Estas funciones se encargan de decir que tan bueno o malo es el modelo en turno resolviendo una tarea.
+
+% Hablar de train y test
+
+% Tipos de ML
+Ya que existe una gran diversidad de tareas surgen varios enfoques dentro del \textit{ML} con los que algunas de estas tareas serán más sencillas de resolver que otras. Primero, esta el \textit{Supervised Learning} dónde se busca predecir etiquetas, generalmente expresadas como $y$, dado un vector de características de entrada, generalmente expresado como $x$. Work in progress...
+
+% 1. Supervisado (enfocarme mas en esto)
+
+% 2. No supervisado
+% 3. Reinforcement
+
+
+\subsection{Etiquetadores}
+
+% etiquetadores a diferentes niveles lingüísticos
+% Teoría de etiquetado
+% Seq2seq
+% Que es la morfología 
+% que es la glosa
+% Que es un etiquetador
+% Tipos de etiquetados
+% Bio Labels
+% Centrarnos en el glosado automatico
+% =Que es el etiquetado de glosa? (Menos tecnico)
+% Perspectiva general y divulgativa con la glosa
+% Glosa automatica
+
+\subsection{Modelos gráficos}
+% Aqui va lo mas pesado
+% profundizar en los CRFs
 % Los límites de los modelos gráficos para bajos recursos
 
 % Cierre de los modelos gráficos y comenzar a hablar de CRF
@@ -133,9 +218,9 @@ Se espera obtener un modelo que produzca glosa para el otomí, generada automát
 
 \subsubsection{Los límites de los modelos gráficos en para bajos recursos}
 
-En este capítulo se explicará qué ventajas tienen los \emph{Conditional Random Fields (CRF)} sobre otros modelos de aprendizaje, se mencionan formalmente los elementos fundamentales que describen los \emph{CRF's}.
+%A continuación se explicará qué ventajas tienen los \emph{Conditional Random Fields (CRF)} sobre otros modelos de aprendizaje, se mencionan formalmente los elementos fundamentales que describen los \emph{CRF's}.
 
-En lingüística computacional una tarea de interés es el procesamiento estadístico del lenguaje natural, en particular, el etiquetado y segmentación de secuencias de datos. En ese sentido, es habitual la utilización de \textbf{modelos generativos}, cómo los \textit{Hidden Markov Models (HMMs)}, o \textbf{modelos condicionales}, como los \textit{Maximum Entropy Markov Models (MEMMs)}.
+En \textit{NLP} una tarea de interés es el etiquetado y segmentación de secuencias de datos. Para llevar a cabo esta tarea es habitual la utilización de \textbf{modelos generativos}, cómo los \textit{Hidden Markov Models (HMMs)}, o \textbf{modelos condicionales}, como los \textit{Maximum Entropy Markov Models (MEMMs)}.
 
 Por una parte, los modelos generativos intentan modelar una probabilidad conjunta $P(x,y)$ sobre observaciones y etiquetas. Para definir esta probabilidad conjunta se necesita enumerar todas las observaciones posibles. Las limitantes de este enfoque son de diversas índoles como las grandes dimensionalidades en el vector de entrada $X$, la dificultad de representar múltiples características que interactúan unas con otras y dependencias complejas que hacen la construcción de la distribución de probabilidad un problema intratable con un enfoque computacional.
 
@@ -163,10 +248,9 @@ Formalmente \citet{lafferty2001conditional} definen los \textit{CRFs} como a con
 
 En esta tesis, para el modelado de secuencias, se utiliza la forma más sencilla de la gráfica $G$ dónde es una cadena simple o línea. Esto quiere decir que $G = (V = \{1,2,...m\}, E = \{(i,i+1)\})$. A este tipo de \textit{CRFs} se les conoce como \textit{linear-chain CRFs}. Como menciona \citet{lafferty2001conditional} "si la gráfica $G = (V,E)$ de $\mathbf{Y}$ es un árbol (del cual una cadena es el ejemplo más sencillo), los \textit{cliques} son los límites y vertices. Entonces, por el teorema de los \textit{random fields} \citep{hammersley1971markov}, la distribución conjunta sobre las etiquetas de secuencias $\mathbf{Y}$ y $\mathbf{X}$ tiene la forma:
 
-% TODO: Poner tag
-% TODO: Explicar esta ecuacion sobre que es son las lambdas, porque hay dos sumandos, porque el símbolo de proporcionalidad, 
+% TODO: Explicar esta ecuacion sobre que es son las lambdas, porque hay dos sumandos, porque el símbolo de proporcionalidad. Entre \proto y \bigg habia un \exp que hacia que se rompiera la ecuacion
 \begin{equation}
-    p{_{\theta}}(y|x) \propto \exp \bigg( \sum\limits_{e \in \mathbf{E},k} \lambda_{k}f_{k}(e,\mathbf{y}|_{e},\mathbf{x}) + \sum\limits_{v \in \mathbf{V},k}\mu_{k}g_{k}(v,\mathbf{y}|_{v},\mathbf{x}) \bigg)
+    p{_{\theta}}(y|x) \propto \bigg( \sum\limits_{e \in \mathbf{E},k} \lambda_{k}f_{k}(e,\mathbf{y}|_{e},\mathbf{x}) + \sum\limits_{v \in \mathbf{V},k}\mu_{k}g_{k}(v,\mathbf{y}|_{v},\mathbf{x}) \bigg)
 \end{equation}
 
 % TODO: Mencionar la ecucacion
@@ -176,6 +260,9 @@ De la ecuación  se destacan $f_{k}$ y $g_{k}$ que representan las \textit{featu
 
 
 \section{Estado del arte}
+
+% Por revisar
+%Un ejemplo de desarrollo de modelos para lenguas de bajo recursos es el trabajo de Moeller y Hulden (2018) donde se realizó un glosador automático con alrededor de 3,000 palabras para la lengua naj-daguestaní llamada Lezgi. Otro trabajo relacionado es el de Anastasopoulos et al. (2018) donde se exploran métodos computacionales para anotar una lengua en peligro de extinción llamada Griko con etiquetas POS.
 
 Los \textit{CRFs} han sido utilizados para la clasificación de regiones en una imagen, estimar el puntaje en un juego de Go, segmentar genes en una hebra de ADN y análisis sintáctico de lenguaje natural en un texto por mencionar algunas \citep{sutton2012introduction}.
 
@@ -195,7 +282,7 @@ se obtendrá texto correctamente glosado con una precisión de al menos 80\%.
 % Metoodologia 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Etiquetador morfológico para el otomí (Metodología)} \label{chap:metodology}
+\chapter{Etiquetador morfológico para el otomí} \label{chap:metodology}
 
 El objetivo de este capítulo es la presentación de la metodología utilizada en esta tesis. La metodología está constituida por un corpus etiquetado, del cual se incluye una descripción detallada, y la arquitectura para la generación de glosa para el idioma otomí. La arquitectura incluye, entre otras cosas, la codificación y preprocesamiento del corpus, el diseño e implementación del los \textit{CRFs} y la determinación de las \textit{feature functions}.
 
@@ -299,7 +386,7 @@ Por otra parte, presentamos una descripción de las etiquetas \textit{POS} en la
 
 Para las etiquetas de Glosa nos basamos en las reglas de \citet{comrie2008leipzig} desarrolladas por el departamento de lingüística del Instituto Max Planck y el Departamento de lingüística de la Universidad de Leipzig. El estándar consiste en diez reglas para la sintaxis y la semántica de glosas interlineales. y un apéndice con un lexicón propuesto de etiquetas de categorías abreviadas \citep{comrie2008leipzig}. Si bien las reglas cubren parte de las necesidades lingüísticas en el glosado de textos, también, son flexibles y se pueden agregar o modificar las convenciones dependiendo de las necesidades.
 
-Los tipos de etiquetas de glosa presentes en el corpus se encuentran en la tabla \ref{table:gloss_types}. En algunos casos aparecen números al inicio de etiquetas que significan las personas gramaticales. Existen combinaciones de varias etiquetas que son separadas por puntos. Por ejemplo, \textsf{pl.exc} es una combinación de las etiquetas ''plural'' y ''exclusivo''.
+Los tipos de etiquetas de glosa presentes en el corpus se encuentran en la tabla \ref{table:gloss_types}. En algunos casos aparecen números al inicio de etiquetas que significan las personas gramaticales. Existen combinaciones de varias etiquetas que son separadas por puntos. Por ejemplo, \textsc{pl.exc} es una combinación de las etiquetas ``plural'' y ``exclusivo''.
 
 \begin{table}
 	\centering
@@ -404,7 +491,7 @@ Esta escasez en el corpus es consecuencia de que el idioma otomí es una lengua 
 	\label{table_pos_gloss_tokens}
 \end{table}
 
-Sin embargo, existen métodos que buscan solucionar el problema de los bajos recursos digitales. Los trabajos de \citet{moeller2018automatic} y \citet{anastasopoulos2018part} muestran como métodos de aprendizaje estructurado, en particular los \textit{CRFs}, tienen buen desempeño en estas condiciones experimentales.
+Sin embargo, existen métodos que buscan solucionar el problema de los bajos recursos digitales. Los trabajos de \citet{moeller2018automatic} y \citet{anastasopoulos2018partofspeech}, en particular los \textit{CRFs}, tienen buen desempeño en estas condiciones experimentales.
 
 Esto puede deberse a que los \textit{CRFs}, a diferencia de otros modelos gráficos, toman las virtudes de los modelos generativos y de los modelos condicionales evitando, a su vez, el problema del \textit{bias} que \citet{lafferty2001conditional} define como ``el momento en el cual las transiciones que salen de un estado sólo compiten entre sí, y no con todas las demás transiciones''.
 
@@ -524,7 +611,6 @@ La extracción de estas características es importante porque capturar fenómeno
     \textsf{prev<n>letters} toma las $n$ letras previas y \textsf{nxt<n>letters} toma las $n$ letras siguientes, si existen en ambos casos. La variable $n$ determina el nombre de la \textit{feature} que indica el tamaño de la ventana a partir de la letra que se esta viendo en ese momento y va desde el número uno, caso dónde no se incluye número en el nombre, hasta el número cuatro. Por ejemplo, \textsf{prev4letters} toma las cuatro letras previas y \textsf{nxtletter} toma la letra siguiente.
 
 \end{description}
-
 
 Las características mencionadas son información relevante para poder construir un modelo más preciso dadas las estructuras de la lengua. Dichas características pueden o no estar presentes dependiendo de la letra que se esté viendo en ese momento. Por ejemplo, si es la primer letra de una palabra la que se observa no estarán presentes las características \textsf{prevletter}, \textsf{prev2letters} o \textsf{EOW} por mencionar algunas. Características como \textsf{letterLowercase} o \textsf{bias} siempre estuvieron presentes.
 
@@ -813,7 +899,7 @@ A continuación mostramos ejemplos de frases etiquetadas en los entornos de expe
     \trans `Cuando me pegaban pues me quitaba' \label{ejemplo:linearcrf-correcto}
 \end{exe}
 
-En el etiquetado \ref{ejemplo:linearcrf-correcto} vemos la aparición de etiquetas sistemáticas como \textsc{stem} y \texsc{3.icp}, por mencionar algunas, por lo que la frase es correctamente etiquetada.
+En el etiquetado \ref{ejemplo:linearcrf-correcto} vemos la aparición de etiquetas sistemáticas como \textsc{stem} y \textsc{3.icp}, por mencionar algunas, por lo que la frase es correctamente etiquetada.
 
 \begin{exe}
 \ex \begin{xlist}
@@ -848,11 +934,13 @@ Las características de las clases abiertas las hacen difíciles de ver por comp
 
 \subsubsection{Ejemplo de frase etiquetada por el modelo \textsf{baseline\_HMMLike\_zero}}
 
-\begin{exe}
-    \ex \gll {bi-\'$\mu$n-gí} {y$\iota$} {mb$\muh$í} {nge} {hín} {dí-má-né} {gwa-porá} {nge} {dí-má-dáhní}\\
+\begin{exe} 
+    \ex 
+    \gll {bi-\'$\mu$n-gí} {y$\iota$} {mb$\muh$í} {nge} {hín} {dí-má-né} {gwa-porá} {nge} {dí-má-dáhní}\\
     {\textsc{3.cpl-stem-1.obj}} {\textsc{det.pl}} {\textsc{stem}} {\textsc{stem}} {\textsc{stem}} {\textsc{1.icp-ctrf-stem}} {\textsc{1.icp.irr-stem}} {\textsc{stem}} {\textsc{1.icp-ctrf-stem}}\\
-    \trans `Me pegaron los patrones porque no me quería apurar, porque era flojo'\label{ejemplo:hmmlike-correcto}
-\end{exe}
+    \trans `Me pegaron los patrones porque no me quería apurar, porque era flojo'
+    \label{ejemplo:hmmlike-correcto}
+\end{exe} 
 
 Ya mencionamos que el desempeño de este modelo, que simula un \textit{HMM}, depende de la frecuencia. El ejemplo \ref{ejemplo:hmmlike-correcto} muestra etiquetas y patrones muy frecuentes como \textsc{cpl} y \textsc{ctrf} que en general son también sistemáticos. A pesar de que el etiquetador pertenece al entorno con menor información y desempeño el etiquetado es correcto. Además, ayuda que, como se observo, los ejemplos largos son mejores para estos modelos de baja información.
 
@@ -890,8 +978,10 @@ Con las \textit{BIO Labels} que se muestran en el ejemplo \ref{ejemplo:estructur
 \begin{exe}
     \ex \gll {i} {bi-thó} {pa} {n$\iota$} {r$\iota$} {chái}\\
     {\textsc{stem}} {\textsc{3.cpl-stem}} {\textsc{stem}} {\textsc{det}} {\textsc{det}} {\textsc{stem}}\\
-    \trans `TODO'\label{ejemplo:frase-glosada}
+    \trans `Y paso por una zanaja'\label{ejemplo:frase-glosada}
 \end{exe}
+
+\Diego{Hacer una recapitulacion del ejemplo donde se equivoca para dar cierre}
 
 
 \chapter{Conclusiones}
@@ -907,6 +997,6 @@ Cuando se le quita información al modelo en las \textit{feature functions} la f
 
 Poner en un ambiente de transferencia y probar si los modelos que entrene pueden aplicarse a otras variantes de otomí con un zero show learning
 
-\bibliography{tesis}
+\bibliography{barriga_tesis}
 	
 \end{document}
