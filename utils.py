@@ -1,6 +1,7 @@
 import os
 import time
 import pycrfsuite
+import pickle
 from collections import Counter
 from itertools import chain
 from sklearn.metrics import classification_report
@@ -652,3 +653,20 @@ def write_report(model_name, train_size, test_size, accuracy, train_time,
     line += hyper['description'] + "\n"
     with open('results.csv', 'a') as f:
         f.write(line)
+
+
+def write_preinput_data():
+    path = "pickel_objects/"
+    corpus_mod = get_corpus('corpus_otomi_mod')
+    with open(path + "corpus_mod", "wb") as f:
+        pickle.dump(corpus_mod, f)
+    corpus_hard = get_corpus('corpus_hard')
+    with open(path + "corpus_hard", "wb") as f:
+        pickle.dump(corpus_hard, f)
+    corpora = corpus_mod + corpus_hard
+    with open(path + "corpora", "wb") as f:
+        pickle.dump(corpora, f)
+    data = WordsToLetter(corpora)
+    with open(path + "input_data", "wb") as f:
+        pickle.dump(data, f)
+    return 0
