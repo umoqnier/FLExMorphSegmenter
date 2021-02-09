@@ -26,14 +26,13 @@ def get_corpus(file_name, path='corpora/'):
     :return: Lista donde cada elemento es un renglon el corpus
     :rtype: list
     """
+    corpus_path = os.path.join(path, file_name)
+    with open(corpus_path, encoding='utf-8', mode='r') as f:
+        plain_text = f.read()
     if 'mod' in file_name:
-        with open(path + file_name, encoding='utf-8', mode='r') as f:
-            plain_text = f.read()
         raw_data = plain_text.split('\n')
         return [eval(row) for row in raw_data if row]
     elif 'hard' in file_name:
-        with open(path + file_name, encoding='utf-8', mode='r') as f:
-            plain_text = f.read()
         data = eval(plain_text)
         for frase in data:
             for i, chunk in enumerate(frase):
@@ -73,7 +72,7 @@ def get_train_test(data, test_size, datatest, corpora_path):
     return train_data, test_data
 
 
-def param_setter(hyper, model_name, test_size, iterations, l1, l2, evaluation):
+def param_setter(hyper, model_name, iterations, l1, l2):
     """ Setea parametros del CLI en diccionario
 
     Si existen parametros del CLI los setea en el diccionario hyper que es
@@ -83,36 +82,28 @@ def param_setter(hyper, model_name, test_size, iterations, l1, l2, evaluation):
     :type: dict
     :param model_name: nombre del modelo de entrenamiento
     :type: str
-    :param test_size: porcentaje del conjunto de pruebas
-    :type: float
     :param iterations: Número de iteraciones maximas para entrenamiento
     :type: int
     :param l1: Parametro de penalización Elasticnet L1
     :type: float
     :param l2: Parámetro de penalización Elasticnet L2
     :type: float
-    :param evaluation: Método de evaluación
-    :type: str
     :return: Diccionario hyper modificado si existen parámetros en CLI
     :rtype: dict
     """
     if model_name:
         hyper['name'] = model_name
-    if test_size:
-        hyper['test-split'] = test_size
     if iterations:
         hyper['iterarions'] = iterations
     if l1:
         hyper['L1'] = l1
     if l2:
         hyper['L2'] = l2
-    if evaluation:
-        hyper['evaluation'] = evaluation
     return hyper
 
 
-def model_trainer(train_data, models_path, hyper, verbose, k=0):
-    """ Entrena un modelo y lo guarda
+def model_trainer(train_data, models_path, hyper, verbose, k):
+    """ Entrena un modelo y lo guarda en disco
 
     Función encargada de entrenar un modelo con base en los hyperparametro y
     lo guarda como un archivo utilizable por `pycrfsuite`
@@ -123,7 +114,7 @@ def model_trainer(train_data, models_path, hyper, verbose, k=0):
     models_path : str
     hyper : dict
     verbose : bool
-    k : int, optional
+    k : int
 
     Returns
     -------
@@ -149,26 +140,34 @@ def model_trainer(train_data, models_path, hyper, verbose, k=0):
             'c2': hyper['L2'],  # coefficient for L2 penalty
             'max_iterations': hyper['max-iter']  # early stopping
         })
-    if k:
-        compositive_name = f"{hyper['name']}_{hyper['max-iter']}_{hyper['L1']}_{hyper['L2']}_k_{k}.crfsuite"
+    # Setting model name
+    model_name = f"{hyper['name']}_"
+    if hyper['L1'] == 0 and hyper['L2'] == 0:
+        model_name += f"noreg_"
+    elif hyper['L1'] == 0:
+        model_name += f"l1_zero_"
+    elif hyper['L2'] == 0:
+        model_name += f"l2_zero_"
     else:
-        compositive_name = f"{hyper['name']}_{hyper['max-iter']}_{hyper['L1']}_{hyper['L2']}.crfsuite"
+        model_name += "regularized_"
+    model_name += f"k_{k}.crfsuite"
     # The program saves the trained model to a file:
-    if not os.path.isfile(models_path + compositive_name):
-        print(f"Entrenando nuevo modelo '{compositive_name}'")
+    path = models_path + hyper["name"] + f"/{model_name}"
+    if not os.path.isfile(path):
+        print(f"Entrenando nuevo modelo '{model_name}'")
         start = time.time()
-        trainer.train(models_path + compositive_name)
+        trainer.train(path)
         end = time.time()
         train_time = end - start
         print("Fin de entrenamiento. Tiempo de entrenamiento >>", train_time,
               "[s]", train_time / 60, "[m]")
     else:
         train_time = 0
-        print("Usando modelo pre-entrenado >>", models_path + compositive_name)
-    return train_time, compositive_name
+        print("Usando modelo pre-entrenado >>", path)
+    return train_time, model_name
 
 
-def model_tester(test_data, models_path, model_name, verbose):
+def model_tester(test_data, models_path, hyper, model_name, verbose):
     """ Prueba un modelo preentrenado
 
     Recibe los datos de prueba y realiza las pruebas con el modelo previo
@@ -194,7 +193,8 @@ def model_tester(test_data, models_path, model_name, verbose):
 
     # ### Make Predictions
     tagger = pycrfsuite.Tagger()
-    tagger.open(models_path + model_name)  # Passing model to tagger
+    tag_path = os.path.join(models_path, hyper["name"], model_name)
+    tagger.open(tag_path)  # Passing model to tagger
 
     # First, let's use the trained model to make predications for just one
     # example sentence from the test data.
@@ -359,7 +359,6 @@ def extractFeatures(sent):
 
     featurelist = []
     senlen = len(sent)
-    # TODO: Optimizar los parametros hardcode para el otomí.
     # each word in a sentence
     for i in range(senlen):
         word = sent[i]
@@ -632,41 +631,18 @@ def write_report(model_name, train_size, test_size, accuracy, train_time,
     """Escribe el reporte con resultados e hiperparametros
 
     """
+    # Header
     line = ''
-    if hyper['k']:
-        hyper['dataset-test'] = 'N/A'
-        hyper['test-split'] = 'N/A'
-        hyper['dataset-train'] += "+corpus_hard"
     line += model_name + ','
-    line += hyper['dataset-train'] + ','
-    line += hyper['dataset-test'] + ','
-    line += str(hyper['test-split']) + ','
-    line += str(train_size) + ','
-    line += str(test_size) + ','
+    line += str(round(accuracy, 4)) + ','
     line += train_time + ','
-    line += str(hyper['max-iter']) + ','
     line += str(hyper['L1']) + ','
     line += str(hyper['L2']) + ','
-    line += str(round(accuracy, 4)) + ','
-    line += hyper['evaluation'] + ','
-    line += str(hyper['k']) + ','
+    line += hyper['dataset'] + ','
+    line += str(train_size) + ','
+    line += str(test_size) + ','
+    line += str(hyper['max-iter']) + ','
+    line += str(hyper['k-folds']) + ','
     line += hyper['description'] + "\n"
     with open('results.csv', 'a') as f:
         f.write(line)
-
-
-def write_preinput_data():
-    path = "pickel_objects/"
-    corpus_mod = get_corpus('corpus_otomi_mod')
-    with open(path + "corpus_mod", "wb") as f:
-        pickle.dump(corpus_mod, f)
-    corpus_hard = get_corpus('corpus_hard')
-    with open(path + "corpus_hard", "wb") as f:
-        pickle.dump(corpus_hard, f)
-    corpora = corpus_mod + corpus_hard
-    with open(path + "corpora", "wb") as f:
-        pickle.dump(corpora, f)
-    data = WordsToLetter(corpora)
-    with open(path + "input_data", "wb") as f:
-        pickle.dump(data, f)
-    return 0
