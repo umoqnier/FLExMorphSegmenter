@@ -1,12 +1,13 @@
-model_name,accuracy,L1,L2,train-size,test-size,time,iterations,dataset-train,evaluation,k,description,dataset-test,test-split
-linearCRF_featured_50_0.1_0.001_k_10.crfsuite,0.9509,0.1,0.001,1608,178,42.91[m],50,corpus_otomi_mod+corpus_hard,k_fold,10,CRFs con parametros de regularización L1+L2. Kfold K=10 y maximo de iteraciones en 50. Todas las features functions activas.,N/A,N/A
-linearCRF_l1_zero_50_0_0.001_k_10.crfsuite,0.948,0,0.001,1608,178,41.03[m],50,corpus_otomi_mod+corpus_hard,k_fold,10,CRFs con parametros de regularización L1+L2. Kfold K=10 y maximo de iteraciones en 50. Todas las features functions activas.,N/A,N/A
-linearCRF_l2_zero_50_0.1_0_k_10.crfsuite,0.9516,0.1,0,1608,178,41.86[m],50,corpus_otomi_mod+corpus_hard,k_fold,10,CRFs sin L2. Kfold K=10 y maximo de iteraciones en 50. Todas las features functions activas.,N/A,N/A
-linearCRF_l1_l2_zero_50_0_0_k_10.crfsuite,0.9499,0,0,1608,178,39.46[m],50,corpus_otomi_mod+corpus_hard,k_fold,10,CRFs sin parametros de regularización L1+L2. Kfold K=10 y maximo de iteraciones en 50. Todas las features functions activas.,N/A,N/A
-baseline_HMMLike_zero_50_0_0_k_10.crfsuite,0.8762,0,0,1608,178,40.44[m],50,corpus_otomi_mod+corpus_hard,k_fold,10,Baseline sin parametros de regularización L1-L2. K=10 y maximo de iteraciones en 50,N/A,N/A
-HMMLike_regularization_50_0.1_0.001_k_10.crfsuite,0.8791,0.1,0.001,1608,178,42.98[m],50,corpus_otomi_mod+corpus_hard,k_fold,10,Simulacion HMM (features reducidas) con parametros de regularización L1+L2 y mex iteration 50.,N/A,N/A
-HMMLike_l1_zero_50_0_0.001_k_10.crfsuite,0.8745,0,0.001,1608,178,43.9[m],50,corpus_otomi_mod+corpus_hard,k_fold,10,Simulacion HMM (features reducidas) l1=0 l2=0.001,N/A,N/A
-HMMLike_l2_zero_50_0.1_0_k_10.crfsuite,0.8818,0.1,0,1608,178,43.71[m],50,corpus_otomi_mod+corpus_hard,k_fold,10,Simulacion HMM (features reducidas) l1=0.1 l2=0,N/A,N/A
-POS_Less_50_0.1_0.001_k_10.crfsuite,0.9499,0.1,0.001,1608,178,37.91[m],50,corpus_otomi_mod+corpus_hard,k_fold,10,Quitando etiquetas POS de las veature functions. Todos los parametros de regularizacion,N/A,N/A
-POS_Less_l1_l2_zero_50_0_0_k_10.crfsuite,0.9452,0,0,1608,178,36.67[m],50,corpus_otomi_mod+corpus_hard,k_fold,10,Quitando etiquetas POS de las veature functions. Sin los parametros de regularizacion,N/A,N/A
-POS_Less_l1_zero_50_0_0.001_k_10.crfsuite,0.9473,0,0.001,1608,178,40.25[m],50,corpus_otomi_mod+corpus_hard,k_fold,10,Quitando etiquetas POS de las feature functions. Parametros de regularizacion reducidos (L1 = 0),N/A,N/A
+model_name,accuracy,time,l1,l2,dataset,train_size,test_size,max_iter,k-folds,desc
+baseline_noreg_k_10.crfsuite,0.8758,29.39[m],0,0,otomi,1593,176,50,10,Baseline: simulación de HMM con las feature functions reducidas (solo se ve la letra actual y la anterior). Los parametros de regularizacion estan en 0
+linearCRF_regularized_k_10.crfsuite,0.9484,27.91[m],1.0,0.001,otomi,1593,176,50,10,Toda la informacion disponible en las feature functions y penalizacion de parametros elasticnet seteados.
+linearCRF_l1_zero_k_10.crfsuite,0.9467,27.03[m],0,0.001,otomi,1593,176,50,10,Toda la informacion disponible en las feature functions y l1 en cero.
+linearCRF_noreg_k_10.crfsuite,0.9444,30.61[m],0,0,otomi,1593,176,50,10,Toda la informacion disponible en las feature functions. l1 y l2 en cero.
+linearCRF_l2_zero_k_10.crfsuite,0.9477,31.66[m],1.0,0,otomi,1593,176,50,10,Toda la informacion disponible en las feature functions. l2 en cero.
+HMMLike_regularized_k_10.crfsuite,0.8806,31.07[m],1.0,0.001,otomi,1593,176,50,10,Minima informacion en las feature functions. Solo letra actual y anterior. Parametros elasticnet seteados.
+POSLess_regularized_k_10.crfsuite,0.9494,28.6[m],1.0,0.001,otomi,1593,176,50,10,feature functions omitiendo las etiquetas POS del corpus. Parametros elasticnet seteados.
+POSLess_l1_zero_k_10.crfsuite,0.9459,26.82[m],0,0.001,otomi,1593,176,50,10,feature functions omitiendo las etiquetas POS del corpus. Parametro elasticnet l1 en cero.
+POSLess_l2_zero_k_10.crfsuite,0.9477,27.58[m],1.0,0,otomi,1593,176,50,10,Feature functions omitiendo las etiquetas POS del corpus. Parametro elasticnet l2 en cero.
+POSLess_noreg_k_10.crfsuite,0.9465,27.99[m],0,0,otomi,1593,176,50,10,Feature functions omitiendo las etiquetas POS del corpus. Parametros elasticnet en cero.
+HMMLike_l1_zero_k_10.crfsuite,0.8758,30.1[m],0,0.001,otomi,1593,176,50,10,Simulando un HMM con las feauture functions al minimo (solo ve la letra actual y la anterior). L1 igual a cero
+HMMLike_l2_zero_k_10.crfsuite,0.8787,27.8[m],1.0,0,otomi,1593,176,50,10,Simulando un HMM con las feauture functions al minimo (solo ve la letra actual y la anterior). L2 igual a cero
