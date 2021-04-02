@@ -102,7 +102,7 @@ def param_setter(hyper, model_name, iterations, l1, l2):
     return hyper
 
 
-def model_trainer(train_data, models_path, hyper, verbose, k):
+def model_trainer(train_data, hyper):
     """ Entrena un modelo y lo guarda en disco
 
     Función encargada de entrenar un modelo con base en los hyperparametro y
@@ -125,49 +125,29 @@ def model_trainer(train_data, models_path, hyper, verbose, k):
     """
     X_train = sent2features(train_data)
     y_train = sent2labels(train_data)
-
+    
+    breakpoint()
     # Train the model
-
-    trainer = pycrfsuite.Trainer(verbose=verbose)
+    trainer = pycrfsuite.Trainer(verbose=True)
 
     for xseq, yseq in zip(X_train, y_train):
         trainer.append(xseq, yseq)
 
     # Set training parameters. L-BFGS is default. Using Elastic Net (L1 + L2)
-    # regularization [ditto?].
     trainer.set_params({
             'c1': hyper['L1'],  # coefficient for L1 penalty
             'c2': hyper['L2'],  # coefficient for L2 penalty
             'max_iterations': hyper['max-iter']  # early stopping
         })
-    # Setting model name
-    model_name = f"{hyper['name']}_"
-    if hyper['L1'] == 0 and hyper['L2'] == 0:
-        model_name += f"noreg_"
-    elif hyper['L1'] == 0:
-        model_name += f"l1_zero_"
-    elif hyper['L2'] == 0:
-        model_name += f"l2_zero_"
-    else:
-        model_name += "regularized_"
-    model_name += f"k_{k}.crfsuite"
     # The program saves the trained model to a file:
-    path = models_path + hyper["name"] + f"/{model_name}"
-    if not os.path.isfile(path):
-        print(f"Entrenando nuevo modelo '{model_name}'")
-        start = time.time()
-        trainer.train(path)
-        end = time.time()
-        train_time = end - start
-        print("Fin de entrenamiento. Tiempo de entrenamiento >>", train_time,
-              "[s]", train_time / 60, "[m]")
-    else:
-        train_time = 0
-        print("Usando modelo pre-entrenado >>", path)
-    return train_time, model_name
+    start = time.time()
+    trainer.train(hyper['path'])
+    end = time.time()
+    train_time = end - start
+    return train_time
 
 
-def model_tester(test_data, models_path, hyper, model_name, verbose):
+def model_tester(test_data, model_path):
     """ Prueba un modelo preentrenado
 
     Recibe los datos de prueba y realiza las pruebas con el modelo previo
@@ -193,36 +173,13 @@ def model_tester(test_data, models_path, hyper, model_name, verbose):
 
     # ### Make Predictions
     tagger = pycrfsuite.Tagger()
-    tag_path = os.path.join(models_path, hyper["name"], model_name)
-    tagger.open(tag_path)  # Passing model to tagger
-
-    # First, let's use the trained model to make predications for just one
-    # example sentence from the test data.
-    # The predicted labels are printed out for comparison above the correct
-    # labels. Most examples have 100% accuracy.
-
-    if verbose:
-        print("Basic example of prediction")
-        example_sent = test_data[0]
-        print('Letters:', '  '.join(extractTokens(example_sent)), end='\n')
-
-        print('Predicted:',
-              ' '.join(tagger.tag(extractFeatures(example_sent))), end='\n')
-        print('Correct:', ' '.join(extractLabels(example_sent, 1)))
-
-    # First, we will predict BIO labels in the test data:
-
-    y_pred = []
-    y_test = labels_decoder(y_test)
-    for xseq in X_test:
-        try:
-            y_pred.append(tagger.tag(xseq))
-        except UnicodeDecodeError as e:
-            print("ERROR al producir etiquetas")
-            print(e.object)
-            print(e.reason)
-
-    return y_test, y_pred, tagger
+    # Passing model to tagger
+    tagger.open(model_path)  
+    # Tagging task using the model
+    y_pred = [tagger.tag(xseq) for xseq in X_test]
+    # Closing tagger
+    tagger.close()
+    return y_test, y_pred
 
 
 def report_printer(y_test, y_pred, tagger):
@@ -310,6 +267,7 @@ def XMLtoWords(filename):
                                 sent.append(lexeme)
                         datalists.append(sent)
     return datalists
+
 
 
 def WordsToLetter(wordlists):
@@ -428,7 +386,7 @@ def extractLabels(sent, flag=0):
     labels = []
     for word in sent:
         for letter in word:
-            if flag:
+            if not flag:
                 labels.append(letter[2])
             else:
                 labels.append(letter[2].encode('utf-8'))
@@ -626,23 +584,22 @@ def accuracy_score(y_test, y_pred):
     return right / total
 
 
-def write_report(model_name, train_size, test_size, accuracy, train_time,
+def write_report(model_name, train_size, test_size, accuracy_set, train_time,
                  hyper):
     """Escribe el reporte con resultados e hiperparametros
-
     """
     # Header
     line = ''
     line += model_name + ','
-    line += str(round(accuracy, 4)) + ','
+    avg_accuracy = sum(accuracy_set) / len(accuracy_set)
+    line += str(round(avg_accuracy, 4)) + ','
+    line += f'"{str(accuracy_set)}",'
     line += train_time + ','
     line += str(hyper['L1']) + ','
     line += str(hyper['L2']) + ','
-    line += hyper['dataset'] + ','
     line += str(train_size) + ','
     line += str(test_size) + ','
     line += str(hyper['max-iter']) + ','
-    line += str(hyper['k-folds']) + ','
-    line += hyper['description'] + "\n"
+    line += str(hyper['k-folds']) + '\n'
     with open('results.csv', 'a') as f:
         f.write(line)

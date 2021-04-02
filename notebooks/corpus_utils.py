@@ -82,6 +82,7 @@ def graph_maker(data, conf):
     plt.savefig(conf['path'], dpi=300, bbox_inches='tight')
     return plt
 
+
 def types_to_table(data, columns):
     return "".join([t + " \\\\\n " if i % columns == 0 else t + " & " for i, t in enumerate(data, start=1)])
 
@@ -97,7 +98,7 @@ def tokens_to_table(data, limit=0):
     return table
 
 
-def oto_glosser(word_list, tags, pos_tags=[]):
+def oto_glosser(word_list, tags, pos_tags=[], corpus_row=0):
     """Funcion que glosa dadas las etiquetas
     
     Esta funcion se encarga de etiquetar una lista de palabras en
@@ -118,7 +119,10 @@ def oto_glosser(word_list, tags, pos_tags=[]):
                 except UnboundLocalError:
                     # TODO: Tratar caso cuando glosa predicha es incorrecta
                     # EJ. Inicia con I-tag y no con B-tag
-                    return ["ERROR"]
+                    print(f"Wrong BIO-label secuence:")
+                    print("BIO-labels:", tags)
+                    print("Sentence:", word_list)
+                    return [f"ERROR AT {corpus_row}"]
             if len(word_list[i]) == word_len:                
                 # Adding POS tag
                 #TODO: Adecuarla para que reciba una lista de etiquetas POS
