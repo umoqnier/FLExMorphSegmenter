@@ -150,7 +150,7 @@ def oto_glosser(word_list, tags, pos_tags=[], corpus_row=0):
     return glossed_phrase
 
 
-def words_report(data, letter_corpus, feature_functions_maker, tagger, num_examples=5):
+def words_report(data, letter_corpus, get_feature_lists, tagger, num_examples=5):
     data = sorted(data, key=lambda t: t[3])
     top = data[:num_examples]
     for i, info in enumerate(top):
@@ -159,7 +159,7 @@ def words_report(data, letter_corpus, feature_functions_maker, tagger, num_examp
         index = info[2]
         palabras = info[0]
         example = letter_corpus[index]
-        features = feature_functions_maker(example)
+        features = get_feature_lists(example)
         prediction_tags = tagger.tag(features)
         real_tags = extractLabels(example, 1)
         print(f"Ejemplo {i+1} de {num_examples} | Frase: \"{' '.join(palabras)}\" | Accuracy: {info[3]}")
