@@ -7,6 +7,7 @@ bleach==3.1.5
 certifi==2020.12.5
 cffi==1.14.4
 chardet==4.0.0
+click==7.1.2
 cycler==0.10.0
 decorator==4.4.2
 defusedxml==0.6.0
@@ -39,6 +40,7 @@ nbformat==5.0.6
 notebook==6.1.6
 numpy==1.19.4
 packaging==20.3
+pandas==1.2.3
 pandocfilters==1.4.2
 parso==0.7.0
 pexpect==4.8.0
@@ -66,8 +68,11 @@ sniffio==1.2.0
 terminado==0.8.3
 testpath==0.4.4
 threadpoolctl==2.1.0
+torch==1.7.1
 tornado==6.1
+tqdm==4.56.0
 traitlets==4.3.3
+typing-extensions==3.7.4.3
 urllib3==1.25.9
 wcwidth==0.1.9
 webencodings==0.5.1
